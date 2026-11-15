@@ -1,21 +1,151 @@
-import json,pathlib,sys,xml.etree.ElementTree as ET
-R=pathlib.Path(__file__).resolve().parents[1];D=R/'dist';A=json.loads((R/'content/app.json').read_text());F=json.loads((R/'content/features.json').read_text());errors=[]
-for p in [D/'index.html',D/'robots.txt',D/'sitemap.xml',D/'llms.txt',D/'assets/style.css',D/'assets/screens/screen-1.webp']:
- if not p.is_file():errors.append('Missing '+str(p.relative_to(D)))
-for l in ('en','ar'):
- for s in ('','about','features','faq'):
-  p=D/l/s/'index.html' if s else D/l/'index.html'
-  if not p.is_file():errors.append('Missing '+str(p.relative_to(D)));continue
-  x=p.read_text()
-  for token in ('canonical','hreflang','application/ld+json','Job Connect'):
-   if token not in x:errors.append(str(p)+' missing '+token)
-try:
- root=ET.parse(D/'sitemap.xml').getroot();loc=[x.find('{http://www.sitemaps.org/schemas/sitemap/0.9}loc').text for x in root]
- if len(loc)!=8 or len(set(loc))!=8:errors.append('Sitemap URL count/uniqueness failed')
-except Exception as e:errors.append(str(e))
-if A['package_id'] not in A['google_play_url']:errors.append('Package ID mismatch')
+import json
+import pathlib
+import sys
+import xml.etree.ElementTree as ET
+from html.parser import HTMLParser
+from urllib.parse import urlparse
 
-root_html=(D/'index.html').read_text(encoding='utf-8')
-if '<meta name="google-site-verification" content="8mOiNMu4Tn477yFaR-IWrNQGhdqH1TpF6NKKoN94Oms">' not in root_html:errors.append('Google Search Console verification meta tag missing from root page')
-if errors:print('\n'.join(errors));sys.exit(1)
-print('Validated bilingual pages, 5 feature descriptions, hero screenshot, metadata and sitemap.')
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+DIST = ROOT / "dist"
+APP = json.loads((ROOT / "content/app.json").read_text(encoding="utf-8"))
+BASE = APP["website_url"].rstrip("/")
+NS = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+ERRORS = []
+
+class DocumentParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.links = []
+        self.canonical = None
+        self.hreflang = {}
+        self.title = []
+        self.h1 = []
+        self.in_title = False
+        self.in_h1 = False
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == "a" and attrs.get("href"):
+            self.links.append(attrs["href"])
+        if tag == "link":
+            if attrs.get("rel") == "canonical":
+                self.canonical = attrs.get("href")
+            if attrs.get("rel") == "alternate" and attrs.get("hreflang"):
+                self.hreflang[attrs["hreflang"]] = attrs.get("href")
+        if tag == "title":
+            self.in_title = True
+        if tag == "h1":
+            self.in_h1 = True
+    def handle_endtag(self, tag):
+        if tag == "title":
+            self.in_title = False
+        if tag == "h1":
+            self.in_h1 = False
+    def handle_data(self, data):
+        if self.in_title:
+            self.title.append(data)
+        if self.in_h1:
+            self.h1.append(data)
+
+def expected_url(lang, section="home"):
+    return f"{BASE}/{lang}/" + ("" if section == "home" else f"{section}/")
+
+def page_path(lang, section="home"):
+    return DIST / lang / ("" if section == "home" else section) / "index.html"
+
+def fail(message):
+    ERRORS.append(message)
+
+required_files = [
+    DIST / "index.html", DIST / "robots.txt", DIST / "sitemap.xml",
+    DIST / "llms.txt", DIST / "assets/style.css",
+    DIST / "assets/screens/screen-1.webp",
+]
+for path in required_files:
+    if not path.is_file():
+        fail(f"Missing generated file: {path.relative_to(DIST)}")
+
+route_urls = {f"{BASE}/"}
+for lang in ("en", "ar"):
+    for section in ("home", "about", "features", "faq"):
+        route_urls.add(expected_url(lang, section))
+        path = page_path(lang, section)
+        if not path.is_file():
+            fail(f"Missing route: {path.relative_to(DIST)}")
+            continue
+        parser = DocumentParser()
+        parser.feed(path.read_text(encoding="utf-8"))
+        expected_canonical = expected_url(lang, section)
+        if parser.canonical != expected_canonical:
+            fail(f"Wrong canonical for {path.relative_to(DIST)}: {parser.canonical}")
+        if parser.hreflang.get("en") != expected_url("en", section):
+            fail(f"Wrong English hreflang for {path.relative_to(DIST)}")
+        if parser.hreflang.get("ar") != expected_url("ar", section):
+            fail(f"Wrong Arabic hreflang for {path.relative_to(DIST)}")
+        if not parser.title or not "".join(parser.title).strip():
+            fail(f"Missing title for {path.relative_to(DIST)}")
+        if not parser.h1 or not "".join(parser.h1).strip():
+            fail(f"Missing H1 for {path.relative_to(DIST)}")
+        for href in parser.links:
+            if href.startswith(("mailto:", "tel:", "#")):
+                continue
+            parsed = urlparse(href)
+            base_parts = urlparse(BASE)
+            if parsed.scheme in ("http", "https"):
+                if parsed.netloc != base_parts.netloc:
+                    continue
+                base_path = base_parts.path.rstrip("/")
+                if parsed.path != base_path and not parsed.path.startswith(base_path + "/"):
+                    fail(f"Internal link escapes project base path: {href} in {path.relative_to(DIST)}")
+                    continue
+                relative = parsed.path[len(base_path):].lstrip("/")
+            else:
+                if parsed.scheme or parsed.netloc:
+                    fail(f"Unsupported internal link {href} in {path.relative_to(DIST)}")
+                    continue
+                if not href.startswith(BASE + "/"):
+                    fail(f"Internal link escapes project base path: {href} in {path.relative_to(DIST)}")
+                    continue
+                relative = href[len(BASE) + 1:]
+            target = DIST / relative
+            if relative.endswith("/"):
+                target = target / "index.html"
+            elif not target.suffix:
+                target = target / "index.html"
+            if not target.is_file():
+                fail(f"Broken internal link {href} in {path.relative_to(DIST)}")
+
+root_parser = DocumentParser()
+if (DIST / "index.html").is_file():
+    root_html = (DIST / "index.html").read_text(encoding="utf-8")
+    root_parser.feed(root_html)
+    if root_parser.canonical != f"{BASE}/":
+        fail("Root canonical URL is incorrect")
+    if 'name="google-site-verification"' not in root_html:
+        fail("Google Search Console verification meta tag missing from root page")
+    for lang in ("en", "ar"):
+        if expected_url(lang) not in root_html:
+            fail(f"Root language link missing: {lang}")
+
+try:
+    sitemap_root = ET.parse(DIST / "sitemap.xml").getroot()
+    sitemap_urls = [node.find(f"{NS}loc").text for node in sitemap_root.findall(f"{NS}url")]
+    if len(sitemap_urls) != len(route_urls):
+        fail(f"Sitemap should contain {len(route_urls)} routes, found {len(sitemap_urls)}")
+    if len(set(sitemap_urls)) != len(sitemap_urls):
+        fail("Sitemap contains duplicate URLs")
+    if set(sitemap_urls) != route_urls:
+        fail("Sitemap URLs do not match the generated site routes")
+except Exception as exc:
+    fail(f"Invalid sitemap XML: {exc}")
+
+robots = (DIST / "robots.txt").read_text(encoding="utf-8") if (DIST / "robots.txt").is_file() else ""
+if f"Sitemap: {BASE}/sitemap.xml" not in robots:
+    fail("robots.txt does not reference the generated sitemap")
+
+if APP["package_id"] not in APP["google_play_url"]:
+    fail("Package ID mismatch in Google Play URL")
+
+if ERRORS:
+    print("\n".join(ERRORS))
+    sys.exit(1)
+print(f"Validated {len(route_urls)} routes, navigation targets, canonical/hreflang pairs, root verification and sitemap.")
