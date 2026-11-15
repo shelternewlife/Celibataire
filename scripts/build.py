@@ -21,7 +21,7 @@ def main():
  write(pathlib.Path('assets/style.css'),CSS);shutil.copytree(R/'assets/screens',O/'assets/screens')
  for l in ('en','ar'):
   for s in ('home','about','features','faq'):write(pathlib.Path(l)/('' if s=='home' else s)/'index.html',make(l,s))
- write(pathlib.Path('index.html'),f'<!doctype html><html><head><meta charset="utf-8"><title>Job Connect</title><link rel="alternate" hreflang="en" href="{B}/en/"><link rel="alternate" hreflang="ar" href="{B}/ar/"></head><body><a href="./en/">English</a> · <a href="./ar/">العربية</a></body></html>')
+ write(pathlib.Path('index.html'),f'<!doctype html><html><head><meta charset="utf-8"><meta name="google-site-verification" content="8mOiNMu4Tn477yFaR-IWrNQGhdqH1TpF6NKKoN94Oms"><title>Job Connect</title><link rel="alternate" hreflang="en" href="{B}/en/"><link rel="alternate" hreflang="ar" href="{B}/ar/"></head><body><a href="./en/">English</a> · <a href="./ar/">العربية</a></body></html>')
  write(pathlib.Path('robots.txt'),f'User-agent: *\nAllow: /\nSitemap: {B}/sitemap.xml\n')
  urls=[f'{B}/{l}/{s+"/" if s else ""}' for l in ('en','ar') for s in ('','about','features','faq')]
  write(pathlib.Path('sitemap.xml'),'<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join('<url><loc>'+e(u)+'</loc></url>' for u in urls)+'</urlset>')

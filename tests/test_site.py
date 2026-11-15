@@ -3,6 +3,8 @@ R=pathlib.Path(__file__).resolve().parents[1]
 class SiteTests(unittest.TestCase):
  @classmethod
  def setUpClass(c):subprocess.run([sys.executable,str(R/'scripts/build.py')],check=True);subprocess.run([sys.executable,str(R/'scripts/validate.py')],check=True)
+ def test_google_site_verification_tag(self):
+  s=(R/'dist/index.html').read_text(encoding='utf-8');self.assertIn('name="google-site-verification"',s);self.assertIn('8mOiNMu4Tn477yFaR-IWrNQGhdqH1TpF6NKKoN94Oms',s)
  def test_identity(self):
   a=json.loads((R/'content/app.json').read_text());self.assertEqual(a['name'],'Job Connect');self.assertIn(a['package_id'],a['google_play_url'])
  def test_routes(self):
