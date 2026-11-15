@@ -14,12 +14,15 @@ class PageParser(HTMLParser):
     def __init__(self):
         super().__init__()
         self.links = []
+        self.images = []
         self.h1 = []
         self.in_h1 = False
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         if tag == "a" and attrs.get("href"):
             self.links.append(attrs["href"])
+        if tag == "img":
+            self.images.append(attrs)
         if tag == "h1":
             self.in_h1 = True
     def handle_endtag(self, tag):
@@ -108,6 +111,17 @@ class SiteTests(unittest.TestCase):
 
     def test_screenshot_asset_exists(self):
         self.assertTrue((DIST / "assets/screens/screen-1.webp").is_file())
+
+    def test_homepage_uses_five_distinct_google_play_screenshots(self):
+        for lang in ("en", "ar"):
+            parser = PageParser()
+            parser.feed(output_path(lang).read_text(encoding="utf-8"))
+            gallery_images = parser.images[1:]
+            self.assertEqual(len(gallery_images), 5)
+            self.assertEqual(len({image.get("src") for image in gallery_images}), 5)
+            self.assertTrue(all(image.get("src", "").startswith("https://play-lh.googleusercontent.com/") for image in gallery_images))
+            self.assertTrue(all(image.get("alt", "").strip() for image in gallery_images))
+            self.assertIn('id="screenshots"', output_path(lang).read_text(encoding="utf-8"))
 
     def test_no_previous_brand(self):
         for path in DIST.rglob("*.html"):

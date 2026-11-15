@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
 APP = json.loads((ROOT / "content/app.json").read_text(encoding="utf-8"))
+SCREENSHOTS = json.loads((ROOT / "content/screenshots.json").read_text(encoding="utf-8"))
 BASE = APP["website_url"].rstrip("/")
 NS = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
 ERRORS = []
@@ -16,6 +17,7 @@ class DocumentParser(HTMLParser):
     def __init__(self):
         super().__init__()
         self.links = []
+        self.images = []
         self.canonical = None
         self.hreflang = {}
         self.title = []
@@ -26,6 +28,8 @@ class DocumentParser(HTMLParser):
         attrs = dict(attrs)
         if tag == "a" and attrs.get("href"):
             self.links.append(attrs["href"])
+        if tag == "img":
+            self.images.append(attrs)
         if tag == "link":
             if attrs.get("rel") == "canonical":
                 self.canonical = attrs.get("href")
@@ -60,6 +64,8 @@ required_files = [
     DIST / "llms.txt", DIST / "assets/style.css",
     DIST / "assets/screens/screen-1.webp",
 ]
+if not (ROOT / "content/screenshots.json").is_file():
+    fail("Missing source screenshot manifest: content/screenshots.json")
 for path in required_files:
     if not path.is_file():
         fail(f"Missing generated file: {path.relative_to(DIST)}")
@@ -85,6 +91,14 @@ for lang in ("en", "ar"):
             fail(f"Missing title for {path.relative_to(DIST)}")
         if not parser.h1 or not "".join(parser.h1).strip():
             fail(f"Missing H1 for {path.relative_to(DIST)}")
+        if section == "home":
+            if len(parser.images) != len(SCREENSHOTS) + 1:
+                fail(f"Homepage gallery should contain {len(SCREENSHOTS)} screenshots plus its hero image: {path.relative_to(DIST)}")
+            gallery_images = parser.images[1:]
+            if len({image.get("src") for image in gallery_images}) != len(SCREENSHOTS):
+                fail(f"Homepage gallery contains duplicate screenshot sources: {path.relative_to(DIST)}")
+            if any(not image.get("alt", "").strip() for image in gallery_images):
+                fail(f"Homepage gallery contains an image without alt text: {path.relative_to(DIST)}")
         for href in parser.links:
             if href.startswith(("mailto:", "tel:", "#")):
                 continue
@@ -144,6 +158,8 @@ if f"Sitemap: {BASE}/sitemap.xml" not in robots:
 
 if APP["package_id"] not in APP["google_play_url"]:
     fail("Package ID mismatch in Google Play URL")
+if len(SCREENSHOTS) != 5 or any(urlparse(item.get("src", "")).hostname != "play-lh.googleusercontent.com" for item in SCREENSHOTS):
+    fail("Gallery must use the five official Google Play screenshot assets")
 
 if ERRORS:
     print("\n".join(ERRORS))

@@ -9,6 +9,7 @@ DIST = ROOT / "dist"
 APP = json.loads((ROOT / "content/app.json").read_text(encoding="utf-8"))
 FEATURES = json.loads((ROOT / "content/features.json").read_text(encoding="utf-8"))
 FAQ = json.loads((ROOT / "content/faq.json").read_text(encoding="utf-8"))
+SCREENSHOTS = json.loads((ROOT / "content/screenshots.json").read_text(encoding="utf-8"))
 BASE_URL = APP["website_url"].rstrip("/")
 
 TEXT = {
@@ -20,6 +21,7 @@ TEXT = {
         "cta": "Open on Google Play",
         "tag": "JOB OPPORTUNITY DISCOVERY",
         "gallery": "A look inside the app",
+        "gallery_intro": "Real screenshots from the Google Play listing.",
         "download": "Get started with Job Connect",
         "privacy": "Privacy policy",
         "support": "Support",
@@ -39,6 +41,7 @@ TEXT = {
         "cta": "افتح التطبيق على Google Play",
         "tag": "اكتشاف فرص العمل",
         "gallery": "نظرة إلى واجهة التطبيق",
+        "gallery_intro": "لقطات شاشة فعلية منشورة في صفحة التطبيق على Google Play.",
         "download": "ابدأ مع Job Connect",
         "privacy": "سياسة الخصوصية",
         "support": "الدعم",
@@ -82,7 +85,7 @@ PAGE_DESCRIPTIONS = {
     },
 }
 
-CSS = """*{box-sizing:border-box}body{margin:0;background:#080b12;color:#f4f7fb;font:16px/1.75 system-ui,sans-serif}a{color:inherit}header,main,footer{width:min(1120px,calc(100% - 36px));margin:auto}header{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:22px 0;border-bottom:1px solid #263246}.brand{font-weight:900;text-decoration:none;letter-spacing:.08em}.brand b,.tag{color:#00c4df}nav{display:flex;gap:22px;flex-wrap:wrap}nav a{color:#c4ccda;text-decoration:none}.hero{padding:70px 0;display:grid;grid-template-columns:1fr .8fr;gap:44px;align-items:center}.tag{font-size:.8rem;letter-spacing:.16em;font-weight:700}.hero h1{font-size:clamp(2.5rem,6vw,4.6rem);line-height:1.12;margin:18px 0}.lead,.muted{color:#aab6c8}.btn{display:inline-block;background:#00c4df;color:#061018;text-decoration:none;padding:13px 20px;border-radius:9px;font-weight:800;margin-top:20px}.preview{padding:16px;background:#121a28;border:1px solid #29364b;border-radius:22px;text-align:center}.preview img{height:480px;max-width:100%;object-fit:contain;border-radius:12px}.section{padding:48px 0;border-top:1px solid #ffffff18}.section h2{font-size:2rem}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.item,.faq{background:#111925;border:1px solid #283449;border-radius:14px;padding:22px}.item h3,.faq h3{margin-top:0}.item p,.faq p{color:#aab6c8}.num{color:#00c4df;font:700 .8rem monospace}.faqgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.end{text-align:center;background:#11242d;border:1px solid #236071;border-radius:18px;padding:34px}.language{min-height:70vh;display:grid;place-items:center;text-align:center}.language a{display:inline-block;margin:8px;padding:14px 22px;border:1px solid #236071;border-radius:10px;text-decoration:none}footer{padding:30px 0;color:#aab6c8;border-top:1px solid #ffffff18;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}html[dir=rtl] body{text-align:right}html[dir=rtl] header{direction:rtl}@media(max-width:760px){.hero{grid-template-columns:1fr;padding:42px 0}.preview img{height:360px}.grid,.faqgrid{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}nav{gap:14px}}"""
+CSS = """*{box-sizing:border-box}body{margin:0;background:#080b12;color:#f4f7fb;font:16px/1.75 system-ui,sans-serif}a{color:inherit}header,main,footer{width:min(1120px,calc(100% - 36px));margin:auto}header{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:22px 0;border-bottom:1px solid #263246}.brand{font-weight:900;text-decoration:none;letter-spacing:.08em}.brand b,.tag{color:#00c4df}nav{display:flex;gap:22px;flex-wrap:wrap}nav a{color:#c4ccda;text-decoration:none}.hero{padding:70px 0;display:grid;grid-template-columns:1fr .8fr;gap:44px;align-items:center}.tag{font-size:.8rem;letter-spacing:.16em;font-weight:700}.hero h1{font-size:clamp(2.5rem,6vw,4.6rem);line-height:1.12;margin:18px 0}.lead,.muted{color:#aab6c8}.btn{display:inline-block;background:#00c4df;color:#061018;text-decoration:none;padding:13px 20px;border-radius:9px;font-weight:800;margin-top:20px}.preview{padding:16px;background:#121a28;border:1px solid #29364b;border-radius:22px;text-align:center}.preview img{height:480px;max-width:100%;object-fit:contain;border-radius:12px}.section{padding:48px 0;border-top:1px solid #ffffff18}.section h2{font-size:2rem}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.item,.faq{background:#111925;border:1px solid #283449;border-radius:14px;padding:22px}.item h3,.faq h3{margin-top:0}.item p,.faq p{color:#aab6c8}.num{color:#00c4df;font:700 .8rem monospace}.faqgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}.shot{margin:0;padding:12px;background:#111925;border:1px solid #283449;border-radius:14px}.shot img{display:block;width:100%;height:auto;aspect-ratio:9/16;object-fit:contain;background:#080b12;border-radius:9px}.shot figcaption{padding:10px 2px 2px;color:#d6deeb;font-size:.92rem;line-height:1.5}.end{text-align:center;background:#11242d;border:1px solid #236071;border-radius:18px;padding:34px}.language{min-height:70vh;display:grid;place-items:center;text-align:center}.language a{display:inline-block;margin:8px;padding:14px 22px;border:1px solid #236071;border-radius:10px;text-decoration:none}footer{padding:30px 0;color:#aab6c8;border-top:1px solid #ffffff18;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}html[dir=rtl] body{text-align:right}html[dir=rtl] header{direction:rtl}@media(max-width:760px){.hero{grid-template-columns:1fr;padding:42px 0}.preview img{height:360px}.grid,.faqgrid{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}nav{gap:14px}}"""
 
 def esc(value):
     return html.escape(str(value), quote=True)
@@ -125,15 +128,31 @@ def render_faq(lang):
         )
     return '<div class="faqgrid">' + "".join(cards) + "</div>"
 
+def render_gallery(lang):
+    t = TEXT[lang]
+    cards = []
+    for screenshot in SCREENSHOTS:
+        cards.append(
+            f'<figure class="shot"><img src="{esc(screenshot["src"])}" '
+            f'alt="{esc(screenshot["alt"][lang])}" loading="lazy" decoding="async">'
+            f'<figcaption>{esc(screenshot["caption"][lang])}</figcaption></figure>'
+        )
+    return (
+        f'<section class="section" id="screenshots"><h2>{t["gallery"]}</h2>'
+        f'<p class="muted">{t["gallery_intro"]}</p>'
+        f'<div class="gallery">{"".join(cards)}</div></section>'
+    )
+
 def render_content(lang, section):
     t = TEXT[lang]
     if section == "home":
-        image = f'{BASE_URL}/assets/screens/screen-1.webp'
+        image = SCREENSHOTS[0]["src"]
         return (
             f'<section class="hero"><div><div class="tag">{t["tag"]}</div>'
             f'<h1>{esc(t["home"])}</h1><p class="lead">{esc(t["home_intro"])}</p>'
             f'<a class="btn" href="{esc(APP["google_play_url"])}">{t["cta"]}</a></div>'
-            f'<div class="preview"><img src="{image}" alt="{esc(t["gallery"])}"></div></section>'
+            f'<div class="preview"><img src="{image}" alt="{esc(SCREENSHOTS[0]["alt"][lang])}" loading="eager"></div></section>'
+            f'{render_gallery(lang)}'
             f'<section class="section"><h2>{t["features"]}</h2>{render_features(lang)}'
             f'<p><a href="{page_url(lang, "features")}">{t["features"]}</a></p></section>'
         )
