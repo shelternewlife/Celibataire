@@ -1,25 +1,16 @@
 import json,pathlib,subprocess,sys,unittest
-ROOT=pathlib.Path(__file__).resolve().parents[1]
-class SiteBuildTests(unittest.TestCase):
+R=pathlib.Path(__file__).resolve().parents[1]
+class SiteTests(unittest.TestCase):
  @classmethod
- def setUpClass(cls):
-  subprocess.run([sys.executable,str(ROOT/"scripts/build.py")],check=True)
-  subprocess.run([sys.executable,str(ROOT/"scripts/validate.py")],check=True)
- def test_store_identity(self):
-  app=json.loads((ROOT/"content/app.json").read_text(encoding="utf-8"))
-  self.assertEqual(app["name"],"Job Connect")
-  self.assertEqual(app["package_id"],"com.jobsearch.jobconnect.work.jobs.devimpact")
-  self.assertIn(app["package_id"],app["google_play_url"])
- def test_all_localized_routes_exist(self):
-  for lang in ("en","ar"):
-   for section in ("","about","features","faq"):
-    p=ROOT/"dist"/lang/section/"index.html" if section else ROOT/"dist"/lang/"index.html"
-    self.assertTrue(p.is_file(),str(p))
- def test_no_previous_branding(self):
-  for p in (ROOT/"dist").rglob("*.html"):
-   self.assertNotIn("Min"+"gle",p.read_text(encoding="utf-8"))
- def test_store_link_on_homepages(self):
-  for lang in ("en","ar"):
-   s=(ROOT/"dist"/lang/"index.html").read_text(encoding="utf-8")
-   self.assertIn("play.google.com/store/apps/details?id=com.jobsearch.jobconnect.work.jobs.devimpact",s)
-if __name__=="__main__": unittest.main()
+ def setUpClass(c):subprocess.run([sys.executable,str(R/'scripts/build.py')],check=True);subprocess.run([sys.executable,str(R/'scripts/validate.py')],check=True)
+ def test_identity(self):
+  a=json.loads((R/'content/app.json').read_text());self.assertEqual(a['name'],'Job Connect');self.assertIn(a['package_id'],a['google_play_url'])
+ def test_routes(self):
+  for l in ('en','ar'):
+   for s in ('','about','features','faq'):self.assertTrue((R/'dist'/l/s/'index.html' if s else R/'dist'/l/'index.html').is_file())
+ def test_screenshot(self):self.assertTrue((R/'dist/assets/screens/screen-1.webp').is_file())
+ def test_no_old_brand(self):
+  for p in (R/'dist').rglob('*.html'):self.assertNotIn('Mingle',p.read_text())
+ def test_google_play_cta(self):
+  for l in ('en','ar'):self.assertIn('play.google.com/store/apps/details?id=com.jobsearch.jobconnect.work.jobs.devimpact',(R/'dist'/l/'index.html').read_text())
+if __name__=='__main__':unittest.main()
