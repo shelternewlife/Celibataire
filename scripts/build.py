@@ -11,6 +11,7 @@ FEATURES = json.loads((ROOT / "content/features.json").read_text(encoding="utf-8
 FAQ = json.loads((ROOT / "content/faq.json").read_text(encoding="utf-8"))
 SCREENSHOTS = json.loads((ROOT / "content/screenshots.json").read_text(encoding="utf-8"))
 BASE_URL = APP["website_url"].rstrip("/")
+GA_MEASUREMENT_ID = APP["ga4_measurement_id"]
 
 TEXT = {
     "en": {
@@ -115,6 +116,28 @@ PAGE_DESCRIPTIONS = {
 
 CSS = """*{box-sizing:border-box}body{margin:0;background:#080b12;color:#f4f7fb;font:16px/1.75 system-ui,sans-serif}a{color:inherit}header,main,footer{width:min(1120px,calc(100% - 36px));margin:auto}header{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:22px 0;border-bottom:1px solid #263246}.brand{font-weight:900;text-decoration:none;letter-spacing:.08em}.brand b,.tag{color:#00c4df}nav{display:flex;gap:22px;flex-wrap:wrap}nav a{color:#c4ccda;text-decoration:none}.hero{padding:70px 0;display:grid;grid-template-columns:1fr .8fr;gap:44px;align-items:center}.tag{font-size:.8rem;letter-spacing:.16em;font-weight:700}.hero h1{font-size:clamp(2.5rem,6vw,4.6rem);line-height:1.12;margin:18px 0}.lead,.muted{color:#aab6c8}.btn{display:inline-block;background:#00c4df;color:#061018;text-decoration:none;padding:13px 20px;border-radius:9px;font-weight:800;margin-top:20px}.preview{padding:16px;background:#121a28;border:1px solid #29364b;border-radius:22px;text-align:center}.preview img{height:480px;max-width:100%;object-fit:contain;border-radius:12px}.section{padding:48px 0;border-top:1px solid #ffffff18}.section h2{font-size:2rem}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.item,.faq{background:#111925;border:1px solid #283449;border-radius:14px;padding:22px}.item h3,.faq h3{margin-top:0}.item p,.faq p{color:#aab6c8}.feature-shot{display:block;width:100%;max-height:230px;object-fit:contain;object-position:left center;background:#080b12;border-radius:9px;margin:0 0 16px}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.step{background:#111925;border:1px solid #283449;border-radius:14px;padding:20px}.step b{display:block;color:#00c4df;font-size:1.3rem}.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.fact{padding:16px;background:#111925;border:1px solid #283449;border-radius:12px;overflow-wrap:anywhere}.fact small{display:block;color:#aab6c8}.download-hero{padding:58px 0;display:grid;grid-template-columns:1fr .65fr;gap:36px;align-items:center}.download-hero h1{font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.15}.num{color:#00c4df;font:700 .8rem monospace}.faqgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}.shot{margin:0;padding:12px;background:#111925;border:1px solid #283449;border-radius:14px}.shot img{display:block;width:100%;height:auto;aspect-ratio:9/16;object-fit:contain;background:#080b12;border-radius:9px}.shot figcaption{padding:10px 2px 2px;color:#d6deeb;font-size:.92rem;line-height:1.5}.end{text-align:center;background:#11242d;border:1px solid #236071;border-radius:18px;padding:34px}.language{min-height:70vh;display:grid;place-items:center;text-align:center}.language a{display:inline-block;margin:8px;padding:14px 22px;border:1px solid #236071;border-radius:10px;text-decoration:none}footer{padding:30px 0;color:#aab6c8;border-top:1px solid #ffffff18;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}html[dir=rtl] body{text-align:right}html[dir=rtl] header{direction:rtl}@media(max-width:760px){.hero,.download-hero{grid-template-columns:1fr;padding:42px 0}.preview img{height:360px}.grid,.faqgrid,.steps,.facts{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}nav{gap:14px}}"""
 
+def render_analytics():
+    return """<script async src="https://www.googletagmanager.com/gtag/js?id=__GA_ID__"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '__GA_ID__');
+document.addEventListener('click', function(event) {
+    const target = event.target instanceof Element ? event.target : event.target.parentElement;
+    const link = target && target.closest('a[data-analytics-event="google_play_click"]');
+    if (!link) return;
+    gtag('event', 'google_play_click', {
+        page_path: window.location.pathname,
+        page_language: document.documentElement.lang || 'unknown',
+        page_section: document.body.dataset.pageSection || 'unknown',
+        cta_location: link.dataset.ctaLocation || 'unknown',
+        link_url: link.href,
+        link_text: link.textContent.trim()
+    });
+});
+</script>""".replace("__GA_ID__", GA_MEASUREMENT_ID)
+
 def esc(value):
     return html.escape(str(value), quote=True)
 
@@ -180,7 +203,8 @@ def render_download(lang):
         f'<section class="download-hero"><div><div class="tag">JOB CONNECT · ANDROID</div>'
         f'<h1>{t["download_title"]}</h1><p class="lead">{esc(t["download_intro"])}</p>'
         f'<a class="btn" href="{esc(APP["google_play_url"])}" '
-        f'target="_blank" rel="noopener noreferrer" aria-label="{esc(t["cta"])}">{t["cta"]}</a>'
+        f'target="_blank" rel="noopener noreferrer" aria-label="{esc(t["cta"])}" '
+        f'data-analytics-event="google_play_click" data-cta-location="download_hero">{t["cta"]}</a>'
         f'<p class="muted">{esc(t["download_note"])}</p></div>'
         f'<div class="preview"><img src="{esc(SCREENSHOTS[0]["src"])}" '
         f'alt="{esc(SCREENSHOTS[0]["alt"][lang])}" loading="eager"></div></section>'
@@ -197,7 +221,8 @@ def render_download(lang):
         f'<section class="section end"><h2>{t["download"]}</h2>'
         f'<p>{esc(APP["tagline"][lang])}</p>'
         f'<a class="btn" href="{esc(APP["google_play_url"])}" target="_blank" '
-        f'rel="noopener noreferrer">{t["cta"]}</a></section>'
+        f'rel="noopener noreferrer" data-analytics-event="google_play_click" '
+        f'data-cta-location="download_end">{t["cta"]}</a></section>'
     )
 
 def render_content(lang, section):
@@ -207,7 +232,8 @@ def render_content(lang, section):
         return (
             f'<section class="hero"><div><div class="tag">{t["tag"]}</div>'
             f'<h1>{esc(t["home"])}</h1><p class="lead">{esc(t["home_intro"])}</p>'
-            f'<a class="btn" href="{esc(APP["google_play_url"])}">{t["cta"]}</a></div>'
+            f'<a class="btn" href="{esc(APP["google_play_url"])}" '
+            f'data-analytics-event="google_play_click" data-cta-location="home_hero">{t["cta"]}</a></div>'
             f'<div class="preview"><img src="{image}" alt="{esc(SCREENSHOTS[0]["alt"][lang])}" loading="eager"></div></section>'
             f'{render_gallery(lang)}'
             f'<section class="section"><h2>{t["features"]}</h2>{render_features(lang)}'
@@ -219,7 +245,8 @@ def render_content(lang, section):
             f'<h1>{t["about"]}</h1><p class="lead">{esc(APP["description"][lang])}</p>'
             f'<p>{esc(t["about_intro"])}</p>'
             f'<p><strong>{esc(APP["developer"])}</strong></p>'
-            f'<p><a class="btn" href="{esc(APP["google_play_url"])}">{t["cta"]}</a></p></section>'
+            f'<p><a class="btn" href="{esc(APP["google_play_url"])}" '
+            f'data-analytics-event="google_play_click" data-cta-location="about_intro">{t["cta"]}</a></p></section>'
         )
     if section == "features":
         return (
@@ -228,7 +255,8 @@ def render_content(lang, section):
             f'{render_features(lang)}'
             f'<section class="section end"><h2>{t["download"]}</h2>'
             f'<p>{esc(APP["tagline"][lang])}</p>'
-            f'<a class="btn" href="{esc(APP["google_play_url"])}">{t["cta"]}</a></section></section>'
+            f'<a class="btn" href="{esc(APP["google_play_url"])}" '
+            f'data-analytics-event="google_play_click" data-cta-location="features_end">{t["cta"]}</a></section></section>'
         )
     if section == "download":
         return render_download(lang)
@@ -285,8 +313,9 @@ def render_page(lang, section):
 <meta property="og:url" content="{canonical}">
 <link rel="stylesheet" href="{BASE_URL}/assets/style.css">
 <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
+{render_analytics()}
 </head>
-<body>
+<body data-page-section="{section}">
 {render_header(lang, section)}
 <main>{content}</main>
 <footer><span>© DevImpact · JOB CONNECT</span>
@@ -310,8 +339,9 @@ def render_language_root():
 <link rel="alternate" hreflang="ar" href="{page_url("ar")}">
 <link rel="alternate" hreflang="x-default" href="{canonical}">
 <link rel="stylesheet" href="{BASE_URL}/assets/style.css">
+{render_analytics()}
 </head>
-<body><main class="language"><div><div class="tag">JOB CONNECT</div>
+<body data-page-section="language-root"><main class="language"><div><div class="tag">JOB CONNECT</div>
 <h1>Choose your language / اختر لغتك</h1>
 <p><a lang="en" href="{page_url("en")}">English</a>
 <a lang="ar" dir="rtl" href="{page_url("ar")}">العربية</a></p></div></main></body>

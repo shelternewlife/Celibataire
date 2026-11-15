@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
 APP = json.loads((ROOT / "content/app.json").read_text(encoding="utf-8"))
+GA_MEASUREMENT_ID = APP["ga4_measurement_id"]
 SCREENSHOTS = json.loads((ROOT / "content/screenshots.json").read_text(encoding="utf-8"))
 FEATURES = json.loads((ROOT / "content/features.json").read_text(encoding="utf-8"))
 BASE = APP["website_url"].rstrip("/")
@@ -91,6 +92,12 @@ for lang in ("en", "ar"):
         if parser.hreflang.get("x-default") != expected_url("en", section):
             fail(f"Wrong x-default hreflang for {path.relative_to(DIST)}")
         page_html = path.read_text(encoding="utf-8")
+        if f"https://www.googletagmanager.com/gtag/js?id={GA_MEASUREMENT_ID}" not in page_html:
+            fail(f"Missing GA4 library on {path.relative_to(DIST)}")
+        if f"gtag('config', '{GA_MEASUREMENT_ID}')" not in page_html:
+            fail(f"Missing GA4 configuration on {path.relative_to(DIST)}")
+        if "gtag('event', 'google_play_click'" not in page_html:
+            fail(f"Missing Google Play click event handler on {path.relative_to(DIST)}")
         for required_meta in ('name="description"', 'name="robots" content="index,follow', 'property="og:title"', 'property="og:image"', 'name="twitter:card"'):
             if required_meta not in page_html:
                 fail(f"Missing SEO metadata {required_meta} in {path.relative_to(DIST)}")
@@ -98,6 +105,17 @@ for lang in ("en", "ar"):
             fail(f"Missing title for {path.relative_to(DIST)}")
         if not parser.h1 or not "".join(parser.h1).strip():
             fail(f"Missing H1 for {path.relative_to(DIST)}")
+        import re
+        tracked_locations = {
+            "home": ["home_hero"],
+            "about": ["about_intro"],
+            "features": ["features_end"],
+            "download": ["download_hero", "download_end"],
+            "faq": [],
+        }
+        found_locations = re.findall(r'data-analytics-event="google_play_click" data-cta-location="([^"]+)"', page_html)
+        if found_locations != tracked_locations[section]:
+            fail(f"Incorrect Google Play click tracking locations on {path.relative_to(DIST)}")
         if section == "download":
             page_html = path.read_text(encoding="utf-8")
             if APP["google_play_url"] not in parser.links:
@@ -157,6 +175,10 @@ if (DIST / "index.html").is_file():
         fail("Root canonical URL is incorrect")
     if 'name="google-site-verification"' not in root_html:
         fail("Google Search Console verification meta tag missing from root page")
+    if f"https://www.googletagmanager.com/gtag/js?id={GA_MEASUREMENT_ID}" not in root_html:
+        fail("GA4 library missing from language root")
+    if f"gtag('config', '{GA_MEASUREMENT_ID}')" not in root_html:
+        fail("GA4 configuration missing from language root")
     for lang in ("en", "ar"):
         if expected_url(lang) not in root_html:
             fail(f"Root language link missing: {lang}")

@@ -14,6 +14,7 @@ class PageParser(HTMLParser):
     def __init__(self):
         super().__init__()
         self.links = []
+        self.tracked_ctas = []
         self.images = []
         self.h1 = []
         self.in_h1 = False
@@ -21,6 +22,8 @@ class PageParser(HTMLParser):
         attrs = dict(attrs)
         if tag == "a" and attrs.get("href"):
             self.links.append(attrs["href"])
+            if attrs.get("data-analytics-event") == "google_play_click":
+                self.tracked_ctas.append(attrs)
         if tag == "img":
             self.images.append(attrs)
         if tag == "h1":
@@ -152,6 +155,30 @@ class SiteTests(unittest.TestCase):
             self.assertIn(APP["google_play_url"], parser.links)
             self.assertIn('id="feature-discovery"', source)
             self.assertIn('id="feature-collections"', source)
+
+    def test_ga4_tracks_google_play_ctas_with_page_context(self):
+        measurement_id = APP["ga4_measurement_id"]
+        expected_locations = {
+            "home": ["home_hero"],
+            "about": ["about_intro"],
+            "features": ["features_end"],
+            "download": ["download_hero", "download_end"],
+            "faq": [],
+        }
+        for lang in ("en", "ar"):
+            for section, locations in expected_locations.items():
+                source = output_path(lang, section).read_text(encoding="utf-8")
+                parser = PageParser()
+                parser.feed(source)
+                self.assertIn(f"https://www.googletagmanager.com/gtag/js?id={measurement_id}", source)
+                self.assertIn(f"gtag('config', '{measurement_id}')", source)
+                self.assertIn("gtag('event', 'google_play_click'", source)
+                self.assertEqual([cta.get("data-cta-location") for cta in parser.tracked_ctas], locations)
+                for cta in parser.tracked_ctas:
+                    self.assertEqual(cta.get("href"), APP["google_play_url"])
+                    self.assertEqual(cta.get("data-analytics-event"), "google_play_click")
+        root = (DIST / "index.html").read_text(encoding="utf-8")
+        self.assertIn(f"gtag('config', '{measurement_id}')", root)
 
     def test_no_previous_brand(self):
         for path in DIST.rglob("*.html"):
