@@ -185,19 +185,62 @@ if (DIST / "index.html").is_file():
 
 try:
     sitemap_root = ET.parse(DIST / "sitemap.xml").getroot()
-    sitemap_urls = [node.find(f"{NS}loc").text for node in sitemap_root.findall(f"{NS}url")]
+    if sitemap_root.tag != f"{NS}urlset":
+        fail("Sitemap root must be the standard XML urlset element")
+    sitemap_nodes = sitemap_root.findall(f"{NS}url")
+    sitemap_urls = []
+    xhtml_ns = "{http://www.w3.org/1999/xhtml}"
+    for node in sitemap_nodes:
+        loc = node.find(f"{NS}loc")
+        if loc is None or not loc.text:
+            fail("Sitemap contains a URL entry without a loc value")
+            continue
+        sitemap_urls.append(loc.text.strip())
+        alternates = {
+            item.get("hreflang"): item.get("href")
+            for item in node.findall(f"{xhtml_ns}link")
+            if item.get("rel") == "alternate"
+        }
+        if loc.text.strip() == f"{BASE}/":
+            expected_alternates = {
+                "en": expected_url("en"),
+                "ar": expected_url("ar"),
+                "x-default": f"{BASE}/",
+            }
+        else:
+            parsed_loc = urlparse(loc.text.strip())
+            relative_parts = parsed_loc.path.rstrip("/").split("/")
+            lang = relative_parts[-1] if relative_parts[-1] in ("en", "ar") else relative_parts[-2]
+            section = "home" if relative_parts[-1] in ("en", "ar") else relative_parts[-1]
+            expected_alternates = {
+                "en": expected_url("en", section),
+                "ar": expected_url("ar", section),
+                "x-default": expected_url("en", section),
+            }
+        if alternates != expected_alternates:
+            fail(f"Incorrect hreflang sitemap alternates for {loc.text.strip()}")
     if len(sitemap_urls) != len(route_urls):
         fail(f"Sitemap should contain {len(route_urls)} routes, found {len(sitemap_urls)}")
     if len(set(sitemap_urls)) != len(sitemap_urls):
         fail("Sitemap contains duplicate URLs")
     if set(sitemap_urls) != route_urls:
         fail("Sitemap URLs do not match the generated site routes")
+    for sitemap_url in sitemap_urls:
+        parsed_url = urlparse(sitemap_url)
+        if parsed_url.scheme != "https" or parsed_url.netloc != urlparse(BASE).netloc:
+            fail(f"Sitemap contains a non-canonical host or non-HTTPS URL: {sitemap_url}")
+        if parsed_url.query or parsed_url.fragment:
+            fail(f"Sitemap contains a URL with query or fragment: {sitemap_url}")
 except Exception as exc:
     fail(f"Invalid sitemap XML: {exc}")
 
 robots = (DIST / "robots.txt").read_text(encoding="utf-8") if (DIST / "robots.txt").is_file() else ""
-if f"Sitemap: {BASE}/sitemap.xml" not in robots:
-    fail("robots.txt does not reference the generated sitemap")
+robots_lines = [line.strip() for line in robots.splitlines() if line.strip()]
+if "User-agent: *" not in robots_lines or "Allow: /" not in robots_lines:
+    fail("robots.txt must allow crawling for all user agents")
+sitemap_directives = [line for line in robots_lines if line.lower().startswith("sitemap:")]
+if sitemap_directives != [f"Sitemap: {BASE}/sitemap.xml"]:
+    fail("robots.txt must contain exactly one canonical sitemap directive")
 
 if APP["package_id"] not in APP["google_play_url"]:
     fail("Package ID mismatch in Google Play URL")

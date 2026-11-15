@@ -112,6 +112,41 @@ class SiteTests(unittest.TestCase):
         self.assertIn(f'href="{BASE}/ar/"', source)
         self.assertIn(f'<link rel="canonical" href="{BASE}/">', source)
 
+    def test_sitemap_contains_reciprocal_language_alternates(self):
+        import xml.etree.ElementTree as ET
+        root = ET.parse(DIST / "sitemap.xml").getroot()
+        ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+        xhtml = "{http://www.w3.org/1999/xhtml}"
+        entries = root.findall(f"{ns}url")
+        self.assertEqual(len(entries), 11)
+        for entry in entries:
+            loc = entry.find(f"{ns}loc").text
+            alternates = {
+                node.get("hreflang"): node.get("href")
+                for node in entry.findall(f"{xhtml}link")
+            }
+            if loc == f"{BASE}/":
+                self.assertEqual(alternates, {
+                    "en": f"{BASE}/en/",
+                    "ar": f"{BASE}/ar/",
+                    "x-default": f"{BASE}/",
+                })
+                continue
+            route = loc[len(BASE) + 1:].strip("/")
+            parts = route.split("/")
+            section = "home" if len(parts) == 1 else parts[1]
+            self.assertEqual(alternates, {
+                "en": f"{BASE}/en/" + ("" if section == "home" else f"{section}/"),
+                "ar": f"{BASE}/ar/" + ("" if section == "home" else f"{section}/"),
+                "x-default": f"{BASE}/en/" + ("" if section == "home" else f"{section}/"),
+            })
+
+    def test_robots_txt_has_one_canonical_sitemap_directive(self):
+        lines = [line.strip() for line in (DIST / "robots.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
+        self.assertIn("User-agent: *", lines)
+        self.assertIn("Allow: /", lines)
+        self.assertEqual([line for line in lines if line.lower().startswith("sitemap:")], [f"Sitemap: {BASE}/sitemap.xml"])
+
     def test_screenshot_asset_exists(self):
         self.assertTrue((DIST / "assets/screens/screen-1.webp").is_file())
 

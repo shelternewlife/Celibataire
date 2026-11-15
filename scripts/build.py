@@ -363,11 +363,26 @@ def main():
             relative = pathlib.Path(lang) / ("" if section == "home" else section) / "index.html"
             write(relative, render_page(lang, section))
     write(pathlib.Path("robots.txt"), f"User-agent: *\nAllow: /\nSitemap: {BASE_URL}/sitemap.xml\n")
-    sitemap_urls = [f"{BASE_URL}/"]
-    sitemap_urls.extend(page_url(lang, section) for lang in ("en", "ar") for section in ("home", "about", "features", "download", "faq"))
+    sitemap_entries = [(f"{BASE_URL}/", None, "home")]
+    sitemap_entries.extend(
+        (page_url(lang, section), lang, section)
+        for lang in ("en", "ar")
+        for section in ("home", "about", "features", "download", "faq")
+    )
     sitemap = '<?xml version="1.0" encoding="UTF-8"?>'
-    sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
-    sitemap += "".join(f"<url><loc>{esc(url)}</loc></url>" for url in sitemap_urls)
+    sitemap += (
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
+        'xmlns:xhtml="http://www.w3.org/1999/xhtml">'
+    )
+    for url, lang, section in sitemap_entries:
+        english_url = page_url("en", section)
+        arabic_url = page_url("ar", section)
+        default_url = f"{BASE_URL}/" if lang is None else english_url
+        sitemap += f"<url><loc>{esc(url)}</loc>"
+        sitemap += f'<xhtml:link rel="alternate" hreflang="en" href="{esc(english_url)}"/>'
+        sitemap += f'<xhtml:link rel="alternate" hreflang="ar" href="{esc(arabic_url)}"/>'
+        sitemap += f'<xhtml:link rel="alternate" hreflang="x-default" href="{esc(default_url)}"/>'
+        sitemap += "</url>"
     sitemap += "</urlset>"
     write(pathlib.Path("sitemap.xml"), sitemap)
     write(pathlib.Path("llms.txt"), (
