@@ -9,6 +9,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
 APP = json.loads((ROOT / "content/app.json").read_text(encoding="utf-8"))
 SCREENSHOTS = json.loads((ROOT / "content/screenshots.json").read_text(encoding="utf-8"))
+FEATURES = json.loads((ROOT / "content/features.json").read_text(encoding="utf-8"))
 BASE = APP["website_url"].rstrip("/")
 NS = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
 ERRORS = []
@@ -72,7 +73,7 @@ for path in required_files:
 
 route_urls = {f"{BASE}/"}
 for lang in ("en", "ar"):
-    for section in ("home", "about", "features", "faq"):
+    for section in ("home", "about", "features", "download", "faq"):
         route_urls.add(expected_url(lang, section))
         path = page_path(lang, section)
         if not path.is_file():
@@ -87,14 +88,34 @@ for lang in ("en", "ar"):
             fail(f"Wrong English hreflang for {path.relative_to(DIST)}")
         if parser.hreflang.get("ar") != expected_url("ar", section):
             fail(f"Wrong Arabic hreflang for {path.relative_to(DIST)}")
+        if parser.hreflang.get("x-default") != expected_url("en", section):
+            fail(f"Wrong x-default hreflang for {path.relative_to(DIST)}")
+        page_html = path.read_text(encoding="utf-8")
+        for required_meta in ('name="description"', 'name="robots" content="index,follow', 'property="og:title"', 'property="og:image"', 'name="twitter:card"'):
+            if required_meta not in page_html:
+                fail(f"Missing SEO metadata {required_meta} in {path.relative_to(DIST)}")
         if not parser.title or not "".join(parser.title).strip():
             fail(f"Missing title for {path.relative_to(DIST)}")
         if not parser.h1 or not "".join(parser.h1).strip():
             fail(f"Missing H1 for {path.relative_to(DIST)}")
+        if section == "download":
+            page_html = path.read_text(encoding="utf-8")
+            if APP["google_play_url"] not in parser.links:
+                fail(f"Download page is missing its official Google Play CTA: {path.relative_to(DIST)}")
+            if 'name="description"' not in page_html or 'name="robots" content="index,follow' not in page_html:
+                fail(f"Download page is missing SEO description or index directive: {path.relative_to(DIST)}")
+            if '"@type": "MobileApplication"' not in page_html or '"installUrl":' not in page_html:
+                fail(f"Download page is missing MobileApplication install structured data: {path.relative_to(DIST)}")
+        if section == "features":
+            page_html = path.read_text(encoding="utf-8")
+            if APP["google_play_url"] not in parser.links:
+                fail(f"Features page is missing its Google Play CTA: {path.relative_to(DIST)}")
+            if len(parser.images) != len(FEATURES):
+                fail(f"Features page should illustrate every feature with a screenshot: {path.relative_to(DIST)}")
         if section == "home":
-            if len(parser.images) != len(SCREENSHOTS) + 1:
-                fail(f"Homepage gallery should contain {len(SCREENSHOTS)} screenshots plus its hero image: {path.relative_to(DIST)}")
-            gallery_images = parser.images[1:]
+            if len(parser.images) != 1 + (len(SCREENSHOTS) * 2):
+                fail(f"Homepage should contain a hero image, {len(SCREENSHOTS)} gallery images and {len(SCREENSHOTS)} feature images: {path.relative_to(DIST)}")
+            gallery_images = parser.images[1:1 + len(SCREENSHOTS)]
             if len({image.get("src") for image in gallery_images}) != len(SCREENSHOTS):
                 fail(f"Homepage gallery contains duplicate screenshot sources: {path.relative_to(DIST)}")
             if any(not image.get("alt", "").strip() for image in gallery_images):

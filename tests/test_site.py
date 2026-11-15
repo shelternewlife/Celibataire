@@ -53,7 +53,7 @@ class SiteTests(unittest.TestCase):
     def test_all_expected_routes_exist(self):
         self.assertTrue((DIST / "index.html").is_file())
         for lang in ("en", "ar"):
-            for section in ("home", "about", "features", "faq"):
+            for section in ("home", "about", "features", "download", "faq"):
                 self.assertTrue(output_path(lang, section).is_file(), f"{lang}/{section}")
 
     def test_page_content_is_section_specific(self):
@@ -73,7 +73,7 @@ class SiteTests(unittest.TestCase):
 
     def test_navigation_uses_project_root_urls(self):
         for lang in ("en", "ar"):
-            for section in ("home", "about", "features", "faq"):
+            for section in ("home", "about", "features", "download", "faq"):
                 parser = PageParser()
                 parser.feed(output_path(lang, section).read_text(encoding="utf-8"))
                 self.assertIn(f"{BASE}/{lang}/about/", parser.links)
@@ -84,7 +84,7 @@ class SiteTests(unittest.TestCase):
     def test_language_switch_preserves_page(self):
         for lang in ("en", "ar"):
             other = "ar" if lang == "en" else "en"
-            for section in ("home", "about", "features", "faq"):
+            for section in ("home", "about", "features", "download", "faq"):
                 parser = PageParser()
                 parser.feed(output_path(lang, section).read_text(encoding="utf-8"))
                 expected = f"{BASE}/{other}/" + ("" if section == "home" else f"{section}/")
@@ -95,11 +95,11 @@ class SiteTests(unittest.TestCase):
         root = ET.parse(DIST / "sitemap.xml").getroot()
         ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
         urls = [node.find(f"{ns}loc").text for node in root.findall(f"{ns}url")]
-        self.assertEqual(len(urls), 9)
+        self.assertEqual(len(urls), 11)
         self.assertEqual(len(urls), len(set(urls)))
         self.assertIn(f"{BASE}/", urls)
         for lang in ("en", "ar"):
-            for section in ("home", "about", "features", "faq"):
+            for section in ("home", "about", "features", "download", "faq"):
                 expected = f"{BASE}/{lang}/" + ("" if section == "home" else f"{section}/")
                 self.assertIn(expected, urls)
 
@@ -116,12 +116,42 @@ class SiteTests(unittest.TestCase):
         for lang in ("en", "ar"):
             parser = PageParser()
             parser.feed(output_path(lang).read_text(encoding="utf-8"))
-            gallery_images = parser.images[1:]
+            gallery_images = parser.images[1:6]
+            self.assertEqual(len(parser.images), 11)
             self.assertEqual(len(gallery_images), 5)
             self.assertEqual(len({image.get("src") for image in gallery_images}), 5)
             self.assertTrue(all(image.get("src", "").startswith("https://play-lh.googleusercontent.com/") for image in gallery_images))
             self.assertTrue(all(image.get("alt", "").strip() for image in gallery_images))
             self.assertIn('id="screenshots"', output_path(lang).read_text(encoding="utf-8"))
+
+
+    def test_download_pages_have_official_store_cta_and_seo(self):
+        for lang in ("en", "ar"):
+            source = output_path(lang, "download").read_text(encoding="utf-8")
+            parser = PageParser()
+            parser.feed(source)
+            self.assertIn(APP["google_play_url"], parser.links)
+            self.assertIn('rel="canonical"', source)
+            self.assertIn('hreflang="ar"', source)
+            self.assertIn('hreflang="en"', source)
+            self.assertIn('hreflang="x-default"', source)
+            self.assertIn('name="description"', source)
+            self.assertIn('name="robots" content="index,follow', source)
+            self.assertIn('property="og:image"', source)
+            self.assertIn('name="twitter:card"', source)
+            self.assertIn('"@type": "MobileApplication"', source)
+            self.assertIn(APP["package_id"], source)
+            self.assertIn("target=\"_blank\"", source)
+
+    def test_features_pages_show_each_feature_and_download_cta(self):
+        for lang in ("en", "ar"):
+            source = output_path(lang, "features").read_text(encoding="utf-8")
+            parser = PageParser()
+            parser.feed(source)
+            self.assertEqual(len(parser.images), 5)
+            self.assertIn(APP["google_play_url"], parser.links)
+            self.assertIn('id="feature-discovery"', source)
+            self.assertIn('id="feature-collections"', source)
 
     def test_no_previous_brand(self):
         for path in DIST.rglob("*.html"):
