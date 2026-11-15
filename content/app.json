@@ -1,0 +1,19 @@
+{
+  "name": "Job Connect",
+  "developer": "DevImpact",
+  "package_id": "com.jobsearch.jobconnect.work.jobs.devimpact",
+  "google_play_url": "https://play.google.com/store/apps/details?id=com.jobsearch.jobconnect.work.jobs.devimpact",
+  "website_url": "https://shelternewlife.github.io/tobemotif-app-discovery/",
+  "category": "Business",
+  "content_rating": "Everyone",
+  "contains_ads": true,
+  "distribution_status": "published_on_google_play",
+  "languages": ["en", "ar"],
+  "android_min_version": null,
+  "privacy_policy_url": "https://sites.google.com/view/regles-2-confidentialite",
+  "support_email": "carta.net.play@gmail.com",
+  "description": {
+    "en": "Job Connect helps job seekers discover job opportunities, search job listings, set job alerts, and save jobs for later.",
+    "ar": "يساعدك Job Connect على اكتشاف فرص العمل والبحث عن الوظائف وإعداد تنبيهات وظيفية وحفظ الوظائف للعودة إليها لاحقاً."
+  }
+}

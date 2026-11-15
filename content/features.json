@@ -1,0 +1,6 @@
+[
+  {"id":"job-search","title":{"en":"Search job listings","ar":"البحث عن الوظائف"},"description":{"en":"Explore job listings and look for opportunities that match your skills and interests.","ar":"استكشف قوائم الوظائف وابحث عن فرص تتناسب مع مهاراتك واهتماماتك."}},
+  {"id":"job-alerts","title":{"en":"Job alerts","ar":"تنبيهات الوظائف"},"description":{"en":"Set up job alerts to keep track of opportunities.","ar":"أعدّ تنبيهات وظيفية لمتابعة الفرص الجديدة."}},
+  {"id":"saved-jobs","title":{"en":"Save jobs","ar":"حفظ الوظائف"},"description":{"en":"Save job listings so you can return to them later.","ar":"احفظ إعلانات الوظائف لتتمكن من الرجوع إليها لاحقاً."}},
+  {"id":"career-discovery","title":{"en":"Explore career opportunities","ar":"اكتشاف الفرص والمسارات المهنية"},"description":{"en":"Discover different job roles and potential career paths.","ar":"اكتشف أدواراً وظيفية مختلفة ومسارات مهنية محتملة."}}
+]
