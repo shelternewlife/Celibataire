@@ -336,6 +336,22 @@ class SiteTests(unittest.TestCase):
                 self.assertIn('class="standard-header"', source)
                 self.assertLess(source.index('<div class="header-main">'), source.index('<div class="locale-switch"'))
 
+
+    def test_social_platform_links_are_present_on_legacy_pages(self):
+        expected = {
+            "Facebook": "https://www.facebook.com/",
+            "X": "https://x.com/",
+            "TikTok": "https://www.tiktok.com/",
+            "Instagram": "https://www.instagram.com/",
+        }
+        for lang in ("en", "ar"):
+            for tail in ("", "about", "features", "download", "faq", "blog", "guide", "tips", "comparison"):
+                path = DIST / lang / tail / "index.html" if tail else DIST / lang / "index.html"
+                source = path.read_text(encoding="utf-8")
+                self.assertIn('<div class="social-links" aria-label="Social media">', source)
+                for label, url in expected.items():
+                    self.assertIn(f'href="{url}" target="_blank" rel="noopener noreferrer" aria-label="{label}"', source)
+
     def test_resource_navigation_is_present(self):
         for lang in ("en", "ar"):
             for tail in ("", "about", "features", "download", "faq", "blog", "guide", "tips", "comparison"):

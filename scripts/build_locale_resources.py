@@ -113,7 +113,8 @@ def render_locale_flags(locale, tail):
             f'title="{esc(label)}" aria-label="{esc(label)}"{current}>'
             f'<span aria-hidden="true">{flag}</span></a>'
         )
-    return '<div class="locale-switch" aria-label="Country and region">' + "".join(links) + '</div>'
+    import build
+    return '<div class="locale-switch" aria-label="Country and region">' + "".join(links) + build.render_social_links() + '</div>'
 
 def esc(value):
     return html.escape(str(value), quote=True)

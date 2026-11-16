@@ -243,6 +243,22 @@ class MarketLocaleTests(unittest.TestCase):
                 source = path.read_text(encoding="utf-8")
                 self.assertLess(source.index('<a class="brand"'), source.index('<nav aria-label="Primary navigation">'))
 
+
+    def test_social_links_are_present_on_every_published_locale_page(self):
+        expected = {
+            "Facebook": "https://www.facebook.com/",
+            "X": "https://x.com/",
+            "TikTok": "https://www.tiktok.com/",
+            "Instagram": "https://www.instagram.com/",
+        }
+        for locale in STRATEGY["published_locales"]:
+            for tail in ("", "about", "features", "download", "faq"):
+                path = DIST / locale.lower() / (tail or "") / "index.html"
+                source = path.read_text(encoding="utf-8")
+                self.assertIn('<div class="social-links" aria-label="Social media">', source)
+                for label, url in expected.items():
+                    self.assertIn(f'href="{url}" target="_blank" rel="noopener noreferrer" aria-label="{label}"', source)
+
     def test_root_selector_points_to_every_published_locale(self):
         source = (DIST / "index.html").read_text(encoding="utf-8")
         for locale in STRATEGY["published_locales"]:

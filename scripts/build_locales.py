@@ -49,7 +49,8 @@ def render_locale_flags(published, tail="", current=None):
             f'title="{html.escape(label, quote=True)}" aria-label="{html.escape(label, quote=True)}"{current_attr}>'
             f'<span aria-hidden="true">{flag}</span></a>'
         )
-    return "".join(links)
+    import build
+    return "".join(links) + build.render_social_links()
 
 def localize(source, locale, section, route_tail=None):
     import build

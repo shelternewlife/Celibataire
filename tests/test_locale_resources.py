@@ -108,6 +108,21 @@ class LocalizedResourceRouteTests(unittest.TestCase):
                     self.assertEqual(len(re.findall(r'<a data-nav-item="[^"]+"', markup)), 4, f"{locale}/{tail}/{name}")
                     for suffix in expected[name]:
                         self.assertIn(f'href="{BASE}/{slug}/{suffix}"', markup, f"{locale}/{tail}/{name}/{suffix}")
+
+    def test_social_platform_links_are_present_on_every_localized_resource_hub(self):
+        expected = {
+            "Facebook": "https://www.facebook.com/",
+            "X": "https://x.com/",
+            "TikTok": "https://www.tiktok.com/",
+            "Instagram": "https://www.instagram.com/",
+        }
+        for locale in LOCALES:
+            for tail in HUBS:
+                source = (DIST / locale.lower() / tail / "index.html").read_text(encoding="utf-8")
+                self.assertIn('<div class="social-links" aria-label="Social media">', source)
+                for label, url in expected.items():
+                    self.assertIn(f'href="{url}" target="_blank" rel="noopener noreferrer" aria-label="{label}"', source)
+
     def test_french_hubs_have_french_titles_and_content(self):
         expected_phrases = {
             "tips": "Conseils pour la recherche d’emploi",
