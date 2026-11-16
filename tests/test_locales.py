@@ -214,24 +214,27 @@ class MarketLocaleTests(unittest.TestCase):
 
     def test_flags_are_above_site_name_only_on_home_and_inline_elsewhere(self):
         expected_flags = {
-            "en-US": "🇺🇸", "en-CA": "🇨🇦", "fr-CA": "🇨🇦",
-            "es-ES": "🇪🇸", "pt-PT": "🇵🇹", "fr-FR": "🇫🇷",
-            "de-DE": "🇩🇪", "it-IT": "🇮🇹",
+            "en-US": ("us", "United States"), "en-CA": ("ca", "Canada"), "fr-CA": ("ca", "Canada"),
+            "es-ES": ("es", "Spain"), "pt-PT": ("pt", "Portugal"), "fr-FR": ("fr", "France"),
+            "de-DE": ("de", "Germany"), "it-IT": ("it", "Italy"),
         }
         for locale in STRATEGY["published_locales"]:
             home = (DIST / locale.lower() / "index.html").read_text(encoding="utf-8")
             self.assertIn('<header class="home-header">', home)
             self.assertLess(home.index('<div class="locale-switch"'), home.index('<div class="header-main">'))
-            for code, flag in expected_flags.items():
+            for code, (flag, country_name) in expected_flags.items():
                 self.assertIn(f'lang="{code}"', home)
-                self.assertIn(f'<span aria-hidden="true">{flag}</span>', home)
+                self.assertIn(f'<img src="https://flagcdn.com/w80/{flag}.png" alt="{country_name} flag" width="40" height="30"', home)
+                self.assertNotIn(f'<span aria-hidden="true">{flag}</span>', home)
             for tail in ("about", "features", "download", "faq"):
                 page = (DIST / locale.lower() / tail / "index.html").read_text(encoding="utf-8")
                 self.assertIn('<header class="standard-header">', page)
                 self.assertLess(page.index('<div class="header-main">'), page.index('<div class="locale-switch"'))
                 self.assertLess(page.index('<div class="locale-switch"'), page.index('<a class="brand"'))
-                for code in expected_flags:
+                for code, (flag, country_name) in expected_flags.items():
                     self.assertIn(f'lang="{code}"', page)
+                    self.assertIn(f'<img src="https://flagcdn.com/w80/{flag}.png" alt="{country_name} flag" width="40" height="30"', page)
+                self.assertNotRegex(page, r'<a class="locale-flag"[^>]*>\\s*<span')
         root = (DIST / "index.html").read_text(encoding="utf-8")
         self.assertIn('class="locale-switch"', root)
         css = (DIST / "assets/style.css").read_text(encoding="utf-8")

@@ -29,25 +29,26 @@ def replace_text(source, old, new):
     return source
 
 FLAG_DATA = {
-    "en-US": ("🇺🇸", "United States · English"),
-    "en-CA": ("🇨🇦", "Canada · English"),
-    "fr-CA": ("🇨🇦", "Canada · Français"),
-    "es-ES": ("🇪🇸", "España · Español"),
-    "pt-PT": ("🇵🇹", "Portugal · Português"),
-    "fr-FR": ("🇫🇷", "France · Français"),
-    "de-DE": ("🇩🇪", "Deutschland · Deutsch"),
-    "it-IT": ("🇮🇹", "Italia · Italiano"),
+    "en-US": ("us", "United States", "United States · English"),
+    "en-CA": ("ca", "Canada", "Canada · English"),
+    "fr-CA": ("ca", "Canada", "Canada · Français"),
+    "es-ES": ("es", "Spain", "España · Español"),
+    "pt-PT": ("pt", "Portugal", "Portugal · Português"),
+    "fr-FR": ("fr", "France", "France · Français"),
+    "de-DE": ("de", "Germany", "Deutschland · Deutsch"),
+    "it-IT": ("it", "Italy", "Italia · Italiano"),
 }
 
 def render_locale_flags(published, tail="", current=None):
     links = []
     for code in published:
-        flag, label = FLAG_DATA[code]
+        country, country_name, label = FLAG_DATA[code]
         current_attr = ' aria-current="page"' if code == current else ""
+        flag_url = f"https://flagcdn.com/w80/{country}.png"
         links.append(
             f'<a class="locale-flag" lang="{code}" href="{BASE}/{slug(code)}/{tail}" '
             f'title="{html.escape(label, quote=True)}" aria-label="{html.escape(label, quote=True)}"{current_attr}>'
-            f'<span aria-hidden="true">{flag}</span></a>'
+            f'<img src="{flag_url}" alt="{html.escape(country_name, quote=True)} flag" width="40" height="30" loading="eager" decoding="async"></a>'
         )
     return "".join(links)
 
