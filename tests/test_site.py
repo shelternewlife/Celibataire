@@ -9,6 +9,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
 APP = json.loads((ROOT / "content/app.json").read_text(encoding="utf-8"))
 BASE = APP["website_url"].rstrip("/")
+from scripts.build_resources import routes as resource_routes, DATA, GUIDES
 
 class PageParser(HTMLParser):
     def __init__(self):
@@ -98,7 +99,7 @@ class SiteTests(unittest.TestCase):
         root = ET.parse(DIST / "sitemap.xml").getroot()
         ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
         urls = [node.find(f"{ns}loc").text for node in root.findall(f"{ns}url")]
-        self.assertEqual(len(urls), 11)
+        self.assertEqual(len(urls), 1 + len(resource_routes()))
         self.assertEqual(len(urls), len(set(urls)))
         self.assertIn(f"{BASE}/", urls)
         for lang in ("en", "ar"):
@@ -118,7 +119,7 @@ class SiteTests(unittest.TestCase):
         ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
         xhtml = "{http://www.w3.org/1999/xhtml}"
         entries = root.findall(f"{ns}url")
-        self.assertEqual(len(entries), 11)
+        self.assertEqual(len(entries), 1 + len(resource_routes()))
         for entry in entries:
             loc = entry.find(f"{ns}loc").text
             alternates = {
@@ -134,11 +135,11 @@ class SiteTests(unittest.TestCase):
                 continue
             route = loc[len(BASE) + 1:].strip("/")
             parts = route.split("/")
-            section = "home" if len(parts) == 1 else parts[1]
+            tail = "/".join(parts[1:])
             self.assertEqual(alternates, {
-                "en": f"{BASE}/en/" + ("" if section == "home" else f"{section}/"),
-                "ar": f"{BASE}/ar/" + ("" if section == "home" else f"{section}/"),
-                "x-default": f"{BASE}/en/" + ("" if section == "home" else f"{section}/"),
+                "en": f"{BASE}/en/" + (f"{tail}/" if tail else ""),
+                "ar": f"{BASE}/ar/" + (f"{tail}/" if tail else ""),
+                "x-default": f"{BASE}/en/" + (f"{tail}/" if tail else ""),
             })
 
     def test_robots_txt_references_both_canonical_sitemaps(self):
@@ -149,7 +150,7 @@ class SiteTests(unittest.TestCase):
 
     def test_text_sitemap_contains_root_and_all_language_routes(self):
         urls = [line.strip() for line in (DIST / "sitemap.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
-        self.assertEqual(len(urls), 11)
+        self.assertEqual(len(urls), 1 + len(resource_routes()))
         self.assertEqual(len(urls), len(set(urls)))
         self.assertIn(f"{BASE}/", urls)
         for lang in ("en", "ar"):
@@ -267,6 +268,41 @@ class SiteTests(unittest.TestCase):
             parser.feed(output_path(lang, "faq").read_text(encoding="utf-8"))
             self.assertIn(APP["google_play_url"], parser.links)
             self.assertEqual([cta.get("data-cta-location") for cta in parser.tracked_ctas], ["faq_end"])
+
+    def test_bilingual_blog_and_resource_pages_exist(self):
+        for lang in ("en", "ar"):
+            for tail in ("blog", "guide", "tips", "comparison"):
+                self.assertTrue((DIST / lang / tail / "index.html").is_file())
+            for article in DATA:
+                path = DIST / lang / "blog" / article[0] / "index.html"
+                self.assertTrue(path.is_file())
+                source = path.read_text(encoding="utf-8")
+                self.assertIn(article[1] if lang == "en" else article[2], source)
+                self.assertIn('"@type": "Article"', source)
+                self.assertIn('hreflang="ar"', source)
+                self.assertIn('hreflang="en"', source)
+
+    def test_guide_uses_all_five_real_store_screenshots(self):
+        for lang in ("en", "ar"):
+            parser = PageParser()
+            parser.feed((DIST / lang / "guide" / "index.html").read_text(encoding="utf-8"))
+            self.assertEqual(len(parser.images), 5)
+            self.assertTrue(all(image.get("alt") and image.get("width") == "526" for image in parser.images))
+            manifest = json.loads((ROOT / "content/screenshots.json").read_text(encoding="utf-8"))
+            self.assertEqual({i.get("src") for i in parser.images}, {s["src"] for s in manifest})
+
+    def test_resource_navigation_is_present(self):
+        for lang in ("en", "ar"):
+            for tail in ("", "about", "features", "download", "faq", "blog", "guide", "tips", "comparison"):
+                path = DIST / lang / tail / "index.html" if tail else DIST / lang / "index.html"
+                source = path.read_text(encoding="utf-8")
+                for section in ("blog", "guide", "tips", "comparison"):
+                    self.assertIn(f'href="{BASE}/{lang}/{section}/"', source)
+
+    def test_comparison_is_qualified_not_a_performance_benchmark(self):
+        for lang in ("en", "ar"):
+            source = (DIST / lang / "comparison" / "index.html").read_text(encoding="utf-8")
+            self.assertIn("independent performance study" if lang == "en" else "مقارنة وصفية", source)
 
     def test_no_previous_brand(self):
         for path in DIST.rglob("*.html"):

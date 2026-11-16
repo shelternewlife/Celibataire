@@ -4,6 +4,7 @@ import sys
 import xml.etree.ElementTree as ET
 from html.parser import HTMLParser
 from urllib.parse import urlparse
+from build_resources import routes as resource_routes
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
@@ -178,6 +179,35 @@ for lang in ("en", "ar"):
             if not target.is_file():
                 fail(f"Broken internal link {href} in {path.relative_to(DIST)}")
 
+
+for lang, tail in resource_routes():
+    resource_url = f"{BASE}/{lang}/" + (f"{tail}/" if tail else "")
+    route_urls.add(resource_url)
+    if tail in ("", "about", "features", "download", "faq"):
+        continue
+    resource_path = DIST / lang / tail / "index.html"
+    if not resource_path.is_file():
+        fail(f"Missing resource route: {resource_path.relative_to(DIST)}")
+        continue
+    source = resource_path.read_text(encoding="utf-8")
+    parser = DocumentParser()
+    parser.feed(source)
+    if parser.canonical != resource_url:
+        fail(f"Wrong canonical for {resource_path.relative_to(DIST)}")
+    if parser.hreflang.get("en") != f"{BASE}/en/{tail}/" or parser.hreflang.get("ar") != f"{BASE}/ar/{tail}/":
+        fail(f"Wrong bilingual alternates for {resource_path.relative_to(DIST)}")
+    if parser.hreflang.get("x-default") != f"{BASE}/en/{tail}/":
+        fail(f"Wrong x-default alternate for {resource_path.relative_to(DIST)}")
+    if source.count("<h1") != 1 or not parser.h1:
+        fail(f"Resource page must contain exactly one H1: {resource_path.relative_to(DIST)}")
+    if '<a class="skip-link" href="#main-content">' not in source or '<main id="main-content">' not in source:
+        fail(f"Resource page is missing accessibility landmarks: {resource_path.relative_to(DIST)}")
+    for image in parser.images:
+        if not image.get("alt", "").strip() or not image.get("width") or not image.get("height"):
+            fail(f"Resource image missing alt text or dimensions: {resource_path.relative_to(DIST)}")
+    if 'name="description"' not in source or 'name="robots" content="index,follow' not in source:
+        fail(f"Resource page missing SEO metadata: {resource_path.relative_to(DIST)}")
+
 root_parser = DocumentParser()
 if (DIST / "index.html").is_file():
     root_html = (DIST / "index.html").read_text(encoding="utf-8")
@@ -222,13 +252,13 @@ try:
             }
         else:
             parsed_loc = urlparse(loc.text.strip())
-            relative_parts = parsed_loc.path.rstrip("/").split("/")
-            lang = relative_parts[-1] if relative_parts[-1] in ("en", "ar") else relative_parts[-2]
-            section = "home" if relative_parts[-1] in ("en", "ar") else relative_parts[-1]
+            relative_path = parsed_loc.path[len(urlparse(BASE).path.rstrip("/")):].strip("/")
+            relative_parts = relative_path.split("/")
+            tail = "/".join(relative_parts[1:])
             expected_alternates = {
-                "en": expected_url("en", section),
-                "ar": expected_url("ar", section),
-                "x-default": expected_url("en", section),
+                "en": f"{BASE}/en/" + (f"{tail}/" if tail else ""),
+                "ar": f"{BASE}/ar/" + (f"{tail}/" if tail else ""),
+                "x-default": f"{BASE}/en/" + (f"{tail}/" if tail else ""),
             }
         if alternates != expected_alternates:
             fail(f"Incorrect hreflang sitemap alternates for {loc.text.strip()}")
@@ -281,4 +311,4 @@ if len(SCREENSHOTS) != 5 or any(urlparse(item.get("src", "")).hostname != "play-
 if ERRORS:
     print("\n".join(ERRORS))
     sys.exit(1)
-print(f"Validated {len(route_urls)} routes, navigation targets, canonical/hreflang pairs, root verification and sitemap.")
+print(f"Validated {len(route_urls)} routes, bilingual resources, navigation targets, canonical/hreflang pairs, root verification and sitemap.")
