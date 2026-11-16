@@ -121,6 +121,14 @@ def localize(source, locale, section, route_tail=None):
         source,
         flags=re.DOTALL,
     )
+    if section != "home":
+        switch_match = re.search(r'<div class="locale-switch"[^>]*>.*?</div>', source, re.DOTALL)
+        if switch_match:
+            switch_markup = switch_match.group(0)
+            source = source.replace(switch_markup, "", 1)
+            source = source.replace('<div class="header-main">', '<div class="header-main">' + switch_markup, 1)
+        source = source.replace('<header class="home-header">', '<header class="standard-header">', 1)
+
     source = re.sub(
         r'<link rel="alternate" hreflang="(?:en|ar|x-default)" href="[^"]+">\n?',
         "",
@@ -194,6 +202,13 @@ def update_legacy_pages(published):
                 source,
                 flags=re.DOTALL,
             )
+            if tail:
+                switch_match = re.search(r'<div class="locale-switch"[^>]*>.*?</div>', source, re.DOTALL)
+                if switch_match:
+                    switch_markup = switch_match.group(0)
+                    source = source.replace(switch_markup, "", 1)
+                    source = source.replace('<div class="header-main">', '<div class="header-main">' + switch_markup, 1)
+                source = source.replace('<header class="home-header">', '<header class="standard-header">', 1)
             path.write_text(source, encoding="utf-8")
 
 

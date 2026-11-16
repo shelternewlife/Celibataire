@@ -201,7 +201,7 @@ def render_page(locale, tail, data):
 </head>
 <body data-page-section="{tail}">
 <a class="skip-link" href="#main-content">{esc(labels["skip"])}</a>
-<header>{render_locale_flags(locale, tail)}<div class="header-main"><a class="brand" href="{BASE}/{slug}/">JOB <b>CONNECT</b></a>
+<header class="standard-header"><div class="header-main">{render_locale_flags(locale, tail)}<a class="brand" href="{BASE}/{slug}/">JOB <b>CONNECT</b></a>
 <nav aria-label="{esc(labels["nav_aria"])}">{nav}</nav></div></header>
 <main id="main-content"><section class="section resource-hub">
 <div class="tag">JOB CONNECT · {esc(labels["resource"])}</div>

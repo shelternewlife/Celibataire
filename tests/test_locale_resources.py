@@ -98,6 +98,9 @@ class LocalizedResourceRouteTests(unittest.TestCase):
                 groups = re.findall(r'<details class="nav-menu" data-nav-group="([^"]+)">(.*?)</details>', source, re.DOTALL)
                 self.assertEqual([name for name, _ in groups], ["primary", "resources"], f"{locale}/{tail}")
                 self.assertIn('class="locale-switch"', source)
+                self.assertIn('<header class="standard-header">', source)
+                self.assertLess(source.index('<div class="header-main">'), source.index('<div class="locale-switch"'))
+                self.assertLess(source.index('<div class="locale-switch"'), source.index('<a class="brand"'))
                 for name, markup in groups:
                     self.assertEqual(len(re.findall(r'<a data-nav-item="[^"]+"', markup)), 4, f"{locale}/{tail}/{name}")
                     for suffix in expected[name]:

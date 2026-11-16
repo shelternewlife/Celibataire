@@ -319,6 +319,13 @@ class SiteTests(unittest.TestCase):
             manifest = json.loads((ROOT / "content/screenshots.json").read_text(encoding="utf-8"))
             self.assertEqual({i.get("src") for i in parser.images}, {s["src"] for s in manifest})
 
+    def test_flags_are_inline_on_non_home_pages(self):
+        for lang in ("en", "ar"):
+            for tail in ("about", "features", "download", "faq", "blog", "guide", "tips", "comparison"):
+                source = (DIST / lang / tail / "index.html").read_text(encoding="utf-8")
+                self.assertIn('class="standard-header"', source)
+                self.assertLess(source.index('<div class="header-main">'), source.index('<div class="locale-switch"'))
+
     def test_resource_navigation_is_present(self):
         for lang in ("en", "ar"):
             for tail in ("", "about", "features", "download", "faq", "blog", "guide", "tips", "comparison"):

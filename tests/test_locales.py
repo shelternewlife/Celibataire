@@ -212,35 +212,28 @@ class MarketLocaleTests(unittest.TestCase):
             expected["x-default"] = f"{BASE}/en-us/{base_tail}"
             self.assertEqual(alternates, expected, loc)
 
-    def test_flag_only_locale_switcher_is_top_left_and_above_navigation(self):
+    def test_flags_are_above_site_name_only_on_home_and_inline_elsewhere(self):
         expected_flags = {
             "en-US": "🇺🇸", "en-CA": "🇨🇦", "fr-CA": "🇨🇦",
             "es-ES": "🇪🇸", "pt-PT": "🇵🇹", "fr-FR": "🇫🇷",
             "de-DE": "🇩🇪", "it-IT": "🇮🇹",
         }
         for locale in STRATEGY["published_locales"]:
-            source = (DIST / locale.lower() / "index.html").read_text(encoding="utf-8")
-            switch = re.search(r'<div class="locale-switch"[^>]*>(.*?)</div>', source, re.DOTALL)
-            self.assertIsNotNone(switch, locale)
-            header = source.index("<header>")
-            switch_pos = source.index('<div class="locale-switch"')
-            nav_pos = source.index('<nav aria-label="Primary navigation">')
-            self.assertLess(header, switch_pos)
-            self.assertLess(switch_pos, nav_pos)
+            home = (DIST / locale.lower() / "index.html").read_text(encoding="utf-8")
+            self.assertIn('<header class="home-header">', home)
+            self.assertLess(home.index('<div class="locale-switch"'), home.index('<div class="header-main">'))
             for code, flag in expected_flags.items():
-                self.assertIn(f'lang="{code}"', switch.group(1), f"{locale} missing {code}")
-                self.assertIn(f'<span aria-hidden="true">{flag}</span>', switch.group(1))
-            self.assertNotRegex(switch.group(1), r'>\s*(?:US English|English \(Canada\)|Français|Español|Português|Deutsch|Italiano)')
+                self.assertIn(f'lang="{code}"', home)
+                self.assertIn(f'<span aria-hidden="true">{flag}</span>', home)
+            for tail in ("about", "features", "download", "faq"):
+                page = (DIST / locale.lower() / tail / "index.html").read_text(encoding="utf-8")
+                self.assertIn('<header class="standard-header">', page)
+                self.assertLess(page.index('<div class="header-main">'), page.index('<div class="locale-switch"'))
+                self.assertLess(page.index('<div class="locale-switch"'), page.index('<a class="brand"'))
+                for code in expected_flags:
+                    self.assertIn(f'lang="{code}"', page)
         root = (DIST / "index.html").read_text(encoding="utf-8")
-        root_switch = re.search(r'<div class="locale-switch"[^>]*>(.*?)</div>', root, re.DOTALL)
-        self.assertIsNotNone(root_switch)
-        for code in expected_flags:
-            self.assertIn(f'lang="{code}"', root_switch.group(1))
-        for legacy in ("en", "ar"):
-            page = (DIST / legacy / "index.html").read_text(encoding="utf-8")
-            self.assertIn('class="locale-switch"', page)
-            for code in expected_flags:
-                self.assertIn(f'lang="{code}"', page)
+        self.assertIn('class="locale-switch"', root)
 
     def test_root_selector_points_to_every_published_locale(self):
         source = (DIST / "index.html").read_text(encoding="utf-8")

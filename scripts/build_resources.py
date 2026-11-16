@@ -65,7 +65,7 @@ def route_url(lang,tail=""): return f'{BASE}/{lang}/'+(f'{tail}/' if tail else "
 def routes():
  tails=["","about","features","download","faq","blog"]+["features/"+f["id"] for f in FEATURES]+["blog/"+a[0] for a in DATA]+list(GUIDES)
  return [(l,t) for l in ("en","ar") for t in tails]
-def nav(l):
+def nav(l, tail=""):
  primary={
   "en":[("about","About"),("features","Features"),("download","Download"),("faq","FAQ")],
   "ar":[("about","عن التطبيق"),("features","المزايا"),("download","التنزيل"),("faq","الأسئلة")]
@@ -83,8 +83,7 @@ def nav(l):
  primary_group="Explore" if l=="en" else "استكشف"
  resource_group="Resources" if l=="en" else "الموارد"
  return (
-  f'<header><div class="locale-switch" aria-label="Country and region">{switch}</div>'
-  f'<div class="header-main"><a class="brand" href="{BASE}/">JOB <b>CONNECT</b></a>'
+  f'<header class="standard-header"><div class="header-main"><div class="locale-switch" aria-label="Country and region">{switch}</div><a class="brand" href="{BASE}/">JOB <b>CONNECT</b></a>'
   f'<nav aria-label="Primary navigation">'
   f'<details class="nav-menu" data-nav-group="primary"><summary>{primary_group}</summary><div class="nav-dropdown">{primary_links}</div></details>'
   f'<details class="nav-menu" data-nav-group="resources"><summary>{resource_group}</summary><div class="nav-dropdown">{resource_links}</div></details>'
@@ -96,7 +95,7 @@ def page(l,tail,title,desc,content,typ="WebPage"):
  u=route_url(l,tail); organization={"@type":"Organization","@id":f"{BASE}/#organization","name":APP["developer"],"url":BASE+"/","email":APP["support_email"]}; schema={"@context":"https://schema.org","@type":typ,"name":title,"description":desc,"inLanguage":l,"url":u,"publisher":{"@id":f"{BASE}/#organization"}}
  if typ=="Article": schema.update({"headline":title,"mainEntityOfPage":u,"author":{"@id":f"{BASE}/#organization"}})
  schema={"@context":"https://schema.org","@graph":[organization,schema]}
- return f'''<!doctype html><html lang="{l}" dir="{"rtl" if l=="ar" else "ltr"}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{e(title)}</title><meta name="description" content="{e(desc)}"><meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="{u}"><link rel="alternate" hreflang="en" href="{route_url("en",tail)}"><link rel="alternate" hreflang="ar" href="{route_url("ar",tail)}"><link rel="alternate" hreflang="x-default" href="{route_url("en",tail)}"><meta property="og:type" content="article"><meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:url" content="{u}"><meta property="og:image" content="{e(SHOTS[0]["src"])}"><meta name="twitter:card" content="summary_large_image"><link rel="preconnect" href="https://play-lh.googleusercontent.com" crossorigin><link rel="stylesheet" href="{BASE}/assets/style.css"><script type="application/ld+json">{json.dumps(schema,ensure_ascii=False)}</script></head><body data-page-section="{e(tail.split("/")[0] if tail else "home")}"><a class="skip-link" href="#main-content">{"تجاوز إلى المحتوى الرئيسي" if l=="ar" else "Skip to main content"}</a>{nav(l)}<main id="main-content">{content}</main>{footer(l)}</body></html>'''
+ return f'''<!doctype html><html lang="{l}" dir="{"rtl" if l=="ar" else "ltr"}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{e(title)}</title><meta name="description" content="{e(desc)}"><meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="{u}"><link rel="alternate" hreflang="en" href="{route_url("en",tail)}"><link rel="alternate" hreflang="ar" href="{route_url("ar",tail)}"><link rel="alternate" hreflang="x-default" href="{route_url("en",tail)}"><meta property="og:type" content="article"><meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:url" content="{u}"><meta property="og:image" content="{e(SHOTS[0]["src"])}"><meta name="twitter:card" content="summary_large_image"><link rel="preconnect" href="https://play-lh.googleusercontent.com" crossorigin><link rel="stylesheet" href="{BASE}/assets/style.css"><script type="application/ld+json">{json.dumps(schema,ensure_ascii=False)}</script></head><body data-page-section="{e(tail.split("/")[0] if tail else "home")}"><a class="skip-link" href="#main-content">{"تجاوز إلى المحتوى الرئيسي" if l=="ar" else "Skip to main content"}</a>{nav(l,tail)}<main id="main-content">{content}</main>{footer(l)}</body></html>'''
 def blog(l):
  title="Job search blog and career guides" if l=="en" else "مدونة البحث عن عمل والأدلة المهنية"
  desc="Practical bilingual articles on finding, evaluating and organizing job opportunities." if l=="en" else "مقالات عملية لاكتشاف فرص العمل وتقييمها وتنظيمها."
