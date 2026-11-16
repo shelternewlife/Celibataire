@@ -1,0 +1,147 @@
+{
+  "fr-CA": {
+    "text": {
+      "about": "À propos de Job Connect",
+      "skip_to_content": "Passer au contenu principal",
+      "features": "Explorer les fonctionnalités",
+      "faq": "Foire aux questions",
+      "download_nav": "Télécharger",
+      "download_title": "Télécharger Job Connect pour Android",
+      "download_intro": "Obtenez l’application Android officielle Job Connect sur Google Play pour découvrir des possibilités d’emploi, consulter leur contexte et organiser vos favoris.",
+      "download_steps_title": "Installer en trois étapes simples",
+      "download_step_1": "Ouvrez la fiche officielle sur Google Play.",
+      "download_step_2": "Touchez Installer sur votre appareil Android.",
+      "download_step_3": "Ouvrez Job Connect et explorez les possibilités.",
+      "download_note": "Pour votre sécurité, installez l’application uniquement à partir de sa fiche officielle sur Google Play.",
+      "download_facts": "Renseignements sur l’application",
+      "platform": "Plateforme",
+      "developer": "Développeur",
+      "package": "Identifiant du package",
+      "home": "Découvrez votre prochaine possibilité",
+      "cta": "Voir sur Google Play",
+      "tag": "DÉCOUVERTE DE POSSIBILITÉS D’EMPLOI",
+      "gallery": "Un aperçu de l’application",
+      "gallery_intro": "Captures d’écran réelles de la fiche Google Play.",
+      "download": "Commencez avec Job Connect",
+      "privacy": "Politique de confidentialité",
+      "support": "Soutien",
+      "about_intro": "Découvrez comment Job Connect vous aide à repérer et à organiser des possibilités d’emploi.",
+      "features_intro": "Explorez les outils de découverte et d’organisation proposés par Job Connect.",
+      "faq_intro": "Réponses aux questions courantes sur Job Connect.",
+      "language": "Choisir la langue",
+      "english": "English",
+      "arabic": "العربية",
+      "home_intro": "Explorez les possibilités d’emploi, consultez les renseignements utiles et gardez à portée de main les postes qui vous intéressent."
+    },
+    "titles": {
+      "home": "Application de recherche d’emploi pour découvrir des possibilités | Job Connect",
+      "about": "Job Connect : à propos de l’application de découverte d’emplois",
+      "features": "Fonctionnalités de recherche d’emploi : découvrir et organiser | Job Connect",
+      "download": "Télécharger Job Connect pour Android | Google Play",
+      "faq": "FAQ Job Connect : recherche d’emploi et fonctionnalités"
+    },
+    "descriptions": {
+      "home": "Découvrez des possibilités d’emploi, comparez les détails des postes et organisez les offres à suivre avec Job Connect, une application Android.",
+      "about": "Découvrez comment l’application Android Job Connect vous aide à repérer des offres, à examiner les détails des postes et à organiser vos favoris.",
+      "features": "Explorez les outils pour découvrir des possibilités, comparer les détails des postes, consulter des indicateurs et organiser les offres.",
+      "download": "Téléchargez Job Connect, une application Android pour découvrir et organiser des possibilités d’emploi. Installation sur Google Play.",
+      "faq": "Réponses sur les offres d’emploi, les indicateurs de possibilités, les collections personnelles et le téléchargement de Job Connect."
+    },
+    "app_description": "Une expérience de découverte de possibilités d’emploi axée sur les nouveaux signaux, l’analyse des occasions et les collections personnelles. Explorez les postes, consultez les indications de rémunération et de lieu, comprenez pourquoi une possibilité est présentée et organisez celles à suivre.",
+    "tagline": "Découvrez les possibilités avant que la concurrence ne s’intensifie.",
+    "features": [
+      [
+        "Repérez les nouveaux signaux d’emploi",
+        "Consultez un fil de découverte présentant les possibilités récemment repérées, leur fraîcheur et des indicateurs de correspondance."
+      ],
+      [
+        "Évaluez les possibilités en un coup d’œil",
+        "Comparez les postes, les organisations, les lieux et les indications de rémunération dans des fiches faciles à parcourir."
+      ],
+      [
+        "Comprenez pourquoi une possibilité ressort",
+        "Examinez les indications de rémunération, de lieu, de flexibilité à distance, de fraîcheur et les raisons mises de l’avant par l’application. Ces valeurs ne sont pas des garanties."
+      ],
+      [
+        "Explorez les indicateurs d’analyse",
+        "Consultez les indicateurs de complétude des données, de fraîcheur, d’unicité et de concurrence, ainsi que les compétences et exigences détectées. Il s’agit d’estimations."
+      ],
+      [
+        "Organisez les possibilités en collections",
+        "Créez des collections personnelles comme Remote Hub, Elite Leap et Ma liste de suivi pour classer les possibilités et les retrouver."
+      ]
+    ],
+    "faq": [
+      [
+        "Qu’est-ce que Job Connect?",
+        "Une application de découverte de possibilités d’emploi axée sur les nouveaux signaux, le contexte des postes et les collections personnelles."
+      ],
+      [
+        "Que signifie un indicateur de correspondance?",
+        "Il s’agit d’un indicateur affiché dans l’application, et non d’une promesse qu’un poste vous convient parfaitement ou que votre candidature sera retenue."
+      ],
+      [
+        "Que sont les indicateurs d’analyse?",
+        "L’application présente des indicateurs calculés, comme la complétude des données, la fraîcheur de l’annonce, l’unicité et la concurrence, ainsi que des compétences et exigences détectées. Ce sont des estimations."
+      ],
+      [
+        "Puis-je organiser les possibilités d’emploi?",
+        "Oui. Les collections comprennent des exemples comme Remote Hub, Elite Leap et Ma liste de suivi."
+      ],
+      [
+        "Où puis-je installer Job Connect?",
+        "Installez l’application Android à partir de sa fiche officielle sur Google Play."
+      ],
+      [
+        "Job Connect contient-elle des publicités?",
+        "La fiche Google Play indique que l’application contient des publicités."
+      ],
+      [
+        "Job Connect postule-t-elle à ma place?",
+        "Non. Job Connect vous aide à découvrir et à examiner des possibilités. Suivez les instructions officielles de l’employeur pour présenter votre candidature."
+      ],
+      [
+        "Un indicateur garantit-il que ma candidature sera retenue?",
+        "Non. Les indicateurs de correspondance, de fraîcheur et d’analyse sont des estimations qui facilitent votre examen. Ils ne prédisent pas les décisions d’embauche et ne garantissent pas une entrevue."
+      ],
+      [
+        "Comment vérifier qu’une offre d’emploi est authentique?",
+        "Trouvez le site officiel de l’employeur de façon indépendante, comparez les détails du poste et le domaine utilisé pour postuler, et méfiez-vous des demandes d’argent, de mots de passe ou de codes de vérification."
+      ],
+      [
+        "Tous les emplois sont-ils à distance ou accessibles dans chaque pays?",
+        "Non. Le lieu de travail et l’admissibilité géographique dépendent de chaque employeur et de chaque offre. Consultez l’annonce originale pour connaître les restrictions et les modalités de télétravail."
+      ],
+      [
+        "Pourquoi une offre peut-elle ne pas indiquer le salaire?",
+        "Certains employeurs ne publient pas les détails de rémunération. Demandez des précisions à l’employeur avant de poursuivre."
+      ],
+      [
+        "Puis-je installer Job Connect ailleurs que sur Google Play?",
+        "Pour obtenir l’application officielle en toute sécurité, utilisez la fiche Job Connect sur Google Play accessible à partir de ce site."
+      ]
+    ],
+    "screenshots": [
+      [
+        "Écran Découvrir de Job Connect présentant de nouveaux signaux de possibilités d’emploi",
+        "Découvrez les nouveaux signaux d’emploi"
+      ],
+      [
+        "Liste de possibilités Job Connect avec le poste, le salaire et le lieu",
+        "Comparez les postes et les renseignements clés"
+      ],
+      [
+        "Détails d’une possibilité et raisons de sa mise en évidence dans Job Connect",
+        "Comprenez pourquoi une possibilité est présentée"
+      ],
+      [
+        "Indicateurs d’analyse des possibilités et de concurrence dans Job Connect",
+        "Examinez les indicateurs d’analyse"
+      ],
+      [
+        "Collections personnelles de possibilités d’emploi dans Job Connect",
+        "Organisez vos possibilités"
+      ]
+    ]
+  }
+}

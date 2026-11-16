@@ -679,5 +679,11 @@
     "search_volume": "Not supplied or verified in this registry. Confirm with Google Keyword Planner by country and language.",
     "organic_performance": "Use Google Search Console query and page data after each locale is genuinely published.",
     "conversion": "Use the existing GA4 google_play_click event, segmented by page_path and locale."
-  }
+  },
+  "published_locales": [
+    "en-US",
+    "en-CA",
+    "fr-CA"
+  ],
+  "publishing_policy": "Only locales listed in published_locales and backed by complete locale content are generated, indexed and included in sitemaps. Market status alone never publishes a locale."
 }

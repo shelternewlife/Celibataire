@@ -9,6 +9,7 @@ from build_resources import routes as resource_routes
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
 APP = json.loads((ROOT / "content/app.json").read_text(encoding="utf-8"))
+STRATEGY = json.loads((ROOT / "content/market-strategy.json").read_text(encoding="utf-8"))
 GA_MEASUREMENT_ID = APP["ga4_measurement_id"]
 SCREENSHOTS = json.loads((ROOT / "content/screenshots.json").read_text(encoding="utf-8"))
 FEATURES = json.loads((ROOT / "content/features.json").read_text(encoding="utf-8"))
@@ -187,6 +188,47 @@ for lang in ("en", "ar"):
                 fail(f"Broken internal link {href} in {path.relative_to(DIST)}")
 
 
+for locale in STRATEGY.get("published_locales", []):
+    slug = locale.lower()
+    for section in ("home", "about", "features", "download", "faq"):
+        route = f"{BASE}/{slug}/" + ("" if section == "home" else f"{section}/")
+        route_urls.add(route)
+        path = DIST / slug / ("" if section == "home" else section) / "index.html"
+        if not path.is_file():
+            fail(f"Missing published locale route: {path.relative_to(DIST)}")
+            continue
+        source = path.read_text(encoding="utf-8")
+        parser = DocumentParser()
+        parser.feed(source)
+        if parser.canonical != route:
+            fail(f"Wrong locale canonical for {path.relative_to(DIST)}")
+        expected = {code: f"{BASE}/{code.lower()}/" + ("" if section == "home" else f"{section}/") for code in STRATEGY["published_locales"]}
+        expected["x-default"] = f"{BASE}/en-us/" + ("" if section == "home" else f"{section}/")
+        if parser.hreflang != expected:
+            fail(f"Incorrect or non-reciprocal locale hreflang for {path.relative_to(DIST)}")
+        if f'<html lang="{locale}"' not in source:
+            fail(f"Incorrect HTML language for {path.relative_to(DIST)}")
+        if '<meta name="robots" content="index,follow' not in source or not parser.title:
+            fail(f"Locale page lacks indexable metadata: {path.relative_to(DIST)}")
+
+import build as site_build
+for locale in STRATEGY.get("published_locales", []):
+    slug = locale.lower()
+    for feature in site_build.FEATURES:
+        tail = f"features/{feature['id']}/"
+        route = f"{BASE}/{slug}/{tail}"
+        route_urls.add(route)
+        path = DIST / slug / tail / "index.html"
+        if not path.is_file():
+            fail(f"Missing published localized feature route: {path.relative_to(DIST)}")
+            continue
+        parser = DocumentParser()
+        parser.feed(path.read_text(encoding="utf-8"))
+        expected = {code: f"{BASE}/{code.lower()}/{tail}" for code in STRATEGY["published_locales"]}
+        expected["x-default"] = f"{BASE}/en-us/{tail}"
+        if parser.canonical != route or parser.hreflang != expected:
+            fail(f"Incorrect canonical or reciprocal hreflang for {path.relative_to(DIST)}")
+
 for lang, tail in resource_routes():
     resource_url = f"{BASE}/{lang}/" + (f"{tail}/" if tail else "")
     route_urls.add(resource_url)
@@ -231,9 +273,9 @@ if (DIST / "index.html").is_file():
         fail("GA4 library missing from language root")
     if f"gtag('config', '{GA_MEASUREMENT_ID}')" not in root_html:
         fail("GA4 configuration missing from language root")
-    for lang in ("en", "ar"):
-        if expected_url(lang) not in root_html:
-            fail(f"Root language link missing: {lang}")
+    for locale in STRATEGY.get("published_locales", []):
+        if f"{BASE}/{locale.lower()}/" not in root_html:
+            fail(f"Root market locale link missing: {locale}")
 
 try:
     sitemap_root = ET.parse(DIST / "sitemap.xml").getroot()
@@ -255,20 +297,29 @@ try:
         }
         if loc.text.strip() == f"{BASE}/":
             expected_alternates = {
-                "en": expected_url("en"),
-                "ar": expected_url("ar"),
-                "x-default": f"{BASE}/",
+                "en-US": f"{BASE}/en-us/", "en-CA": f"{BASE}/en-ca/",
+                "fr-CA": f"{BASE}/fr-ca/", "x-default": f"{BASE}/",
             }
         else:
             parsed_loc = urlparse(loc.text.strip())
             relative_path = parsed_loc.path[len(urlparse(BASE).path.rstrip("/")):].strip("/")
             relative_parts = relative_path.split("/")
-            tail = "/".join(relative_parts[1:])
-            expected_alternates = {
-                "en": f"{BASE}/en/" + (f"{tail}/" if tail else ""),
-                "ar": f"{BASE}/ar/" + (f"{tail}/" if tail else ""),
-                "x-default": f"{BASE}/en/" + (f"{tail}/" if tail else ""),
-            }
+            if relative_parts[0] in ("en-us", "en-ca", "fr-ca"):
+                tail = "/".join(relative_parts[1:])
+                suffix = f"{tail}/" if tail else ""
+                expected_alternates = {
+                    "en-US": f"{BASE}/en-us/{suffix}",
+                    "en-CA": f"{BASE}/en-ca/{suffix}",
+                    "fr-CA": f"{BASE}/fr-ca/{suffix}",
+                    "x-default": f"{BASE}/en-us/{suffix}",
+                }
+            else:
+                tail = "/".join(relative_parts[1:])
+                expected_alternates = {
+                    "en": f"{BASE}/en/" + (f"{tail}/" if tail else ""),
+                    "ar": f"{BASE}/ar/" + (f"{tail}/" if tail else ""),
+                    "x-default": f"{BASE}/en/" + (f"{tail}/" if tail else ""),
+                }
         if alternates != expected_alternates:
             fail(f"Incorrect hreflang sitemap alternates for {loc.text.strip()}")
     if len(sitemap_urls) != len(route_urls):

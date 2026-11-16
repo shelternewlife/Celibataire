@@ -417,8 +417,11 @@ def main():
         f"- English: {page_url('en')}\n- Arabic: {page_url('ar')}\n"
     ))
 
+
     from build_resources import build_extra_pages
     build_extra_pages()
+    from build_locales import build_localized_pages
+    build_localized_pages()
 
 if __name__ == "__main__":
     main()
