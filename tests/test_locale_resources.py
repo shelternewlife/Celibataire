@@ -123,6 +123,18 @@ class LocalizedResourceRouteTests(unittest.TestCase):
                 for label, url in expected.items():
                     self.assertIn(f'href="{url}" target="_blank" rel="noopener noreferrer" aria-label="{label}"', source)
 
+
+    def test_resource_hubs_render_all_eight_real_flag_images(self):
+        import re
+        for locale in LOCALES:
+            for tail in HUBS:
+                source = (DIST / locale.lower() / tail / "index.html").read_text(encoding="utf-8")
+                flags = re.findall(r'<a class="locale-flag" lang="([^"]+)"[^>]*>(.*?)</a>', source, re.DOTALL)
+                self.assertEqual({code for code, _ in flags}, set(LOCALES))
+                self.assertEqual(len(flags), 8)
+                for code, markup in flags:
+                    self.assertRegex(markup, r'<img src="https://flagcdn\.com/w80/[a-z]{2}\.png" alt="[^"]+ flag" width="40" height="30"', f"{locale}/{tail}/{code}")
+
     def test_french_hubs_have_french_titles_and_content(self):
         expected_phrases = {
             "tips": "Conseils pour la recherche d’emploi",

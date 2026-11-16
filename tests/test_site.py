@@ -20,6 +20,7 @@ class PageParser(HTMLParser):
         self.links = []
         self.tracked_ctas = []
         self.images = []
+        self.all_images = []
         self.h1 = []
         self.in_h1 = False
     def handle_starttag(self, tag, attrs):
@@ -29,7 +30,10 @@ class PageParser(HTMLParser):
             if attrs.get("data-analytics-event") == "google_play_click":
                 self.tracked_ctas.append(attrs)
         if tag == "img":
-            self.images.append(attrs)
+            self.all_images.append(attrs)
+            image_src = attrs.get("src", "")
+            if image_src.startswith("https://play-lh.googleusercontent.com/") or "/assets/screens/" in image_src:
+                self.images.append(attrs)
         if tag == "h1":
             self.in_h1 = True
     def handle_endtag(self, tag):
@@ -269,7 +273,7 @@ class SiteTests(unittest.TestCase):
         for path in DIST.rglob("*.html"):
             parser = PageParser()
             parser.feed(path.read_text(encoding="utf-8"))
-            for image in parser.images:
+            for image in parser.all_images:
                 self.assertTrue(image.get("alt", "").strip(), str(path))
                 self.assertTrue(image.get("width", "").isdigit(), str(path))
                 self.assertTrue(image.get("height", "").isdigit(), str(path))
@@ -407,6 +411,28 @@ class SiteTests(unittest.TestCase):
         self.assertIn("job search app", targets["en"]["primary"])
         self.assertIn("البحث عن عمل", targets["ar"]["primary"])
         self.assertIn("not verified", targets["note"])
+
+
+    def test_every_language_selector_uses_eight_real_country_flag_images(self):
+        import re
+        expected = set(STRATEGY["published_locales"])
+        for path in DIST.rglob("*.html"):
+            source = path.read_text(encoding="utf-8")
+            if 'class="locale-switch"' not in source:
+                continue
+            flags = re.findall(
+                r'<a class="locale-flag" lang="([^"]+)"[^>]*>(.*?)</a>',
+                source,
+                re.DOTALL,
+            )
+            self.assertEqual({code for code, _ in flags}, expected, str(path))
+            self.assertEqual(len(flags), 8, str(path))
+            for code, markup in flags:
+                self.assertRegex(
+                    markup,
+                    r'<img src="https://flagcdn\.com/w80/[a-z]{2}\.png" alt="[^"]+ flag" width="40" height="30"',
+                    f"{path}: {code}",
+                )
 
     def test_no_previous_brand(self):
         for path in DIST.rglob("*.html"):

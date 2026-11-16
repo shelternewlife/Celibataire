@@ -86,14 +86,14 @@ CONTENT = {
 CONTENT.update(EXTRA_CONTENT)
 
 FLAG_DATA = {
-    "en-US": ("🇺🇸", "United States · English"),
-    "en-CA": ("🇨🇦", "Canada · English"),
-    "fr-CA": ("🇨🇦", "Canada · Français"),
-    "es-ES": ("🇪🇸", "España · Español"),
-    "pt-PT": ("🇵🇹", "Portugal · Português"),
-    "fr-FR": ("🇫🇷", "France · Français"),
-    "de-DE": ("🇩🇪", "Deutschland · Deutsch"),
-    "it-IT": ("🇮🇹", "Italia · Italiano"),
+    "en-US": ("us", "United States", "United States · English"),
+    "en-CA": ("ca", "Canada", "Canada · English"),
+    "fr-CA": ("ca", "Canada", "Canada · Français"),
+    "es-ES": ("es", "Spain", "España · Español"),
+    "pt-PT": ("pt", "Portugal", "Portugal · Português"),
+    "fr-FR": ("fr", "France", "France · Français"),
+    "de-DE": ("de", "Germany", "Deutschland · Deutsch"),
+    "it-IT": ("it", "Italy", "Italia · Italiano"),
 }
 NAV_GROUPS = {
     "en-US": ("Explore", "Resources"), "en-CA": ("Explore", "Resources"),
@@ -106,12 +106,13 @@ LOCALE_TEXT = json.loads((ROOT / "content/locales.json").read_text(encoding="utf
 def render_locale_flags(locale, tail):
     links = []
     for code in STRATEGY["published_locales"]:
-        flag, label = FLAG_DATA[code]
+        country, country_name, label = FLAG_DATA[code]
         current = ' aria-current="page"' if code == locale else ""
+        flag_url = f"https://flagcdn.com/w80/{country}.png"
         links.append(
             f'<a class="locale-flag" lang="{code}" href="{route(code, tail)}" '
             f'title="{esc(label)}" aria-label="{esc(label)}"{current}>'
-            f'<span aria-hidden="true">{flag}</span></a>'
+            f'<img src="{flag_url}" alt="{esc(country_name)} flag" width="40" height="30" loading="eager" decoding="async"></a>'
         )
     import build
     return '<div class="locale-switch" aria-label="Country and region">' + "".join(links) + build.render_social_links() + '</div>'

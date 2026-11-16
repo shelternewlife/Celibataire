@@ -127,14 +127,15 @@ def localize(source, locale, section, route_tail=None):
     source = source.replace(f"{BASE}/en/", f"{BASE}/{slug(locale)}/")
     source = source.replace('<html lang="en"', f'<html lang="{locale}"')
     tail = route_tail if route_tail is not None else ("" if section == "home" else f"{section}/")
+    source = ensure_social_links(source)
     selector = render_locale_flags(STRATEGY["published_locales"], tail, locale)
     source = re.sub(
-        r'<a class="locale-flag" lang="(?:ar|en)"[^>]*>.*?</a>',
-        lambda _: selector,
+        r'(<div class="locale-switch"[^>]*>).*?(<div class="social-links"[^>]*>)',
+        lambda match: match.group(1) + selector + match.group(2),
         source,
+        count=1,
         flags=re.DOTALL,
     )
-    source = ensure_social_links(source)
     if section != "home":
         switch_match = re.search(r'<div class="locale-switch"[^>]*>.*?</div>', source, re.DOTALL)
         if switch_match:
@@ -209,14 +210,15 @@ def update_legacy_pages(published):
             relative = path.parent.relative_to(root)
             tail = "" if str(relative) == "." else relative.as_posix() + "/"
             source = path.read_text(encoding="utf-8")
+            source = ensure_social_links(source)
             selector = render_locale_flags(published, tail)
             source = re.sub(
-                r'<a class="locale-flag" lang="(?:ar|en)"[^>]*>.*?</a>',
-                lambda _: selector,
+                r'(<div class="locale-switch"[^>]*>).*?(<div class="social-links"[^>]*>)',
+                lambda match: match.group(1) + selector + match.group(2),
                 source,
+                count=1,
                 flags=re.DOTALL,
             )
-            source = ensure_social_links(source)
             if tail:
                 switch_match = re.search(r'<div class="locale-switch"[^>]*>.*?</div>', source, re.DOTALL)
                 if switch_match:

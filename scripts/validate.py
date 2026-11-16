@@ -1,4 +1,5 @@
 import json
+import re
 import pathlib
 import sys
 import xml.etree.ElementTree as ET
@@ -22,6 +23,7 @@ class DocumentParser(HTMLParser):
         super().__init__()
         self.links = []
         self.images = []
+        self.all_images = []
         self.canonical = None
         self.hreflang = {}
         self.title = []
@@ -33,7 +35,10 @@ class DocumentParser(HTMLParser):
         if tag == "a" and attrs.get("href"):
             self.links.append(attrs["href"])
         if tag == "img":
-            self.images.append(attrs)
+            self.all_images.append(attrs)
+            image_src = attrs.get("src", "")
+            if image_src.startswith("https://play-lh.googleusercontent.com/") or "/assets/screens/" in image_src:
+                self.images.append(attrs)
         if tag == "link":
             if attrs.get("rel") == "canonical":
                 self.canonical = attrs.get("href")
@@ -117,7 +122,7 @@ for lang in ("en", "ar"):
             fail(f"Page must contain exactly one H1: {path.relative_to(DIST)}")
         if '<a class="skip-link" href="#main-content">' not in page_html or '<main id="main-content">' not in page_html:
             fail(f"Missing accessible skip link or main landmark: {path.relative_to(DIST)}")
-        for image in parser.images:
+        for image in parser.all_images:
             if not image.get("alt", "").strip():
                 fail(f"Image without alternative text: {path.relative_to(DIST)}")
             if not image.get("width") or not image.get("height"):
@@ -251,7 +256,7 @@ for lang, tail in resource_routes():
         fail(f"Resource page must contain exactly one H1: {resource_path.relative_to(DIST)}")
     if '<a class="skip-link" href="#main-content">' not in source or '<main id="main-content">' not in source:
         fail(f"Resource page is missing accessibility landmarks: {resource_path.relative_to(DIST)}")
-    for image in parser.images:
+    for image in parser.all_images:
         if not image.get("alt", "").strip() or not image.get("width") or not image.get("height"):
             fail(f"Resource image missing alt text or dimensions: {resource_path.relative_to(DIST)}")
     if '"@type": "Organization"' not in source:
@@ -259,6 +264,29 @@ for lang, tail in resource_routes():
     if 'name="description"' not in source or 'name="robots" content="index,follow' not in source:
         fail(f"Resource page missing SEO metadata: {resource_path.relative_to(DIST)}")
 
+
+
+# Every page that exposes the market-language selector must use the same eight real flag images.
+expected_flag_codes = set(STRATEGY.get("published_locales", []))
+for html_path in DIST.rglob("*.html"):
+    source = html_path.read_text(encoding="utf-8")
+    if 'class="locale-switch"' not in source:
+        continue
+    flag_links = re.findall(
+        r'<a class="locale-flag" lang="([^"]+)"[^>]*>(.*?)</a>',
+        source,
+        re.DOTALL,
+    )
+    observed_codes = {code for code, _ in flag_links}
+    if len(flag_links) != len(expected_flag_codes) or observed_codes != expected_flag_codes:
+        fail(f"Language selector must contain exactly the eight published locale flags: {html_path.relative_to(DIST)}")
+        continue
+    for code, markup in flag_links:
+        if not re.search(
+            r'<img src="https://flagcdn\.com/w80/[a-z]{2}\.png" alt="[^"]+ flag" width="40" height="30"',
+            markup,
+        ):
+            fail(f"Language selector uses a non-image or inaccessible flag for {code}: {html_path.relative_to(DIST)}")
 
 # Published market resource hubs: these four routes must exist in every live locale.
 RESOURCE_HUBS = ("tips", "blog", "guide", "comparison")

@@ -164,6 +164,12 @@ def render_social_links():
         )
     return '<div class="social-links" aria-label="Social media">' + "".join(links) + '</div>'
 
+def render_market_flags(tail="", current=None):
+    import build_locales
+    return build_locales.render_locale_flags(
+        build_locales.STRATEGY["published_locales"], tail, current
+    )
+
 def render_header(lang, section):
     t = TEXT[lang]
     nav_items = (("about", t["about"]), ("features", t["features"]),
@@ -172,14 +178,8 @@ def render_header(lang, section):
         f'<a data-nav-item="{key}" href="{page_url(lang, key)}">{esc(label)}</a>'
         for key, label in nav_items
     )
-    other = "ar" if lang == "en" else "en"
-    switch_label = t["arabic"] if lang == "en" else t["english"]
-    switch_flag = "🇺🇸" if lang == "en" else "🌐"
-    switch = (
-        f'<a class="locale-flag" lang="{other}" href="{page_url(other, section)}" '
-        f'title="{esc(switch_label)}" aria-label="{esc(switch_label)}">'
-        f'<span aria-hidden="true">{switch_flag}</span></a>'
-    )
+    tail = "" if section == "home" else f"{section}/"
+    switch = render_market_flags(tail)
     return (
         f'<header class="{"home-header" if section == "home" else "standard-header"}"><div class="locale-switch" aria-label="Country and region">{switch}{render_social_links()}</div>'
         f'<div class="header-main"><a class="brand" href="{BASE_URL}/">JOB <b>CONNECT</b></a>'
@@ -392,8 +392,7 @@ def render_language_root():
 <link rel="stylesheet" href="{BASE_URL}/assets/style.css">
 {render_analytics()}
 </head>
-<body data-page-section="language-root"><a class="skip-link" href="#language-content">Skip to main content</a><header class="language-header"><div class="locale-switch"><p><a lang="en" href="{page_url("en")}">English</a>
-<a lang="ar" dir="rtl" href="{page_url("ar")}">العربية</a></p>{render_social_links()}</div></header><main id="language-content" class="language"><div><div class="tag">JOB CONNECT</div>
+<body data-page-section="language-root"><a class="skip-link" href="#language-content">Skip to main content</a><header class="language-header"><div class="locale-switch" aria-label="Country and region">{render_market_flags()}{render_social_links()}</div></header><main id="language-content" class="language"><div><div class="tag">JOB CONNECT</div>
 <h1>Choose your language / اختر لغتك</h1></div></main></body>
 </html>'''
 
