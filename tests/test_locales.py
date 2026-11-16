@@ -130,6 +130,23 @@ class MarketLocaleTests(unittest.TestCase):
             self.assertNotIn(f"{BASE}/ar/", parser.links)
             self.assertNotIn(f"{BASE}/en/", parser.links)
 
+    def test_navigation_groups_keep_related_pages_in_two_dropdowns(self):
+        expected_paths = {
+            "primary": ("about/", "features/", "download/", "faq/"),
+            "resources": ("tips/", "blog/", "guide/", "comparison/"),
+        }
+        for locale in STRATEGY["published_locales"]:
+            slug = locale.lower()
+            source = (DIST / slug / "index.html").read_text(encoding="utf-8")
+            groups = re.findall(r'<details class="nav-menu" data-nav-group="([^"]+)">(.*?)</details>', source, re.DOTALL)
+            self.assertEqual([name for name, _ in groups], ["primary", "resources"], locale)
+            for name, markup in groups:
+                self.assertEqual(len(re.findall(r'<a data-nav-item="[^"]+"', markup)), 4, f"{locale}/{name}")
+                for suffix in expected_paths[name]:
+                    self.assertIn(f'href="{BASE}/{slug}/{suffix}"', markup, f"{locale}/{name}/{suffix}")
+                self.assertIn("<summary>", markup)
+            nav_markup = source[source.index("<nav"):source.index("</nav>")]
+            self.assertEqual(nav_markup.count("<details "), 2, locale)
     def test_french_pages_have_genuine_french_content_and_metadata(self):
         for locale in ("fr-CA", "fr-FR"):
             source = (DIST / locale.lower() / "index.html").read_text(encoding="utf-8")

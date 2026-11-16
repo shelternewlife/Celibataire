@@ -85,6 +85,23 @@ class LocalizedResourceRouteTests(unittest.TestCase):
                         target = target / "index.html"
                     self.assertTrue(target.is_file(), f"Broken link in {locale}/{tail}: {href}")
 
+    def test_resource_hub_navigation_is_grouped_and_flag_selector_is_retained(self):
+        import re
+        expected = {
+            "primary": ("about/", "features/", "download/", "faq/"),
+            "resources": ("tips/", "blog/", "guide/", "comparison/"),
+        }
+        for locale in LOCALES:
+            slug = locale.lower()
+            for tail in HUBS:
+                source = (DIST / slug / tail / "index.html").read_text(encoding="utf-8")
+                groups = re.findall(r'<details class="nav-menu" data-nav-group="([^"]+)">(.*?)</details>', source, re.DOTALL)
+                self.assertEqual([name for name, _ in groups], ["primary", "resources"], f"{locale}/{tail}")
+                self.assertIn('class="locale-switch"', source)
+                for name, markup in groups:
+                    self.assertEqual(len(re.findall(r'<a data-nav-item="[^"]+"', markup)), 4, f"{locale}/{tail}/{name}")
+                    for suffix in expected[name]:
+                        self.assertIn(f'href="{BASE}/{slug}/{suffix}"', markup, f"{locale}/{tail}/{name}/{suffix}")
     def test_french_hubs_have_french_titles_and_content(self):
         expected_phrases = {
             "tips": "Conseils pour la recherche d’emploi",

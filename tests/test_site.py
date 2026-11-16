@@ -98,6 +98,19 @@ class SiteTests(unittest.TestCase):
                     expected = f"{BASE}/{locale.lower()}/" + suffix
                     self.assertIn(expected, parser.links)
 
+    def test_primary_and_resource_navigation_are_grouped_in_dropdowns(self):
+        import re
+        for lang in ("en", "ar"):
+            for page in ("", "about", "features", "download", "faq", "blog"):
+                path = DIST / lang / page / "index.html" if page else DIST / lang / "index.html"
+                source = path.read_text(encoding="utf-8")
+                groups = re.findall(r'<details class="nav-menu" data-nav-group="([^"]+)">(.*?)</details>', source, re.DOTALL)
+                self.assertEqual([name for name, _ in groups], ["primary", "resources"], f"{lang}/{page}")
+                for name, markup in groups:
+                    self.assertEqual(len(re.findall(r'<a data-nav-item="[^"]+"', markup)), 4, f"{lang}/{page}/{name}")
+                    self.assertIn("<summary>", markup)
+                self.assertIn(".nav-dropdown", (DIST / "assets/style.css").read_text(encoding="utf-8"))
+
     def test_sitemap_contains_root_and_all_language_routes(self):
         import xml.etree.ElementTree as ET
         root = ET.parse(DIST / "sitemap.xml").getroot()

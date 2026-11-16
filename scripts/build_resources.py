@@ -66,10 +66,30 @@ def routes():
  tails=["","about","features","download","faq","blog"]+["features/"+f["id"] for f in FEATURES]+["blog/"+a[0] for a in DATA]+list(GUIDES)
  return [(l,t) for l in ("en","ar") for t in tails]
 def nav(l):
- names={"en":[("about","About"),("features","Features"),("download","Download"),("faq","FAQ"),("blog","Blog"),("guide","User guide"),("tips","Job tips"),("comparison","Compare")],"ar":[("about","عن التطبيق"),("features","المزايا"),("download","التنزيل"),("faq","الأسئلة"),("blog","المدونة"),("guide","دليل الاستخدام"),("tips","نصائح العمل"),("comparison","مقارنة")]}
- links="".join(f'<a href="{route_url(l,p)}">{n}</a>' for p,n in names[l])
+ primary={
+  "en":[("about","About"),("features","Features"),("download","Download"),("faq","FAQ")],
+  "ar":[("about","عن التطبيق"),("features","المزايا"),("download","التنزيل"),("faq","الأسئلة")]
+ }
+ resource={
+  "en":[("tips","Tips"),("blog","Blog"),("guide","User guide"),("comparison","Compare")],
+  "ar":[("tips","نصائح العمل"),("blog","المدونة"),("guide","دليل الاستخدام"),("comparison","مقارنة")]
+ }
+ primary_links="".join(f'<a data-nav-item="{key}" href="{route_url(l,key)}">{label}</a>' for key,label in primary[l])
+ resource_links="".join(f'<a data-nav-item="{key}" href="{route_url(l,key)}">{label}</a>' for key,label in resource[l])
  other="ar" if l=="en" else "en"
- return f'<header><a class="brand" href="{BASE}/">JOB <b>CONNECT</b></a><nav aria-label="Primary navigation">{links}<a lang="{other}" href="{route_url(other)}">{"العربية" if l=="en" else "English"}</a></nav></header>'
+ switch_label="العربية" if l=="en" else "English"
+ switch_flag="🇺🇸" if l=="en" else "🌐"
+ switch=(f'<a class="locale-flag" lang="{other}" href="{route_url(other)}" title="{switch_label}" aria-label="{switch_label}"><span aria-hidden="true">{switch_flag}</span></a>')
+ primary_group="Explore" if l=="en" else "استكشف"
+ resource_group="Resources" if l=="en" else "الموارد"
+ return (
+  f'<header><div class="locale-switch" aria-label="Country and region">{switch}</div>'
+  f'<div class="header-main"><a class="brand" href="{BASE}/">JOB <b>CONNECT</b></a>'
+  f'<nav aria-label="Primary navigation">'
+  f'<details class="nav-menu" data-nav-group="primary"><summary>{primary_group}</summary><div class="nav-dropdown">{primary_links}</div></details>'
+  f'<details class="nav-menu" data-nav-group="resources"><summary>{resource_group}</summary><div class="nav-dropdown">{resource_links}</div></details>'
+  f'</nav></div></header>'
+ )
 def footer(l):
  return f'<footer><span>© DevImpact · JOB CONNECT</span><span><a href="{e(APP["privacy_policy_url"])}">{"Privacy policy" if l=="en" else "سياسة الخصوصية"}</a> · <a href="mailto:{e(APP["support_email"])}">{"Support" if l=="en" else "الدعم"}</a></span></footer>'
 def page(l,tail,title,desc,content,typ="WebPage"):
@@ -121,13 +141,17 @@ def feature_page(l,feature):
 def build_extra_pages():
  css=DIST/"assets/style.css"
  css.write_text(css.read_text(encoding="utf-8")+"""
-.article{max-width:850px;margin:auto}.article h1{font-size:clamp(2.1rem,5vw,3.5rem);line-height:1.2}.article-section{padding:18px 0;border-bottom:1px solid #ffffff18}.article-section h2{font-size:1.45rem}.article-section p,.guide-step p{color:#c1ccda}.guide-list{display:grid;gap:18px;margin-top:28px}.guide-step{display:grid;grid-template-columns:54px 1fr;gap:16px;padding:22px;background:#111925;border:1px solid #283449;border-radius:16px}.guide-step>.num{font-size:1.4rem}.guide-step h2{margin:0 0 8px}.guide-shot{margin:18px 0 0;padding:12px;background:#080b12;border-radius:12px}.guide-shot img{display:block;width:100%;height:auto;object-fit:contain}.guide-shot figcaption{color:#aab6c8;padding-top:8px}.article .end{margin-top:38px}.item a{color:#00c4df}.item h2{font-size:1.3rem;line-height:1.4}@media(max-width:760px){.guide-step{grid-template-columns:36px 1fr;padding:16px}}
+.article{max-width:850px;margin:auto}.article h1{font-size:clamp(2.1rem,5vw,3.5rem);line-height:1.2}.article-section{padding:18px 0;border-bottom:1px solid #ffffff18}.article-section h2{font-size:1.45rem}.article-section p,.guide-step p{color:#c1ccda}.guide-list{display:grid;gap:18px;margin-top:28px}.guide-step{display:grid;grid-template-columns:54px 1fr;gap:16px;padding:22px;background:#111925;border:1px solid #283449;border-radius:16px}.guide-step>.num{font-size:1.4rem}.guide-step h2{margin:0 0 8px}.guide-shot{margin:18px 0 0;padding:12px;background:#080b12;border-radius:12px}.guide-shot img{display:block;width:100%;height:auto;object-fit:contain}.guide-shot figcaption{color:#aab6c8;padding-top:8px}.article .end{margin-top:38px}.item a{color:#00c4df}.item h2{font-size:1.3rem;line-height:1.4}nav{align-items:center;gap:10px}.nav-menu{position:relative}.nav-menu>summary{list-style:none;cursor:pointer;display:flex;align-items:center;min-height:44px;padding:8px 13px;border:1px solid #34445c;border-radius:9px;background:#111925;color:#e5edf7;font-weight:700;white-space:nowrap}.nav-menu>summary::-webkit-details-marker{display:none}.nav-menu>summary::after{content:"▾";margin-inline-start:9px;color:#00c4df;font-size:.85em}.nav-menu>summary:focus-visible{outline:3px solid #00c4df;outline-offset:3px}.nav-menu[open]>summary{border-color:#00c4df}.nav-dropdown{position:absolute;top:calc(100% + 8px);inset-inline-start:0;z-index:60;display:grid;gap:3px;width:min(260px,calc(100vw - 36px));padding:8px;background:#111925;border:1px solid #34445c;border-radius:12px;box-shadow:0 16px 36px #0009}.nav-dropdown a{display:flex;align-items:center;min-height:42px;padding:8px 12px;border-radius:8px;color:#dce5f2;text-decoration:none}.nav-dropdown a:hover,.nav-dropdown a:focus-visible{background:#1c2b3e;color:#fff}.nav-dropdown a:focus-visible{outline:2px solid #00c4df;outline-offset:1px}@media(max-width:760px){nav{width:100%;gap:8px}.nav-menu>summary{padding:8px 10px}.nav-dropdown{max-width:calc(100vw - 36px)}.guide-step{grid-template-columns:36px 1fr;padding:16px}}
 """,encoding="utf-8")
  for l in ("en","ar"):
-  extra="".join(f'<a href="{route_url(l,p)}">{n}</a>' for p,n in [("blog","Blog" if l=="en" else "المدونة"),("guide","User guide" if l=="en" else "دليل الاستخدام"),("tips","Job tips" if l=="en" else "نصائح العمل"),("comparison","Compare" if l=="en" else "مقارنة")])
+  resource_items=[("tips","Tips" if l=="en" else "نصائح العمل"),("blog","Blog" if l=="en" else "المدونة"),("guide","User guide" if l=="en" else "دليل الاستخدام"),("comparison","Compare" if l=="en" else "مقارنة")]
+  extra='<details class="nav-menu" data-nav-group="resources"><summary>'+("Resources" if l=="en" else "الموارد")+'</summary><div class="nav-dropdown">'
+  extra+="".join(f'<a data-nav-item="{key}" href="{route_url(l,key)}">{label}</a>' for key,label in resource_items)
+  extra+='</div></details>'
   for f in (DIST/l).rglob("index.html"):
    src=f.read_text(encoding="utf-8")
-   if "<nav " in src: f.write_text(src.replace("</nav>",extra+"</nav>"),encoding="utf-8")
+   if "<nav " in src and 'data-nav-group="resources"' not in src:
+    f.write_text(src.replace("</nav>",extra+"</nav>"),encoding="utf-8")
   p=DIST/l/"blog"/"index.html"; p.parent.mkdir(parents=True,exist_ok=True); p.write_text(blog(l),encoding="utf-8")
   for a in DATA:
    p=DIST/l/"blog"/a[0]/"index.html"; p.parent.mkdir(parents=True,exist_ok=True); p.write_text(article(l,a),encoding="utf-8")

@@ -149,9 +149,10 @@ def page_url(lang, section="home"):
 
 def render_header(lang, section):
     t = TEXT[lang]
-    nav_items = (("about", t["about"]), ("features", t["features"]), ("download", t["download_nav"]), ("faq", t["faq"]))
+    nav_items = (("about", t["about"]), ("features", t["features"]),
+                 ("download", t["download_nav"]), ("faq", t["faq"]))
     nav = "".join(
-        f'<a href="{page_url(lang, key)}">{esc(label)}</a>'
+        f'<a data-nav-item="{key}" href="{page_url(lang, key)}">{esc(label)}</a>'
         for key, label in nav_items
     )
     other = "ar" if lang == "en" else "en"
@@ -165,7 +166,10 @@ def render_header(lang, section):
     return (
         f'<header><div class="locale-switch" aria-label="Country and region">{switch}</div>'
         f'<div class="header-main"><a class="brand" href="{BASE_URL}/">JOB <b>CONNECT</b></a>'
-        f'<nav aria-label="Primary navigation">{nav}</nav></div></header>'
+        f'<nav aria-label="Primary navigation">'
+        f'<details class="nav-menu" data-nav-group="primary"><summary>{"Explore" if lang == "en" else "استكشف"}</summary>'
+        f'<div class="nav-dropdown">{nav}</div></details>'
+        f'</nav></div></header>'
     )
 
 def render_features(lang):

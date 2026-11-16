@@ -93,6 +93,23 @@ def localize(source, locale, section, route_tail=None):
         source = source.replace('og:locale" content="en_US"', 'og:locale" content="en_CA"')
         source = source.replace("Job listings", "Job postings").replace("job listings", "job postings")
         source = source.replace("Job listing", "Job posting").replace("job listing", "job posting")
+    # Localize the two navigation group labels and the resource links.
+    nav_groups = {
+        "en-US": ("Explore", "Resources"), "en-CA": ("Explore", "Resources"),
+        "fr-CA": ("Explorer", "Ressources"), "es-ES": ("Explorar", "Recursos"),
+        "pt-PT": ("Explorar", "Recursos"), "fr-FR": ("Explorer", "Ressources"),
+        "de-DE": ("Entdecken", "Ressourcen"), "it-IT": ("Esplora", "Risorse"),
+    }
+    primary_label, resource_label = nav_groups[locale]
+    source = source.replace("<summary>Explore</summary>", f"<summary>{primary_label}</summary>")
+    source = source.replace("<summary>Resources</summary>", f"<summary>{resource_label}</summary>")
+    from build_locale_resources import CONTENT as RESOURCE_CONTENT
+    for item, label in RESOURCE_CONTENT[locale]["nav"].items():
+        source = re.sub(
+            rf'(<a[^>]*data-nav-item="{re.escape(item)}"[^>]*>).*?(</a>)',
+            lambda match, value=html.escape(label, quote=False): match.group(1) + value + match.group(2),
+            source,
+        )
     # Convert every internal English route, including navigation and feature anchors.
     source = source.replace(f"{BASE}/en/", f"{BASE}/{slug(locale)}/")
     source = source.replace('<html lang="en"', f'<html lang="{locale}"')

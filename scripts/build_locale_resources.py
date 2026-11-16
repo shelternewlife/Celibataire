@@ -85,6 +85,36 @@ CONTENT = {
 }
 CONTENT.update(EXTRA_CONTENT)
 
+FLAG_DATA = {
+    "en-US": ("🇺🇸", "United States · English"),
+    "en-CA": ("🇨🇦", "Canada · English"),
+    "fr-CA": ("🇨🇦", "Canada · Français"),
+    "es-ES": ("🇪🇸", "España · Español"),
+    "pt-PT": ("🇵🇹", "Portugal · Português"),
+    "fr-FR": ("🇫🇷", "France · Français"),
+    "de-DE": ("🇩🇪", "Deutschland · Deutsch"),
+    "it-IT": ("🇮🇹", "Italia · Italiano"),
+}
+NAV_GROUPS = {
+    "en-US": ("Explore", "Resources"), "en-CA": ("Explore", "Resources"),
+    "fr-CA": ("Explorer", "Ressources"), "es-ES": ("Explorar", "Recursos"),
+    "pt-PT": ("Explorar", "Recursos"), "fr-FR": ("Explorer", "Ressources"),
+    "de-DE": ("Entdecken", "Ressourcen"), "it-IT": ("Esplora", "Risorse"),
+}
+LOCALE_TEXT = json.loads((ROOT / "content/locales.json").read_text(encoding="utf-8"))
+
+def render_locale_flags(locale, tail):
+    links = []
+    for code in STRATEGY["published_locales"]:
+        flag, label = FLAG_DATA[code]
+        current = ' aria-current="page"' if code == locale else ""
+        links.append(
+            f'<a class="locale-flag" lang="{code}" href="{route(code, tail)}" '
+            f'title="{esc(label)}" aria-label="{esc(label)}"{current}>'
+            f'<span aria-hidden="true">{flag}</span></a>'
+        )
+    return '<div class="locale-switch" aria-label="Country and region">' + "".join(links) + '</div>'
+
 def esc(value):
     return html.escape(str(value), quote=True)
 
@@ -110,13 +140,27 @@ def render_page(locale, tail, data):
         for code in STRATEGY["published_locales"]
     )
     alternates += f'<link rel="alternate" hreflang="x-default" href="{route("en-US", tail)}">'
-    nav = "".join(
-        f'<a href="{route(locale, item)}">{esc(CONTENT[locale]["nav"][item])}</a>'
-        for item in HUBS
+    nav_groups = NAV_GROUPS[locale]
+    primary_text = LOCALE_TEXT.get(locale, {}).get("text", {})
+    primary_items = (
+        ("about", primary_text.get("about", "About")),
+        ("features", primary_text.get("features", labels["features"])),
+        ("download", primary_text.get("download_nav", "Download")),
+        ("faq", primary_text.get("faq", "FAQ")),
     )
-    nav += (
-        f'<a href="{BASE}/{slug}/features/">{esc(labels["features"])}</a>'
-        f'<a href="{BASE}/{slug}/faq/">FAQ</a>'
+    primary_links = "".join(
+        f'<a data-nav-item="{key}" href="{BASE}/{slug}/{key}/">{esc(label)}</a>'
+        for key, label in primary_items
+    )
+    resource_links = "".join(
+        f'<a data-nav-item="{item}" href="{route(locale, item)}">{esc(CONTENT[locale]["nav"][item])}</a>'
+        for item in ("tips", "blog", "guide", "comparison")
+    )
+    nav = (
+        f'<details class="nav-menu" data-nav-group="primary"><summary>{esc(nav_groups[0])}</summary>'
+        f'<div class="nav-dropdown">{primary_links}</div></details>'
+        f'<details class="nav-menu" data-nav-group="resources"><summary>{esc(nav_groups[1])}</summary>'
+        f'<div class="nav-dropdown">{resource_links}</div></details>'
     )
     cards_html = "".join(
         f'<article class="item"><h2><a href="{route(locale, target)}">{esc(card_title)}</a></h2>'
@@ -157,8 +201,8 @@ def render_page(locale, tail, data):
 </head>
 <body data-page-section="{tail}">
 <a class="skip-link" href="#main-content">{esc(labels["skip"])}</a>
-<header><a class="brand" href="{BASE}/{slug}/">JOB <b>CONNECT</b></a>
-<nav aria-label="{esc(labels["nav_aria"])}">{nav}</nav></header>
+<header>{render_locale_flags(locale, tail)}<div class="header-main"><a class="brand" href="{BASE}/{slug}/">JOB <b>CONNECT</b></a>
+<nav aria-label="{esc(labels["nav_aria"])}">{nav}</nav></div></header>
 <main id="main-content"><section class="section resource-hub">
 <div class="tag">JOB CONNECT · {esc(labels["resource"])}</div>
 <h1>{esc(heading)}</h1><p class="lead">{esc(intro)}</p>
