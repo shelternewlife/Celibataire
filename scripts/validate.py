@@ -257,8 +257,8 @@ robots_lines = [line.strip() for line in robots.splitlines() if line.strip()]
 if "User-agent: *" not in robots_lines or "Allow: /" not in robots_lines:
     fail("robots.txt must allow crawling for all user agents")
 sitemap_directives = [line for line in robots_lines if line.lower().startswith("sitemap:")]
-if sitemap_directives != [f"Sitemap: {BASE}/sitemap.txt"]:
-    fail("robots.txt must reference only the canonical text sitemap")
+if sitemap_directives != [f"Sitemap: {BASE}/sitemap.xml", f"Sitemap: {BASE}/sitemap.txt"]:
+    fail("robots.txt must reference both canonical XML and text sitemaps in order")
 
 if APP["package_id"] not in APP["google_play_url"]:
     fail("Package ID mismatch in Google Play URL")

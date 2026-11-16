@@ -362,7 +362,7 @@ def main():
         for section in ("home", "about", "features", "download", "faq"):
             relative = pathlib.Path(lang) / ("" if section == "home" else section) / "index.html"
             write(relative, render_page(lang, section))
-    write(pathlib.Path("robots.txt"), f"User-agent: *\nAllow: /\nSitemap: {BASE_URL}/sitemap.txt\n")
+    write(pathlib.Path("robots.txt"), f"User-agent: *\nAllow: /\n\nSitemap: {BASE_URL}/sitemap.xml\nSitemap: {BASE_URL}/sitemap.txt\n")
     sitemap_entries = [(f"{BASE_URL}/", None, "home")]
     sitemap_entries.extend(
         (page_url(lang, section), lang, section)

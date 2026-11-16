@@ -141,11 +141,11 @@ class SiteTests(unittest.TestCase):
                 "x-default": f"{BASE}/en/" + ("" if section == "home" else f"{section}/"),
             })
 
-    def test_robots_txt_has_one_canonical_sitemap_directive(self):
+    def test_robots_txt_references_both_canonical_sitemaps(self):
         lines = [line.strip() for line in (DIST / "robots.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
         self.assertIn("User-agent: *", lines)
         self.assertIn("Allow: /", lines)
-        self.assertEqual([line for line in lines if line.lower().startswith("sitemap:")], [f"Sitemap: {BASE}/sitemap.txt"])
+        self.assertEqual([line for line in lines if line.lower().startswith("sitemap:")], [f"Sitemap: {BASE}/sitemap.xml", f"Sitemap: {BASE}/sitemap.txt"])
 
     def test_text_sitemap_contains_root_and_all_language_routes(self):
         urls = [line.strip() for line in (DIST / "sitemap.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
