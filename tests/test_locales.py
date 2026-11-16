@@ -21,20 +21,67 @@ class Links(HTMLParser):
         self.alternates = {}
         self.canonical = None
         self.links = []
+        self.title = ""
+        self.description = None
+        self.in_title = False
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
+        if tag == "title":
+            self.in_title = True
+        if tag == "meta" and attrs.get("name") == "description":
+            self.description = attrs.get("content")
         if tag == "link" and attrs.get("rel") == "canonical":
             self.canonical = attrs.get("href")
         if tag == "link" and attrs.get("rel") == "alternate":
             self.alternates[attrs.get("hreflang")] = attrs.get("href")
         if tag == "a" and attrs.get("href"):
             self.links.append(attrs["href"])
+    def handle_endtag(self, tag):
+        if tag == "title":
+            self.in_title = False
+    def handle_data(self, data):
+        if self.in_title:
+            self.title += data
 
 class MarketLocaleTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         subprocess.run([sys.executable, str(ROOT / "scripts/build.py")], check=True)
         subprocess.run([sys.executable, str(ROOT / "scripts/validate.py")], check=True)
+
+    def test_locale_titles_and_descriptions_are_localized_and_within_snippet_bounds(self):
+        for locale in ("en-US", "en-CA", "fr-CA"):
+            bundle = json.loads((ROOT / "content/locales.json").read_text(encoding="utf-8"))[locale]
+            observed_titles = set()
+            for section in ("", "about", "features", "download", "faq"):
+                path = DIST / locale.lower() / section / "index.html" if section else DIST / locale.lower() / "index.html"
+                parser = Links()
+                parser.feed(path.read_text(encoding="utf-8"))
+                key = section or "home"
+                self.assertEqual(parser.title, bundle["titles"][key], f"{locale}/{key} title")
+                self.assertEqual(parser.description, bundle["descriptions"][key], f"{locale}/{key} description")
+                self.assertLessEqual(len(parser.title), 60, f"{locale}/{key} title too long")
+                self.assertLessEqual(len(parser.description), 160, f"{locale}/{key} description too long")
+                self.assertNotIn(parser.title, observed_titles, f"Duplicate title in {locale}")
+                observed_titles.add(parser.title)
+
+    def test_market_keyword_clusters_are_relevant_and_avoid_unverified_promises(self):
+        clusters = STRATEGY["initial_keyword_clusters"]
+        expected = {"en-US", "en-CA", "fr-CA"}
+        self.assertEqual(set(clusters), expected)
+        for locale, config in clusters.items():
+            self.assertTrue(config["primary"])
+            self.assertTrue(config["secondary"])
+            self.assertTrue(config["clusters"])
+            self.assertTrue(all(item["primary"] for item in config["clusters"]))
+            bundle = json.loads((ROOT / "content/locales.json").read_text(encoding="utf-8"))[locale]
+            metadata = " ".join(bundle["titles"].values()) + " " + " ".join(bundle["descriptions"].values())
+            folded = metadata.casefold()
+            for term in config["excluded_terms"]:
+                self.assertNotIn(term.casefold(), folded, f"Unsupported keyword claim in {locale}: {term}")
+        self.assertIn("job search app", " ".join(clusters["en-US"]["primary"]))
+        self.assertIn("job search app Canada", " ".join(clusters["en-CA"]["primary"]))
+        self.assertIn("application de recherche d’emploi", " ".join(clusters["fr-CA"]["primary"]))
 
     def test_only_explicitly_published_locales_are_generated(self):
         expected = {"en-us", "en-ca", "fr-ca"}

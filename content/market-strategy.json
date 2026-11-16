@@ -515,104 +515,145 @@
   ],
   "initial_keyword_clusters": {
     "en-US": {
-      "language": "English",
+      "language": "English (United States)",
       "market": "United States",
+      "intent": "Discover and evaluate job opportunities with an Android app; do not imply a guaranteed live inventory, application service or job-board comparison.",
+      "primary": [
+        "job search app",
+        "job opportunities",
+        "job opportunity discovery app"
+      ],
+      "secondary": [
+        "Android job search app",
+        "discover job opportunities",
+        "job listings",
+        "organize job opportunities"
+      ],
+      "excluded_terms": [
+        "best job search apps",
+        "jobs hiring now",
+        "remote jobs",
+        "entry level jobs",
+        "jobs near me",
+        "guaranteed jobs"
+      ],
+      "exclusion_reason": "These imply comparison rankings, live hiring inventory, geographic availability, or specialist filters that are not verified as core app capabilities.",
       "clusters": [
         {
           "intent": "app discovery",
           "primary": [
             "job search app",
-            "best job search apps",
-            "job search apps for Android"
+            "job opportunities"
           ],
           "secondary": [
-            "job opportunity app",
-            "find job opportunities",
-            "job listings app"
+            "Android job search app",
+            "discover job opportunities"
           ]
         },
         {
-          "intent": "job discovery",
+          "intent": "opportunity discovery and organization",
           "primary": [
-            "find jobs",
-            "job opportunities",
-            "job listings"
+            "job opportunity discovery app"
           ],
           "secondary": [
-            "new job postings",
-            "discover jobs",
-            "jobs hiring now"
-          ]
-        },
-        {
-          "intent": "remote and early career",
-          "primary": [
-            "remote job search",
-            "entry level jobs"
-          ],
-          "secondary": [
-            "remote job opportunities",
-            "jobs for beginners",
-            "entry level job search"
+            "job listings",
+            "organize job opportunities"
           ]
         }
       ]
     },
     "en-CA": {
-      "language": "English",
+      "language": "English (Canada)",
       "market": "Canada",
+      "intent": "Localize terminology for Canadian English while describing discovery and review features without promising Canadian vacancy coverage.",
+      "primary": [
+        "job search app Canada",
+        "job search app",
+        "job postings",
+        "job opportunities"
+      ],
+      "secondary": [
+        "Android job search app",
+        "employment opportunities",
+        "discover job opportunities",
+        "organize job postings"
+      ],
+      "excluded_terms": [
+        "find jobs in Canada",
+        "jobs in Canada",
+        "jobs hiring now",
+        "remote jobs Canada",
+        "entry level jobs Canada"
+      ],
+      "exclusion_reason": "Avoid claims that the app guarantees Canadian inventory, current hiring, remote-only listings or entry-level coverage until verified against live app data.",
       "clusters": [
         {
           "intent": "app discovery",
           "primary": [
             "job search app Canada",
-            "job search app",
-            "find jobs in Canada"
+            "job search app"
           ],
           "secondary": [
-            "job opportunities Canada",
-            "job listings app"
+            "Android job search app",
+            "employment opportunities"
           ]
         },
         {
-          "intent": "job discovery",
+          "intent": "opportunity discovery and organization",
           "primary": [
-            "jobs in Canada",
             "job postings",
-            "employment opportunities"
+            "job opportunities"
           ],
           "secondary": [
-            "new job postings Canada",
-            "search job vacancies"
+            "discover job opportunities",
+            "organize job postings"
           ]
         }
       ]
     },
     "fr-CA": {
-      "language": "French",
+      "language": "Français canadien",
       "market": "Canada",
+      "intent": "Use natural Canadian French terms for job-search discovery and opportunity organization; do not imply guaranteed local vacancy coverage.",
+      "primary": [
+        "application de recherche d’emploi",
+        "application pour trouver un emploi",
+        "offres d’emploi"
+      ],
+      "secondary": [
+        "possibilités d’emploi",
+        "recherche d’emploi",
+        "application Android pour l’emploi",
+        "organiser les offres d’emploi"
+      ],
+      "excluded_terms": [
+        "emplois au Canada",
+        "emplois à distance",
+        "emplois débutant",
+        "emplois près de moi",
+        "meilleure application de recherche d’emploi"
+      ],
+      "exclusion_reason": "These can imply a verified Canadian job inventory, remote or entry-level filters, nearby listings or an unsupported comparative ranking.",
       "clusters": [
         {
           "intent": "app discovery",
           "primary": [
-            "application recherche emploi",
+            "application de recherche d’emploi",
             "application pour trouver un emploi"
           ],
           "secondary": [
-            "application offres d'emploi",
-            "recherche emploi Canada"
+            "possibilités d’emploi",
+            "recherche d’emploi"
           ]
         },
         {
-          "intent": "job discovery",
+          "intent": "opportunity discovery and organization",
           "primary": [
-            "offres d'emploi",
-            "trouver un emploi",
-            "emplois au Canada"
+            "offres d’emploi"
           ],
           "secondary": [
-            "emploi à distance",
-            "emplois débutant"
+            "application Android pour l’emploi",
+            "organiser les offres d’emploi"
           ]
         }
       ]
@@ -685,5 +726,11 @@
     "en-CA",
     "fr-CA"
   ],
-  "publishing_policy": "Only locales listed in published_locales and backed by complete locale content are generated, indexed and included in sitemaps. Market status alone never publishes a locale."
+  "publishing_policy": "Only locales listed in published_locales and backed by complete locale content are generated, indexed and included in sitemaps. Market status alone never publishes a locale.",
+  "keyword_quality_policy": {
+    "source_of_truth": "Locale-specific keyword clusters in this file; legacy broad-language seeds are not market-volume research.",
+    "claim_guardrail": "Target only app capabilities confirmed by the current product and store listing. Do not promise live vacancies, hiring-now status, geographic coverage, remote-only or entry-level inventory, application submission, or best-app rankings unless verified.",
+    "volume_policy": "No search-volume, difficulty or traffic estimates are asserted. Validate demand by country and language in Google Keyword Planner and Search Console after sufficient impressions accrue.",
+    "localization_policy": "Use natural regional terminology in titles, descriptions and page copy; do not insert country names into every page or repeat keywords unnaturally."
+  }
 }

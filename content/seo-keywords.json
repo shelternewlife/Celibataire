@@ -3,14 +3,13 @@
     "primary": [
       "job search app",
       "job opportunities",
-      "find jobs"
+      "job opportunity discovery"
     ],
     "secondary": [
+      "Android job search app",
       "job listings",
-      "remote jobs",
-      "entry-level jobs",
-      "job search tips",
-      "organize job opportunities"
+      "organize job opportunities",
+      "job search app features"
     ]
   },
   "ar": {
@@ -27,5 +26,5 @@
       "نصائح البحث عن عمل"
     ]
   },
-  "note": "Legacy broad-language seed lists retained for existing pages. Market-specific research and locale expansion are defined in market-strategy.json. Search volume is not verified; confirm by country and language in Google Keyword Planner and refine with Search Console."
+  "note": "Legacy English seeds are aligned to verified discovery and organization features. Market-specific clusters in market-strategy.json are authoritative for en-US, en-CA and fr-CA. Search volume is not verified; confirm by country and language in Google Keyword Planner and refine with Search Console."
 }

@@ -34,18 +34,18 @@
       "home_intro": "Explorez les possibilités d’emploi, consultez les renseignements utiles et gardez à portée de main les postes qui vous intéressent."
     },
     "titles": {
-      "home": "Application de recherche d’emploi pour découvrir des possibilités | Job Connect",
-      "about": "Job Connect : à propos de l’application de découverte d’emplois",
-      "features": "Fonctionnalités de recherche d’emploi : découvrir et organiser | Job Connect",
+      "home": "Application de recherche d’emploi | Job Connect",
+      "about": "À propos de Job Connect | Offres d’emploi",
+      "features": "Fonctionnalités Job Connect | Recherche d’emploi",
       "download": "Télécharger Job Connect pour Android | Google Play",
-      "faq": "FAQ Job Connect : recherche d’emploi et fonctionnalités"
+      "faq": "FAQ Job Connect | Offres et recherche d’emploi"
     },
     "descriptions": {
-      "home": "Découvrez des possibilités d’emploi, comparez les détails des postes et organisez les offres à suivre avec Job Connect, une application Android.",
-      "about": "Découvrez comment l’application Android Job Connect vous aide à repérer des offres, à examiner les détails des postes et à organiser vos favoris.",
-      "features": "Explorez les outils pour découvrir des possibilités, comparer les détails des postes, consulter des indicateurs et organiser les offres.",
-      "download": "Téléchargez Job Connect, une application Android pour découvrir et organiser des possibilités d’emploi. Installation sur Google Play.",
-      "faq": "Réponses sur les offres d’emploi, les indicateurs de possibilités, les collections personnelles et le téléchargement de Job Connect."
+      "home": "Découvrez des possibilités d’emploi avec Job Connect, une application Android pour examiner les détails des postes et organiser les offres à suivre.",
+      "about": "Découvrez comment Job Connect aide à repérer des possibilités d’emploi, à examiner les renseignements sur les postes et à organiser les offres à suivre.",
+      "features": "Explorez les fonctions de découverte, les fiches de postes, les indicateurs de rémunération et de lieu, ainsi que les collections personnelles.",
+      "download": "Téléchargez Job Connect pour Android sur Google Play. Découvrez des possibilités d’emploi, examinez les détails des postes et organisez vos favoris.",
+      "faq": "Consultez les réponses sur la recherche d’emploi, les offres, les indicateurs, les collections personnelles et l’installation de Job Connect."
     },
     "app_description": "Une expérience de découverte de possibilités d’emploi axée sur les nouveaux signaux, l’analyse des occasions et les collections personnelles. Explorez les postes, consultez les indications de rémunération et de lieu, comprenez pourquoi une possibilité est présentée et organisez celles à suivre.",
     "tagline": "Découvrez les possibilités avant que la concurrence ne s’intensifie.",
@@ -143,5 +143,37 @@
         "Organisez vos possibilités"
       ]
     ]
+  },
+  "en-US": {
+    "titles": {
+      "home": "Job Search App to Discover Opportunities | Job Connect",
+      "about": "About Job Connect | Job Opportunity Discovery App",
+      "features": "Job Search App Features & Opportunity Insights | Job Connect",
+      "download": "Download Job Connect for Android | Google Play",
+      "faq": "Job Connect FAQ | Job Search App & Features"
+    },
+    "descriptions": {
+      "home": "Discover job opportunities with Job Connect, an Android app for reviewing role, pay and location signals and organizing opportunities to follow.",
+      "about": "Learn how Job Connect helps you discover job opportunities, review role details and organize opportunities to revisit. Available for Android.",
+      "features": "Explore Job Connect features for discovering opportunities, reviewing role details and indicators, and organizing opportunities in personal collections.",
+      "download": "Get Job Connect for Android on Google Play. Discover job opportunities, review role details and organize the opportunities you want to follow.",
+      "faq": "Answers about Job Connect, job opportunity discovery, role indicators, personal collections and installing the Android app."
+    }
+  },
+  "en-CA": {
+    "titles": {
+      "home": "Job Search App Canada | Job Connect",
+      "about": "About Job Connect | Canada Job Search App",
+      "features": "Job Search App Features | Job Connect Canada",
+      "download": "Download Job Connect for Android in Canada",
+      "faq": "Job Connect FAQ | Job Postings & Opportunities"
+    },
+    "descriptions": {
+      "home": "Explore job opportunities with Job Connect, an Android job search app. Review role, pay and location signals, then organize roles to follow.",
+      "about": "Learn how Job Connect helps you discover job opportunities, review role details and organize job postings to revisit. Available for Android.",
+      "features": "Explore discovery tools, job details, compensation and location indicators, and personal collections in Job Connect for Android.",
+      "download": "Download Job Connect for Android on Google Play. Discover opportunities, review role details and organize the job postings you want to follow.",
+      "faq": "Answers about Job Connect, job postings, opportunity indicators, personal collections and installing the Android app."
+    }
   }
 }

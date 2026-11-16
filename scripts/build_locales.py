@@ -31,36 +31,45 @@ def replace_text(source, old, new):
 def localize(source, locale, section, route_tail=None):
     import build
     language, region = locale_parts(locale)
-    if language == "fr":
-        data = LOCALES[locale]
-        replacements = []
-        for key, value in build.TEXT["en"].items():
-            if key in data["text"]:
-                replacements.append((value, data["text"][key]))
-        for key, value in build.PAGE_TITLES["en"].items():
+    data = LOCALES.get(locale, {})
+    replacements = []
+    for key, value in build.TEXT["en"].items():
+        if key in data.get("text", {}):
+            replacements.append((value, data["text"][key]))
+    for key, value in build.PAGE_TITLES["en"].items():
+        if key in data.get("titles", {}):
             replacements.append((value, data["titles"][key]))
-        for key, value in build.PAGE_DESCRIPTIONS["en"].items():
+    for key, value in build.PAGE_DESCRIPTIONS["en"].items():
+        if key in data.get("descriptions", {}):
             replacements.append((value, data["descriptions"][key]))
-        replacements.extend([
-            (APP["description"]["en"], data["app_description"]),
-            (APP["tagline"]["en"], data["tagline"]),
-            ("Explore this feature", "Explorer cette fonctionnalité"),
-        ])
+    if data.get("app_description"):
+        replacements.append((APP["description"]["en"], data["app_description"]))
+    if data.get("tagline"):
+        replacements.append((APP["tagline"]["en"], data["tagline"]))
+    replacements.extend([
+        ("Explore this feature", "Explorer cette fonctionnalité")
+        for _ in [0] if language == "fr"
+    ])
+    if data.get("features"):
         for feature, translated in zip(build.FEATURES, data["features"]):
             replacements.extend([(feature["title"]["en"], translated[0]),
                                  (feature["description"]["en"], translated[1])])
+    if data.get("faq"):
         for item, translated in zip(build.FAQ, data["faq"]):
             replacements.extend([(item["q"]["en"], translated[0]),
                                  (item["a"]["en"], translated[1])])
+    if data.get("screenshots"):
         for screenshot, translated in zip(build.SCREENSHOTS, data["screenshots"]):
             replacements.extend([(screenshot["alt"]["en"], translated[0]),
                                  (screenshot["caption"]["en"], translated[1])])
-        for old, new in sorted(replacements, key=lambda pair: len(pair[0]), reverse=True):
-            source = replace_text(source, old, new)
+    for old, new in sorted(replacements, key=lambda pair: len(pair[0]), reverse=True):
+        source = replace_text(source, old, new)
+    if locale == "fr-CA":
         source = source.replace('og:locale" content="en_US"', 'og:locale" content="fr_CA"')
     elif locale == "en-CA":
-        source = source.replace("job listings", "job postings")
-        source = source.replace("Job Search App", "Job Search App")
+        source = source.replace('og:locale" content="en_US"', 'og:locale" content="en_CA"')
+        source = source.replace("Job listings", "Job postings").replace("job listings", "job postings")
+        source = source.replace("Job listing", "Job posting").replace("job listing", "job posting")
     # Convert every internal English route, including navigation and feature anchors.
     source = source.replace(f"{BASE}/en/", f"{BASE}/{slug(locale)}/")
     source = source.replace('<html lang="en"', f'<html lang="{locale}"')
