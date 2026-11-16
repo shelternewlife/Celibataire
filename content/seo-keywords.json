@@ -1,0 +1,31 @@
+{
+  "en": {
+    "primary": [
+      "job search app",
+      "job opportunities",
+      "find jobs"
+    ],
+    "secondary": [
+      "job listings",
+      "remote jobs",
+      "entry-level jobs",
+      "job search tips",
+      "organize job opportunities"
+    ]
+  },
+  "ar": {
+    "primary": [
+      "البحث عن عمل",
+      "وظائف شاغرة",
+      "فرص عمل"
+    ],
+    "secondary": [
+      "البحث عن وظائف",
+      "وظائف عن بعد",
+      "وظائف للمبتدئين",
+      "تنظيم فرص العمل",
+      "نصائح البحث عن عمل"
+    ]
+  },
+  "note": "Search-intent targets only; volume rankings are not verified. Confirm average monthly searches by target country in Google Keyword Planner and refine with Search Console query data."
+}

@@ -10,6 +10,8 @@ DIST = ROOT / "dist"
 APP = json.loads((ROOT / "content/app.json").read_text(encoding="utf-8"))
 BASE = APP["website_url"].rstrip("/")
 from scripts.build_resources import routes as resource_routes, DATA, GUIDES
+FAQ = json.loads((ROOT / "content/faq.json").read_text(encoding="utf-8"))
+FEATURES = json.loads((ROOT / "content/features.json").read_text(encoding="utf-8"))
 
 class PageParser(HTMLParser):
     def __init__(self):
@@ -188,7 +190,8 @@ class SiteTests(unittest.TestCase):
             self.assertIn('name="robots" content="index,follow', source)
             self.assertIn('property="og:image"', source)
             self.assertIn('name="twitter:card"', source)
-            self.assertIn('"@type": "MobileApplication"', source)
+            self.assertIn('"@type": "SoftwareApplication"', source)
+            self.assertIn('"@type": "Organization"', source)
             self.assertIn(APP["package_id"], source)
             self.assertIn("target=\"_blank\"", source)
 
@@ -303,6 +306,49 @@ class SiteTests(unittest.TestCase):
         for lang in ("en", "ar"):
             source = (DIST / lang / "comparison" / "index.html").read_text(encoding="utf-8")
             self.assertIn("independent performance study" if lang == "en" else "مقارنة وصفية", source)
+
+
+    def test_jsonld_software_organization_and_faqpage_are_valid(self):
+        import re
+        for lang in ("en", "ar"):
+            for section in ("home", "about", "features", "download", "faq"):
+                source = output_path(lang, section).read_text(encoding="utf-8")
+                scripts = re.findall(r'<script type="application/ld\+json">(.*?)</script>', source, re.S)
+                self.assertTrue(scripts, f"Missing JSON-LD on {lang}/{section}")
+                graph = json.loads(scripts[0])["@graph"]
+                types = [node.get("@type") for node in graph]
+                self.assertIn("Organization", types)
+                self.assertIn("SoftwareApplication", types)
+                self.assertNotIn("MobileApplication", types)
+                faq_nodes = [node for node in graph if node.get("@type") == "FAQPage"]
+                if section == "faq":
+                    self.assertEqual(len(faq_nodes), 1)
+                    self.assertEqual(len(faq_nodes[0]["mainEntity"]), len(FAQ))
+                    for item in FAQ:
+                        self.assertTrue(any(q["name"] == item["q"][lang] for q in faq_nodes[0]["mainEntity"]))
+                        self.assertIn(item["q"][lang], source)
+                        self.assertIn(item["a"][lang], source)
+                else:
+                    self.assertFalse(faq_nodes)
+
+    def test_feature_detail_pages_are_bilingual_and_in_sitemap(self):
+        urls = [line.strip() for line in (DIST / "sitemap.txt").read_text(encoding="utf-8").splitlines()]
+        for lang in ("en", "ar"):
+            for feature in FEATURES:
+                path = DIST / lang / "features" / feature["id"] / "index.html"
+                self.assertTrue(path.is_file())
+                source = path.read_text(encoding="utf-8")
+                self.assertIn(feature["title"][lang], source)
+                self.assertIn('"@type": "Organization"', source)
+                self.assertIn('hreflang="ar"', source)
+                self.assertIn('hreflang="en"', source)
+                self.assertIn(f"{BASE}/{lang}/features/{feature['id']}/", urls)
+
+    def test_keyword_targets_are_documented_without_fake_volume_claims(self):
+        targets = json.loads((ROOT / "content/seo-keywords.json").read_text(encoding="utf-8"))
+        self.assertIn("job search app", targets["en"]["primary"])
+        self.assertIn("البحث عن عمل", targets["ar"]["primary"])
+        self.assertIn("not verified", targets["note"])
 
     def test_no_previous_brand(self):
         for path in DIST.rglob("*.html"):

@@ -84,35 +84,35 @@ TEXT = {
 
 PAGE_TITLES = {
     "en": {
-        "home": "Job Connect — Discover job opportunities",
-        "about": "About Job Connect",
-        "features": "Job Connect Features — Explore Opportunity Discovery Tools",
-        "download": "Download Job Connect for Android — Official Google Play App",
-        "faq": "Job Connect — Frequently asked questions",
+        "home": "Job Search App for Finding Work Opportunities | Job Connect",
+        "about": "Job Connect: About the Job Search and Opportunity Discovery App",
+        "features": "Job Search App Features: Discover, Compare and Organize Jobs | Job Connect",
+        "download": "Download Job Connect: Android Job Search App | Google Play",
+        "faq": "Job Connect FAQ: Job Search, Job Listings and App Features",
     },
     "ar": {
-        "home": "Job Connect — اكتشف فرص العمل",
-        "about": "عن Job Connect",
-        "features": "مزايا Job Connect لاكتشاف فرص العمل",
-        "download": "تنزيل Job Connect لنظام Android من Google Play",
-        "faq": "Job Connect — الأسئلة الشائعة",
+        "home": "البحث عن عمل واكتشاف الوظائف | Job Connect",
+        "about": "Job Connect: تطبيق للبحث عن عمل واكتشاف الوظائف",
+        "features": "مزايا تطبيق Job Connect لاكتشاف فرص العمل وتنظيمها",
+        "download": "تنزيل تطبيق Job Connect للبحث عن عمل | Google Play",
+        "faq": "الأسئلة الشائعة حول Job Connect والبحث عن الوظائف",
     },
 }
 
 PAGE_DESCRIPTIONS = {
     "en": {
-        "home": "Discover job opportunities with Job Connect. Explore roles, review opportunity context and organize roles worth following.",
-        "about": "Learn about Job Connect, its purpose and the developer behind the Android application.",
-        "features": "Explore five Job Connect features: fresh job discovery, opportunity cards, alignment context, intelligence indicators and personal job collections.",
-        "download": "Download Job Connect, the Android job opportunity discovery app by DevImpact. Install it securely from the official Google Play listing.",
-        "faq": "Find answers about Job Connect, its opportunity indicators, collections and official Android download.",
+        "home": "Explore job opportunities, compare role details and organize jobs to follow with Job Connect, an Android job search app.",
+        "about": "Learn how the Job Connect Android app helps you discover job listings, review opportunity details and organize roles to follow.",
+        "features": "Explore job search tools for discovering fresh opportunities, comparing job details, reviewing indicators and organizing job listings.",
+        "download": "Download Job Connect, an Android job search app for discovering and organizing job opportunities. Install it from Google Play.",
+        "faq": "Get answers about job listings, opportunity indicators, personal collections and downloading the Job Connect Android app.",
     },
     "ar": {
-        "home": "اكتشف فرص العمل مع Job Connect. استكشف الوظائف وراجع تفاصيل الفرص ونظّم الوظائف التي تستحق المتابعة.",
-        "about": "تعرّف على Job Connect وهدفه ومطور تطبيق Android.",
-        "features": "تعرّف على خمس مزايا في Job Connect: اكتشاف الفرص الحديثة وبطاقات الوظائف ومؤشرات التوافق وذكاء الفرص والمجموعات الشخصية.",
-        "download": "نزّل Job Connect، تطبيق Android لاكتشاف فرص العمل من DevImpact، وثبّته بأمان من صفحة التطبيق الرسمية على Google Play.",
-        "faq": "اعثر على إجابات حول Job Connect ومؤشرات الفرص والمجموعات وطريقة تنزيل التطبيق الرسمي.",
+        "home": "اكتشف فرص العمل والوظائف الشاغرة، وراجع تفاصيلها ونظّم الفرص التي تريد متابعتها باستخدام تطبيق Job Connect لنظام Android.",
+        "about": "تعرّف على تطبيق Job Connect للبحث عن عمل واكتشاف إعلانات الوظائف ومراجعة تفاصيل الفرص وتنظيمها.",
+        "features": "اكتشف أدوات البحث عن وظائف: متابعة الفرص الحديثة ومقارنة تفاصيل الوظائف ومراجعة المؤشرات وتنظيم إعلانات العمل.",
+        "download": "نزّل تطبيق Job Connect للبحث عن عمل واكتشاف فرص العمل على Android من صفحة Google Play الرسمية.",
+        "faq": "إجابات عن البحث عن وظائف وإعلانات العمل ومؤشرات الفرص والمجموعات وتنزيل تطبيق Job Connect.",
     },
 }
 
@@ -165,13 +165,15 @@ def render_header(lang, section):
 def render_features(lang):
     cards = []
     for index, feature in enumerate(FEATURES, 1):
+        detail_url = page_url(lang, "features/" + feature["id"])
         cards.append(
             f'<article class="item" id="feature-{esc(feature["id"])}">'
             f'<div class="num">{index:02d} / FEATURE</div>'
             f'<img class="feature-shot" src="{esc(SCREENSHOTS[index - 1]["src"])}" width="526" height="296" '
             f'alt="{esc(SCREENSHOTS[index - 1]["alt"][lang])}" loading="lazy" decoding="async">'
-            f'<h2>{esc(feature["title"][lang])}</h2>'
-            f'<p>{esc(feature["description"][lang])}</p></article>'
+            f'<h2><a href="{detail_url}">{esc(feature["title"][lang])}</a></h2>'
+            f'<p>{esc(feature["description"][lang])}</p>'
+            f'<p><a href="{detail_url}">{"Explore this feature" if lang == "en" else "اكتشف تفاصيل الميزة"}</a></p></article>'
         )
     return '<div class="grid">' + "".join(cards) + "</div>"
 
@@ -280,18 +282,30 @@ def render_page(lang, section):
     canonical = page_url(lang, section)
     description = PAGE_DESCRIPTIONS[lang][section]
     other = "ar" if lang == "en" else "en"
-    schema = {
-        "@context": "https://schema.org",
-        "@type": "MobileApplication",
-        "name": APP["name"],
-        "operatingSystem": "Android",
+    organization = {
+        "@type": "Organization", "@id": f"{BASE_URL}/#organization",
+        "name": APP["developer"], "url": BASE_URL + "/", "email": APP["support_email"],
+    }
+    software = {
+        "@type": "SoftwareApplication", "@id": f"{BASE_URL}/#softwareapplication",
+        "name": APP["name"], "operatingSystem": "Android",
         "applicationCategory": "BusinessApplication",
         "description": APP["description"][lang],
-        "downloadUrl": APP["google_play_url"],
-        "url": canonical,
-        "installUrl": APP["google_play_url"],
-        "author": {"@type": "Organization", "name": APP["developer"]},
+        "downloadUrl": APP["google_play_url"], "installUrl": APP["google_play_url"],
+        "url": canonical, "image": SCREENSHOTS[0]["src"],
+        "author": {"@id": f"{BASE_URL}/#organization"},
     }
+    graph = [organization, software]
+    if section == "faq":
+        graph.append({
+            "@type": "FAQPage", "@id": canonical + "#faq", "url": canonical, "inLanguage": lang,
+            "mainEntity": [
+                {"@type": "Question", "name": item["q"][lang],
+                 "acceptedAnswer": {"@type": "Answer", "text": item["a"][lang]}}
+                for item in FAQ
+            ],
+        })
+    schema = {"@context": "https://schema.org", "@graph": graph}
     content = render_content(lang, section)
     return f'''<!doctype html>
 <html lang="{lang}" dir="{direction}">
@@ -317,6 +331,8 @@ def render_page(lang, section):
 <meta property="og:title" content="{esc(PAGE_TITLES[lang][section])}">
 <meta property="og:description" content="{esc(description)}">
 <meta property="og:url" content="{canonical}">
+<link rel="preconnect" href="https://play-lh.googleusercontent.com" crossorigin>
+<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
 <link rel="stylesheet" href="{BASE_URL}/assets/style.css">
 <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
 {render_analytics()}
@@ -342,6 +358,7 @@ def render_language_root():
 <title>Job Connect — Choose your language</title>
 <meta name="description" content="Discover Job Connect, the Android job opportunity discovery app by DevImpact.">
 <link rel="canonical" href="{canonical}">
+<script type="application/ld+json">{json.dumps({"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": f"{BASE_URL}/#organization", "name": APP["developer"], "url": BASE_URL + "/", "email": APP["support_email"]}]}, ensure_ascii=False)}</script>
 <link rel="alternate" hreflang="en" href="{page_url("en")}">
 <link rel="alternate" hreflang="ar" href="{page_url("ar")}">
 <link rel="alternate" hreflang="x-default" href="{canonical}">

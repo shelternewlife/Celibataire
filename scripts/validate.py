@@ -93,6 +93,12 @@ for lang in ("en", "ar"):
         if parser.hreflang.get("x-default") != expected_url("en", section):
             fail(f"Wrong x-default hreflang for {path.relative_to(DIST)}")
         page_html = path.read_text(encoding="utf-8")
+        if '"@type": "Organization"' not in page_html or '"@type": "SoftwareApplication"' not in page_html:
+            fail(f"Missing Organization or SoftwareApplication JSON-LD on {path.relative_to(DIST)}")
+        if section == "faq" and ('"@type": "FAQPage"' not in page_html or page_html.count('"@type": "Question"') != 12):
+            fail(f"FAQPage JSON-LD must describe all 12 visible FAQ entries: {path.relative_to(DIST)}")
+        if section != "faq" and '"@type": "FAQPage"' in page_html:
+            fail(f"FAQPage JSON-LD must only appear on the FAQ page: {path.relative_to(DIST)}")
         if f"https://www.googletagmanager.com/gtag/js?id={GA_MEASUREMENT_ID}" not in page_html:
             fail(f"Missing GA4 library on {path.relative_to(DIST)}")
         if f"gtag('config', '{GA_MEASUREMENT_ID}')" not in page_html:
@@ -132,7 +138,8 @@ for lang in ("en", "ar"):
                 fail(f"Download page is missing its official Google Play CTA: {path.relative_to(DIST)}")
             if 'name="description"' not in page_html or 'name="robots" content="index,follow' not in page_html:
                 fail(f"Download page is missing SEO description or index directive: {path.relative_to(DIST)}")
-            if '"@type": "MobileApplication"' not in page_html or '"installUrl":' not in page_html:
+            if '"@type": "SoftwareApplication"' not in page_html or '"installUrl":' not in page_html:
+                fail(f"Download page is missing SoftwareApplication install structured data: {path.relative_to(DIST)}")
                 fail(f"Download page is missing MobileApplication install structured data: {path.relative_to(DIST)}")
         if section == "faq" and APP["google_play_url"] not in parser.links:
             fail(f"FAQ page is missing its official Google Play CTA: {path.relative_to(DIST)}")
@@ -205,6 +212,8 @@ for lang, tail in resource_routes():
     for image in parser.images:
         if not image.get("alt", "").strip() or not image.get("width") or not image.get("height"):
             fail(f"Resource image missing alt text or dimensions: {resource_path.relative_to(DIST)}")
+    if '"@type": "Organization"' not in source:
+        fail(f"Resource page missing Organization JSON-LD: {resource_path.relative_to(DIST)}")
     if 'name="description"' not in source or 'name="robots" content="index,follow' not in source:
         fail(f"Resource page missing SEO metadata: {resource_path.relative_to(DIST)}")
 
