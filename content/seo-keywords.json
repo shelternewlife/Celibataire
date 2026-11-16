@@ -27,5 +27,5 @@
       "نصائح البحث عن عمل"
     ]
   },
-  "note": "Search-intent targets only; volume rankings are not verified. Confirm average monthly searches by target country in Google Keyword Planner and refine with Search Console query data."
+  "note": "Legacy broad-language seed lists retained for existing pages. Market-specific research and locale expansion are defined in market-strategy.json. Search volume is not verified; confirm by country and language in Google Keyword Planner and refine with Search Console."
 }

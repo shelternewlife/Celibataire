@@ -1,0 +1,683 @@
+{
+  "version": 1,
+  "purpose": "Market and locale planning registry. This file does not publish locale routes; a locale becomes indexable only after its complete translated pages, metadata, navigation, canonical and reciprocal hreflang are generated and validated.",
+  "market_priority": {
+    "1": "United States and Canada",
+    "2": "All European countries, including multilingual and non-EU countries listed below"
+  },
+  "url_policy": {
+    "pattern": "/{locale}/",
+    "examples": [
+      "/en-us/",
+      "/en-ca/",
+      "/fr-ca/",
+      "/de-de/",
+      "/fr-fr/",
+      "/es-es/"
+    ],
+    "locale_identifier": "BCP 47 language-region tag; store hreflang in standard casing (for example en-US) and normalize URL path to lowercase (en-us).",
+    "canonical": "Each translated page has a self-referencing canonical URL.",
+    "hreflang": "Emit reciprocal hreflang links only among equivalent pages that are genuinely available in each locale; include x-default for the global language selector or default landing page.",
+    "fallback": "Do not silently serve English or another language under a locale URL. Untranslated locales remain unpublished and absent from sitemaps.",
+    "country_targeting": "A locale identifies language and regional presentation; it is not a claim that the app contains vacancies or supports hiring in that country."
+  },
+  "markets": [
+    {
+      "country_code": "US",
+      "country_name": "United States",
+      "priority": 1,
+      "status": "initial",
+      "locales": [
+        "en-US"
+      ]
+    },
+    {
+      "country_code": "CA",
+      "country_name": "Canada",
+      "priority": 1,
+      "status": "initial",
+      "locales": [
+        "en-CA",
+        "fr-CA"
+      ]
+    },
+    {
+      "country_code": "AL",
+      "country_name": "Albania",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "sq-AL"
+      ]
+    },
+    {
+      "country_code": "AD",
+      "country_name": "Andorra",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "ca-AD"
+      ]
+    },
+    {
+      "country_code": "AM",
+      "country_name": "Armenia",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "hy-AM"
+      ]
+    },
+    {
+      "country_code": "AT",
+      "country_name": "Austria",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "de-AT"
+      ]
+    },
+    {
+      "country_code": "AZ",
+      "country_name": "Azerbaijan",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "az-AZ"
+      ]
+    },
+    {
+      "country_code": "BY",
+      "country_name": "Belarus",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "be-BY",
+        "ru-BY"
+      ]
+    },
+    {
+      "country_code": "BE",
+      "country_name": "Belgium",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "nl-BE",
+        "fr-BE",
+        "de-BE"
+      ]
+    },
+    {
+      "country_code": "BA",
+      "country_name": "Bosnia and Herzegovina",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "bs-BA",
+        "hr-BA",
+        "sr-BA"
+      ]
+    },
+    {
+      "country_code": "BG",
+      "country_name": "Bulgaria",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "bg-BG"
+      ]
+    },
+    {
+      "country_code": "HR",
+      "country_name": "Croatia",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "hr-HR"
+      ]
+    },
+    {
+      "country_code": "CY",
+      "country_name": "Cyprus",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "el-CY",
+        "tr-CY"
+      ]
+    },
+    {
+      "country_code": "CZ",
+      "country_name": "Czechia",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "cs-CZ"
+      ]
+    },
+    {
+      "country_code": "DK",
+      "country_name": "Denmark",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "da-DK"
+      ]
+    },
+    {
+      "country_code": "EE",
+      "country_name": "Estonia",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "et-EE"
+      ]
+    },
+    {
+      "country_code": "FI",
+      "country_name": "Finland",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "fi-FI",
+        "sv-FI"
+      ]
+    },
+    {
+      "country_code": "FR",
+      "country_name": "France",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "fr-FR"
+      ]
+    },
+    {
+      "country_code": "GE",
+      "country_name": "Georgia",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "ka-GE"
+      ]
+    },
+    {
+      "country_code": "DE",
+      "country_name": "Germany",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "de-DE"
+      ]
+    },
+    {
+      "country_code": "GR",
+      "country_name": "Greece",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "el-GR"
+      ]
+    },
+    {
+      "country_code": "HU",
+      "country_name": "Hungary",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "hu-HU"
+      ]
+    },
+    {
+      "country_code": "IS",
+      "country_name": "Iceland",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "is-IS"
+      ]
+    },
+    {
+      "country_code": "IE",
+      "country_name": "Ireland",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "en-IE",
+        "ga-IE"
+      ]
+    },
+    {
+      "country_code": "IT",
+      "country_name": "Italy",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "it-IT"
+      ]
+    },
+    {
+      "country_code": "XK",
+      "country_name": "Kosovo",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "sq-XK",
+        "sr-XK"
+      ]
+    },
+    {
+      "country_code": "LV",
+      "country_name": "Latvia",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "lv-LV"
+      ]
+    },
+    {
+      "country_code": "LI",
+      "country_name": "Liechtenstein",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "de-LI"
+      ]
+    },
+    {
+      "country_code": "LT",
+      "country_name": "Lithuania",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "lt-LT"
+      ]
+    },
+    {
+      "country_code": "LU",
+      "country_name": "Luxembourg",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "lb-LU",
+        "fr-LU",
+        "de-LU"
+      ]
+    },
+    {
+      "country_code": "MT",
+      "country_name": "Malta",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "mt-MT",
+        "en-MT"
+      ]
+    },
+    {
+      "country_code": "MD",
+      "country_name": "Moldova",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "ro-MD"
+      ]
+    },
+    {
+      "country_code": "MC",
+      "country_name": "Monaco",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "fr-MC"
+      ]
+    },
+    {
+      "country_code": "ME",
+      "country_name": "Montenegro",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "sr-ME",
+        "sq-ME"
+      ]
+    },
+    {
+      "country_code": "NL",
+      "country_name": "Netherlands",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "nl-NL"
+      ]
+    },
+    {
+      "country_code": "MK",
+      "country_name": "North Macedonia",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "mk-MK",
+        "sq-MK"
+      ]
+    },
+    {
+      "country_code": "NO",
+      "country_name": "Norway",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "nb-NO",
+        "nn-NO"
+      ]
+    },
+    {
+      "country_code": "PL",
+      "country_name": "Poland",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "pl-PL"
+      ]
+    },
+    {
+      "country_code": "PT",
+      "country_name": "Portugal",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "pt-PT"
+      ]
+    },
+    {
+      "country_code": "RO",
+      "country_name": "Romania",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "ro-RO"
+      ]
+    },
+    {
+      "country_code": "RU",
+      "country_name": "Russia",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "ru-RU"
+      ]
+    },
+    {
+      "country_code": "SM",
+      "country_name": "San Marino",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "it-SM"
+      ]
+    },
+    {
+      "country_code": "RS",
+      "country_name": "Serbia",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "sr-RS"
+      ]
+    },
+    {
+      "country_code": "SK",
+      "country_name": "Slovakia",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "sk-SK"
+      ]
+    },
+    {
+      "country_code": "SI",
+      "country_name": "Slovenia",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "sl-SI"
+      ]
+    },
+    {
+      "country_code": "ES",
+      "country_name": "Spain",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "es-ES",
+        "ca-ES",
+        "eu-ES",
+        "gl-ES"
+      ]
+    },
+    {
+      "country_code": "SE",
+      "country_name": "Sweden",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "sv-SE"
+      ]
+    },
+    {
+      "country_code": "CH",
+      "country_name": "Switzerland",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "de-CH",
+        "fr-CH",
+        "it-CH",
+        "rm-CH"
+      ]
+    },
+    {
+      "country_code": "TR",
+      "country_name": "Türkiye",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "tr-TR"
+      ]
+    },
+    {
+      "country_code": "UA",
+      "country_name": "Ukraine",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "uk-UA"
+      ]
+    },
+    {
+      "country_code": "GB",
+      "country_name": "United Kingdom",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "en-GB"
+      ]
+    },
+    {
+      "country_code": "VA",
+      "country_name": "Vatican City",
+      "priority": 2,
+      "status": "planned",
+      "locales": [
+        "it-VA"
+      ]
+    }
+  ],
+  "initial_keyword_clusters": {
+    "en-US": {
+      "language": "English",
+      "market": "United States",
+      "clusters": [
+        {
+          "intent": "app discovery",
+          "primary": [
+            "job search app",
+            "best job search apps",
+            "job search apps for Android"
+          ],
+          "secondary": [
+            "job opportunity app",
+            "find job opportunities",
+            "job listings app"
+          ]
+        },
+        {
+          "intent": "job discovery",
+          "primary": [
+            "find jobs",
+            "job opportunities",
+            "job listings"
+          ],
+          "secondary": [
+            "new job postings",
+            "discover jobs",
+            "jobs hiring now"
+          ]
+        },
+        {
+          "intent": "remote and early career",
+          "primary": [
+            "remote job search",
+            "entry level jobs"
+          ],
+          "secondary": [
+            "remote job opportunities",
+            "jobs for beginners",
+            "entry level job search"
+          ]
+        }
+      ]
+    },
+    "en-CA": {
+      "language": "English",
+      "market": "Canada",
+      "clusters": [
+        {
+          "intent": "app discovery",
+          "primary": [
+            "job search app Canada",
+            "job search app",
+            "find jobs in Canada"
+          ],
+          "secondary": [
+            "job opportunities Canada",
+            "job listings app"
+          ]
+        },
+        {
+          "intent": "job discovery",
+          "primary": [
+            "jobs in Canada",
+            "job postings",
+            "employment opportunities"
+          ],
+          "secondary": [
+            "new job postings Canada",
+            "search job vacancies"
+          ]
+        }
+      ]
+    },
+    "fr-CA": {
+      "language": "French",
+      "market": "Canada",
+      "clusters": [
+        {
+          "intent": "app discovery",
+          "primary": [
+            "application recherche emploi",
+            "application pour trouver un emploi"
+          ],
+          "secondary": [
+            "application offres d'emploi",
+            "recherche emploi Canada"
+          ]
+        },
+        {
+          "intent": "job discovery",
+          "primary": [
+            "offres d'emploi",
+            "trouver un emploi",
+            "emplois au Canada"
+          ],
+          "secondary": [
+            "emploi à distance",
+            "emplois débutant"
+          ]
+        }
+      ]
+    }
+  },
+  "europe_keyword_research": {
+    "status": "research-seeds-only",
+    "note": "European language keyword clusters must be researched and validated per country before publishing. Do not translate North American terms literally or assume one phrase fits every country.",
+    "first_wave_locales": [
+      "en-GB",
+      "fr-FR",
+      "de-DE",
+      "es-ES",
+      "it-IT",
+      "nl-NL",
+      "pl-PL"
+    ],
+    "examples": {
+      "fr-FR": [
+        "application recherche emploi",
+        "offres d'emploi",
+        "recherche d'emploi",
+        "emploi à distance"
+      ],
+      "de-DE": [
+        "Jobsuche App",
+        "Stellenangebote",
+        "Jobs finden",
+        "Remote Jobs"
+      ],
+      "es-ES": [
+        "aplicación para buscar empleo",
+        "ofertas de empleo",
+        "buscar trabajo",
+        "trabajo remoto"
+      ],
+      "it-IT": [
+        "app ricerca lavoro",
+        "offerte di lavoro",
+        "cercare lavoro",
+        "lavoro da remoto"
+      ],
+      "nl-NL": [
+        "vacatures app",
+        "vacatures zoeken",
+        "werk zoeken",
+        "thuiswerk vacatures"
+      ],
+      "pl-PL": [
+        "aplikacja do szukania pracy",
+        "oferty pracy",
+        "szukanie pracy",
+        "praca zdalna"
+      ],
+      "en-GB": [
+        "job search app",
+        "find a job",
+        "job vacancies",
+        "remote jobs"
+      ]
+    }
+  },
+  "measurement": {
+    "search_volume": "Not supplied or verified in this registry. Confirm with Google Keyword Planner by country and language.",
+    "organic_performance": "Use Google Search Console query and page data after each locale is genuinely published.",
+    "conversion": "Use the existing GA4 google_play_click event, segmented by page_path and locale."
+  }
+}
