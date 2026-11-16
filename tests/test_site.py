@@ -102,7 +102,7 @@ class SiteTests(unittest.TestCase):
         root = ET.parse(DIST / "sitemap.xml").getroot()
         ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
         urls = [node.find(f"{ns}loc").text for node in root.findall(f"{ns}url")]
-        self.assertEqual(len(urls), 1 + len(resource_routes()) + 30)
+        self.assertEqual(len(urls), 1 + len(resource_routes()) + 30 + 12)
         self.assertEqual(len(urls), len(set(urls)))
         self.assertIn(f"{BASE}/", urls)
         for lang in ("en", "ar"):
@@ -123,7 +123,7 @@ class SiteTests(unittest.TestCase):
         ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
         xhtml = "{http://www.w3.org/1999/xhtml}"
         entries = root.findall(f"{ns}url")
-        self.assertEqual(len(entries), 1 + len(resource_routes()) + 30)
+        self.assertEqual(len(entries), 1 + len(resource_routes()) + 30 + 12)
         for entry in entries:
             loc = entry.find(f"{ns}loc").text
             alternates = {
@@ -161,7 +161,7 @@ class SiteTests(unittest.TestCase):
 
     def test_text_sitemap_contains_root_and_all_language_routes(self):
         urls = [line.strip() for line in (DIST / "sitemap.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
-        self.assertEqual(len(urls), 1 + len(resource_routes()) + 30)
+        self.assertEqual(len(urls), 1 + len(resource_routes()) + 30 + 12)
         self.assertEqual(len(urls), len(set(urls)))
         self.assertIn(f"{BASE}/", urls)
         for lang in ("en", "ar"):

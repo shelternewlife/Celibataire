@@ -259,6 +259,58 @@ for lang, tail in resource_routes():
     if 'name="description"' not in source or 'name="robots" content="index,follow' not in source:
         fail(f"Resource page missing SEO metadata: {resource_path.relative_to(DIST)}")
 
+
+# Published market resource hubs: these four routes must exist in every live locale.
+RESOURCE_HUBS = ("tips", "blog", "guide", "comparison")
+for locale in STRATEGY.get("published_locales", []):
+    slug = locale.lower()
+    expected_hreflang = {
+        code: f"{BASE}/{code.lower()}/" + "{tail}/"
+        for code in STRATEGY["published_locales"]
+    }
+    for tail in RESOURCE_HUBS:
+        route = f"{BASE}/{slug}/{tail}/"
+        route_urls.add(route)
+        path = DIST / slug / tail / "index.html"
+        if not path.is_file():
+            fail(f"Missing localized resource hub: {path.relative_to(DIST)}")
+            continue
+        source = path.read_text(encoding="utf-8")
+        parser = DocumentParser()
+        parser.feed(source)
+        expected = {code: f"{BASE}/{code.lower()}/{tail}/" for code in STRATEGY["published_locales"]}
+        expected["x-default"] = f"{BASE}/en-us/{tail}/"
+        if parser.canonical != route or parser.hreflang != expected:
+            fail(f"Incorrect canonical or reciprocal hreflang for {path.relative_to(DIST)}")
+        if f'<html lang="{locale}"' not in source:
+            fail(f"Incorrect HTML language for {path.relative_to(DIST)}")
+        if source.count("<h1") != 1 or not parser.h1:
+            fail(f"Localized resource hub must contain exactly one H1: {path.relative_to(DIST)}")
+        if 'name="description"' not in source or 'name="robots" content="index,follow' not in source:
+            fail(f"Localized resource hub is missing SEO metadata: {path.relative_to(DIST)}")
+        if '<a class="skip-link" href="#main-content">' not in source or '<main id="main-content">' not in source:
+            fail(f"Localized resource hub is missing accessibility landmarks: {path.relative_to(DIST)}")
+        for href in parser.links:
+            if href.startswith(("mailto:", "tel:", "#")):
+                continue
+            parsed = urlparse(href)
+            if parsed.scheme in ("http", "https"):
+                if parsed.netloc != urlparse(BASE).netloc:
+                    continue
+                base_path = urlparse(BASE).path.rstrip("/")
+                if parsed.path != base_path and not parsed.path.startswith(base_path + "/"):
+                    fail(f"Localized resource link escapes project base path: {href}")
+                    continue
+                relative = parsed.path[len(base_path):].lstrip("/")
+            else:
+                fail(f"Unsupported localized resource link: {href}")
+                continue
+            target = DIST / relative
+            if relative.endswith("/") or not target.suffix:
+                target = target / "index.html"
+            if not target.is_file():
+                fail(f"Broken localized resource link {href} in {path.relative_to(DIST)}")
+
 root_parser = DocumentParser()
 if (DIST / "index.html").is_file():
     root_html = (DIST / "index.html").read_text(encoding="utf-8")

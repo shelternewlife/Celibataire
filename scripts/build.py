@@ -422,6 +422,8 @@ def main():
     build_extra_pages()
     from build_locales import build_localized_pages
     build_localized_pages()
+    from build_locale_resources import build_localized_resource_pages
+    build_localized_resource_pages()
 
 if __name__ == "__main__":
     main()
