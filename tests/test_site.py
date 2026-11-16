@@ -120,22 +120,24 @@ class SiteTests(unittest.TestCase):
         root = ET.parse(DIST / "sitemap.xml").getroot()
         ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
         urls = [node.find(f"{ns}loc").text for node in root.findall(f"{ns}url")]
-        self.assertEqual(len(urls), 1 + len(resource_routes()) + (len(STRATEGY["published_locales"]) * 14))
+        self.assertEqual(len(urls), len(resource_routes()) + (len(STRATEGY["published_locales"]) * 14))
         self.assertEqual(len(urls), len(set(urls)))
-        self.assertIn(f"{BASE}/", urls)
+        self.assertNotIn(f"{BASE}/", urls)
         for lang in ("en", "ar"):
             for section in ("home", "about", "features", "download", "faq"):
                 expected = f"{BASE}/{lang}/" + ("" if section == "home" else f"{section}/")
                 self.assertIn(expected, urls)
 
-    def test_root_language_gateway_and_verification(self):
+    def test_root_redirects_to_us_english_about_and_preserves_verification(self):
         source = (DIST / "index.html").read_text(encoding="utf-8")
-        self.assertIn(f'href="{BASE}/en-us/"', source)
-        self.assertIn(f'href="{BASE}/en-ca/"', source)
-        self.assertIn(f'href="{BASE}/fr-ca/"', source)
-        for locale in ("es-ES", "pt-PT", "fr-FR", "de-DE", "it-IT"):
-            self.assertIn(f'href="{BASE}/{locale.lower()}/"', source)
-        self.assertIn(f'<link rel="canonical" href="{BASE}/">', source)
+        target = f"{BASE}/en-us/about/"
+        self.assertIn(f'<link rel="canonical" href="{target}">', source)
+        self.assertIn(f'<meta http-equiv="refresh" content="0; url={target}">', source)
+        self.assertIn(f'window.location.replace("{target}")', source)
+        self.assertIn('name="google-site-verification"', source)
+        self.assertIn('name="robots" content="noindex,follow"', source)
+        self.assertNotIn("Choose your language", source)
+        self.assertNotIn("اختر لغتك", source)
 
     def test_sitemap_contains_reciprocal_language_alternates(self):
         import xml.etree.ElementTree as ET
@@ -143,19 +145,13 @@ class SiteTests(unittest.TestCase):
         ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
         xhtml = "{http://www.w3.org/1999/xhtml}"
         entries = root.findall(f"{ns}url")
-        self.assertEqual(len(entries), 1 + len(resource_routes()) + (len(STRATEGY["published_locales"]) * 14))
+        self.assertEqual(len(entries), len(resource_routes()) + (len(STRATEGY["published_locales"]) * 14))
         for entry in entries:
             loc = entry.find(f"{ns}loc").text
             alternates = {
                 node.get("hreflang"): node.get("href")
                 for node in entry.findall(f"{xhtml}link")
             }
-            if loc == f"{BASE}/":
-                self.assertEqual(alternates, {
-                    **{code: f"{BASE}/{code.lower()}/" for code in STRATEGY["published_locales"]},
-                    "x-default": f"{BASE}/",
-                })
-                continue
             route = loc[len(BASE) + 1:].strip("/")
             parts = route.split("/")
             if parts[0] in {code.lower() for code in STRATEGY["published_locales"]}:
@@ -181,9 +177,9 @@ class SiteTests(unittest.TestCase):
 
     def test_text_sitemap_contains_root_and_all_language_routes(self):
         urls = [line.strip() for line in (DIST / "sitemap.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
-        self.assertEqual(len(urls), 1 + len(resource_routes()) + (len(STRATEGY["published_locales"]) * 14))
+        self.assertEqual(len(urls), len(resource_routes()) + (len(STRATEGY["published_locales"]) * 14))
         self.assertEqual(len(urls), len(set(urls)))
-        self.assertIn(f"{BASE}/", urls)
+        self.assertNotIn(f"{BASE}/", urls)
         for lang in ("en", "ar"):
             for section in ("home", "about", "features", "download", "faq"):
                 expected = f"{BASE}/{lang}/" + ("" if section == "home" else f"{section}/")
@@ -256,7 +252,6 @@ class SiteTests(unittest.TestCase):
                     self.assertEqual(cta.get("href"), APP["google_play_url"])
                     self.assertEqual(cta.get("data-analytics-event"), "google_play_click")
         root = (DIST / "index.html").read_text(encoding="utf-8")
-        self.assertIn(f"gtag('config', '{measurement_id}')", root)
 
     def test_pages_have_skip_links_and_single_main_heading(self):
         for lang in ("en", "ar"):
@@ -266,8 +261,6 @@ class SiteTests(unittest.TestCase):
                 self.assertIn('<main id="main-content">', source)
                 self.assertEqual(source.count("<h1"), 1)
         root = (DIST / "index.html").read_text(encoding="utf-8")
-        self.assertIn('<a class="skip-link" href="#language-content">', root)
-        self.assertIn('<main id="language-content"', root)
 
     def test_all_images_have_alt_text_and_intrinsic_dimensions(self):
         for path in DIST.rglob("*.html"):

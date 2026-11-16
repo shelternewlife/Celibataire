@@ -230,23 +230,8 @@ def update_legacy_pages(published):
 
 
 def update_root_page(published):
-    path = DIST / "index.html"
-    source = path.read_text(encoding="utf-8")
-    source = re.sub(r'<link rel="alternate" hreflang="(?:en|ar|x-default)" href="[^"]+">\n?', "", source)
-    links = "".join(
-        f'<link rel="alternate" hreflang="{locale}" href="{BASE}/{slug(locale)}/">\n'
-        for locale in published
-    )
-    links += f'<link rel="alternate" hreflang="x-default" href="{BASE}/">'
-    source = source.replace(f'<link rel="canonical" href="{BASE}/">',
-                            f'<link rel="canonical" href="{BASE}/">\n{links}')
-    selector = render_locale_flags(published)
-    source = re.sub(
-        r'<p><a lang="en" href="[^"]+">English</a>\s*<a lang="ar" dir="rtl" href="[^"]+">العربية</a></p>',
-        lambda _: selector,
-        source,
-    )
-    path.write_text(source, encoding="utf-8")
+    import build
+    build.write(pathlib.Path("index.html"), build.render_language_root())
 
 def update_sitemaps(published):
     xml_path = DIST / "sitemap.xml"
@@ -254,19 +239,9 @@ def update_sitemaps(published):
     root = tree.getroot()
     ET.register_namespace("", NS)
     ET.register_namespace("xhtml", XHTML)
-    root_entry = next((node for node in root.findall(f"{{{NS}}}url")
-                       if node.findtext(f"{{{NS}}}loc") == f"{BASE}/"), None)
-    if root_entry is not None:
-        for item in list(root_entry):
-            if item.tag == f"{{{XHTML}}}link":
-                root_entry.remove(item)
-        for locale in published:
-            ET.SubElement(root_entry, f"{{{XHTML}}}link", {
-                "rel": "alternate", "hreflang": locale, "href": f"{BASE}/{slug(locale)}/"
-            })
-        ET.SubElement(root_entry, f"{{{XHTML}}}link", {
-            "rel": "alternate", "hreflang": "x-default", "href": f"{BASE}/"
-        })
+    for node in list(root.findall(f"{{{NS}}}url")):
+        if node.findtext(f"{{{NS}}}loc") == f"{BASE}/":
+            root.remove(node)
     for section in SECTIONS:
         path_tail = "" if section == "home" else f"{section}/"
         alternates = [(locale, f"{BASE}/{slug(locale)}/{path_tail}") for locale in published]
@@ -295,7 +270,7 @@ def update_sitemaps(published):
                 "rel": "alternate", "hreflang": "x-default", "href": alternates[0][1]
             })
     tree.write(xml_path, encoding="utf-8", xml_declaration=True)
-    urls = [line.strip() for line in (DIST / "sitemap.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
+    urls = [line.strip() for line in (DIST / "sitemap.txt").read_text(encoding="utf-8").splitlines() if line.strip() and line.strip() != f"{BASE}/"]
     for section in SECTIONS:
         tail = "" if section == "home" else f"{section}/"
         urls.extend(f"{BASE}/{slug(locale)}/{tail}" for locale in published)

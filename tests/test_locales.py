@@ -236,7 +236,8 @@ class MarketLocaleTests(unittest.TestCase):
                     self.assertIn(f'<img src="https://flagcdn.com/w80/{flag}.png" alt="{country_name} flag" width="40" height="30"', page)
                 self.assertNotRegex(page, r'<a class="locale-flag"[^>]*>\\s*<span')
         root = (DIST / "index.html").read_text(encoding="utf-8")
-        self.assertIn('class="locale-switch"', root)
+        self.assertIn(f'<meta http-equiv="refresh" content="0; url={BASE}/en-us/about/">', root)
+        self.assertNotIn('class="locale-switch"', root)
         css = (DIST / "assets/style.css").read_text(encoding="utf-8")
         self.assertIn(".header-main>nav{margin-inline-start:auto;justify-content:flex-end}", css)
         self.assertIn(".home-header>.header-main{align-self:stretch;width:100%}", css)
@@ -262,12 +263,13 @@ class MarketLocaleTests(unittest.TestCase):
                 for label, url in expected.items():
                     self.assertIn(f'href="{url}" target="_blank" rel="noopener noreferrer" aria-label="{label}"', source)
 
-    def test_root_selector_points_to_every_published_locale(self):
+    def test_root_redirect_has_no_language_selector(self):
         source = (DIST / "index.html").read_text(encoding="utf-8")
-        for locale in STRATEGY["published_locales"]:
-            self.assertIn(f'hreflang="{locale}"', source)
-            self.assertIn(f'href="{BASE}/{locale.lower()}/"', source)
-        self.assertIn(f'hreflang="x-default" href="{BASE}/"', source)
+        self.assertIn(f'<link rel="canonical" href="{BASE}/en-us/about/">', source)
+        self.assertIn(f'<meta http-equiv="refresh" content="0; url={BASE}/en-us/about/">', source)
+        self.assertNotIn('class="locale-switch"', source)
+        self.assertNotIn("Choose your language", source)
+        self.assertNotIn("اختر لغتك", source)
 
 if __name__ == "__main__":
     unittest.main()

@@ -375,25 +375,20 @@ def render_page(lang, section):
 </html>'''
 
 def render_language_root():
-    canonical = f"{BASE_URL}/"
+    target = f"{BASE_URL}/en-us/about/"
     return f'''<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="google-site-verification" content="8mOiNMu4Tn477yFaR-IWrNQGhdqH1TpF6NKKoN94Oms">
-<title>Job Connect — Choose your language</title>
-<meta name="description" content="Discover Job Connect, the Android job opportunity discovery app by DevImpact.">
-<link rel="canonical" href="{canonical}">
-<script type="application/ld+json">{json.dumps({"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": f"{BASE_URL}/#organization", "name": APP["developer"], "url": BASE_URL + "/", "email": APP["support_email"]}]}, ensure_ascii=False)}</script>
-<link rel="alternate" hreflang="en" href="{page_url("en")}">
-<link rel="alternate" hreflang="ar" href="{page_url("ar")}">
-<link rel="alternate" hreflang="x-default" href="{canonical}">
-<link rel="stylesheet" href="{BASE_URL}/assets/style.css">
-{render_analytics()}
+<meta name="robots" content="noindex,follow">
+<title>Job Connect</title>
+<link rel="canonical" href="{target}">
+<meta http-equiv="refresh" content="0; url={target}">
+<script>window.location.replace("{target}");</script>
 </head>
-<body data-page-section="language-root"><a class="skip-link" href="#language-content">Skip to main content</a><header class="language-header"><div class="locale-switch" aria-label="Country and region">{render_market_flags()}{render_social_links()}</div></header><main id="language-content" class="language"><div><div class="tag">JOB CONNECT</div>
-<h1>Choose your language / اختر لغتك</h1></div></main></body>
+<body><p><a href="{target}">Continue to Job Connect</a></p></body>
 </html>'''
 
 def write(relative_path, content):
@@ -412,7 +407,7 @@ def main():
             relative = pathlib.Path(lang) / ("" if section == "home" else section) / "index.html"
             write(relative, render_page(lang, section))
     write(pathlib.Path("robots.txt"), f"User-agent: *\nAllow: /\n\nSitemap: {BASE_URL}/sitemap.xml\nSitemap: {BASE_URL}/sitemap.txt\n")
-    sitemap_entries = [(f"{BASE_URL}/", None, "home")]
+    sitemap_entries = []
     sitemap_entries.extend(
         (page_url(lang, section), lang, section)
         for lang in ("en", "ar")
@@ -426,7 +421,7 @@ def main():
     for url, lang, section in sitemap_entries:
         english_url = page_url("en", section)
         arabic_url = page_url("ar", section)
-        default_url = f"{BASE_URL}/" if lang is None else english_url
+        default_url = english_url
         sitemap += f"<url><loc>{esc(url)}</loc>"
         sitemap += f'<xhtml:link rel="alternate" hreflang="en" href="{esc(english_url)}"/>'
         sitemap += f'<xhtml:link rel="alternate" hreflang="ar" href="{esc(arabic_url)}"/>'

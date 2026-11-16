@@ -79,7 +79,7 @@ for path in required_files:
     if not path.is_file():
         fail(f"Missing generated file: {path.relative_to(DIST)}")
 
-route_urls = {f"{BASE}/"}
+route_urls = set()
 for lang in ("en", "ar"):
     for section in ("home", "about", "features", "download", "faq"):
         route_urls.add(expected_url(lang, section))
@@ -343,19 +343,19 @@ root_parser = DocumentParser()
 if (DIST / "index.html").is_file():
     root_html = (DIST / "index.html").read_text(encoding="utf-8")
     root_parser.feed(root_html)
-    if root_parser.canonical != f"{BASE}/":
-        fail("Root canonical URL is incorrect")
+    target = f"{BASE}/en-us/about/"
+    if root_parser.canonical != target:
+        fail("Root redirect canonical must point to the selected English About homepage")
     if 'name="google-site-verification"' not in root_html:
-        fail("Google Search Console verification meta tag missing from root page")
-    if '<a class="skip-link" href="#language-content">' not in root_html or '<main id="language-content"' not in root_html:
-        fail("Root language page is missing its accessible skip link or main landmark")
-    if f"https://www.googletagmanager.com/gtag/js?id={GA_MEASUREMENT_ID}" not in root_html:
-        fail("GA4 library missing from language root")
-    if f"gtag('config', '{GA_MEASUREMENT_ID}')" not in root_html:
-        fail("GA4 configuration missing from language root")
-    for locale in STRATEGY.get("published_locales", []):
-        if f"{BASE}/{locale.lower()}/" not in root_html:
-            fail(f"Root market locale link missing: {locale}")
+        fail("Google Search Console verification meta tag missing from root redirect")
+    if f'<meta http-equiv="refresh" content="0; url={target}">' not in root_html:
+        fail("Root page must immediately redirect to the selected About homepage")
+    if f'window.location.replace("{target}")' not in root_html:
+        fail("Root redirect JavaScript fallback is missing")
+    if 'name="robots" content="noindex,follow"' not in root_html:
+        fail("Root redirect must not be indexed as a duplicate page")
+    if "Choose your language" in root_html or "اختر لغتك" in root_html:
+        fail("Obsolete language gateway content remains on the root page")
 
 try:
     sitemap_root = ET.parse(DIST / "sitemap.xml").getroot()
