@@ -234,6 +234,13 @@ class MarketLocaleTests(unittest.TestCase):
                     self.assertIn(f'lang="{code}"', page)
         root = (DIST / "index.html").read_text(encoding="utf-8")
         self.assertIn('class="locale-switch"', root)
+        css = (DIST / "assets/style.css").read_text(encoding="utf-8")
+        self.assertIn(".header-main>nav{margin-inline-start:auto}", css)
+        for locale in STRATEGY["published_locales"]:
+            for tail in ("", "about", "features", "download", "faq"):
+                path = DIST / locale.lower() / ("" if not tail else tail) / "index.html"
+                source = path.read_text(encoding="utf-8")
+                self.assertLess(source.index('<a class="brand"'), source.index('<nav aria-label="Primary navigation">'))
 
     def test_root_selector_points_to_every_published_locale(self):
         source = (DIST / "index.html").read_text(encoding="utf-8")

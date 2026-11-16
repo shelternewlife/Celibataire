@@ -274,6 +274,15 @@ class SiteTests(unittest.TestCase):
                 self.assertTrue(image.get("width", "").isdigit(), str(path))
                 self.assertTrue(image.get("height", "").isdigit(), str(path))
 
+    def test_navigation_sits_opposite_the_unchanged_brand(self):
+        css = (DIST / "assets/style.css").read_text(encoding="utf-8")
+        self.assertIn(".header-main>nav{margin-inline-start:auto}", css)
+        for lang in ("en", "ar"):
+            for section in ("home", "about", "features", "download", "faq", "blog", "guide", "tips", "comparison"):
+                path = DIST / lang / ("" if section == "home" else section) / "index.html"
+                source = path.read_text(encoding="utf-8")
+                self.assertLess(source.index('<a class="brand"'), source.index("<nav aria-label="))
+
     def test_navigation_has_keyboard_focus_and_touch_targets(self):
         css = (DIST / "assets/style.css").read_text(encoding="utf-8")
         self.assertIn("a:focus-visible{outline:", css)
