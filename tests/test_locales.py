@@ -235,7 +235,7 @@ class MarketLocaleTests(unittest.TestCase):
         root = (DIST / "index.html").read_text(encoding="utf-8")
         self.assertIn('class="locale-switch"', root)
         css = (DIST / "assets/style.css").read_text(encoding="utf-8")
-        self.assertIn(".header-main>nav{margin-inline-start:auto}", css)
+        self.assertIn(".header-main>nav{margin-inline-start:auto;justify-content:flex-end}", css)
         for locale in STRATEGY["published_locales"]:
             for tail in ("", "about", "features", "download", "faq"):
                 path = DIST / locale.lower() / ("" if not tail else tail) / "index.html"

@@ -276,7 +276,7 @@ class SiteTests(unittest.TestCase):
 
     def test_navigation_sits_opposite_the_unchanged_brand(self):
         css = (DIST / "assets/style.css").read_text(encoding="utf-8")
-        self.assertIn(".header-main>nav{margin-inline-start:auto}", css)
+        self.assertIn(".header-main>nav{margin-inline-start:auto;justify-content:flex-end}", css)
         for lang in ("en", "ar"):
             for section in ("home", "about", "features", "download", "faq", "blog", "guide", "tips", "comparison"):
                 path = DIST / lang / ("" if section == "home" else section) / "index.html"

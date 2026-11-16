@@ -86,6 +86,8 @@ class LocalizedResourceRouteTests(unittest.TestCase):
                     self.assertTrue(target.is_file(), f"Broken link in {locale}/{tail}: {href}")
 
     def test_resource_hub_navigation_is_grouped_and_flag_selector_is_retained(self):
+        css = (DIST / "assets/style.css").read_text(encoding="utf-8")
+        self.assertIn(".header-main>nav{margin-inline-start:auto;justify-content:flex-end}", css)
         import re
         expected = {
             "primary": ("about/", "features/", "download/", "faq/"),
