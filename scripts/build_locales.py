@@ -49,8 +49,19 @@ def render_locale_flags(published, tail="", current=None):
             f'title="{html.escape(label, quote=True)}" aria-label="{html.escape(label, quote=True)}"{current_attr}>'
             f'<span aria-hidden="true">{flag}</span></a>'
         )
+    return "".join(links)
+
+def ensure_social_links(source):
+    if 'class="social-links"' in source:
+        return source
     import build
-    return "".join(links) + build.render_social_links()
+    return re.sub(
+        r'(<div class="locale-switch"[^>]*>.*?)(</div>)',
+        lambda match: match.group(1) + build.render_social_links() + match.group(2),
+        source,
+        count=1,
+        flags=re.DOTALL,
+    )
 
 def localize(source, locale, section, route_tail=None):
     import build
@@ -122,6 +133,7 @@ def localize(source, locale, section, route_tail=None):
         source,
         flags=re.DOTALL,
     )
+    source = ensure_social_links(source)
     if section != "home":
         switch_match = re.search(r'<div class="locale-switch"[^>]*>.*?</div>', source, re.DOTALL)
         if switch_match:
@@ -203,6 +215,7 @@ def update_legacy_pages(published):
                 source,
                 flags=re.DOTALL,
             )
+            source = ensure_social_links(source)
             if tail:
                 switch_match = re.search(r'<div class="locale-switch"[^>]*>.*?</div>', source, re.DOTALL)
                 if switch_match:

@@ -255,7 +255,7 @@ class MarketLocaleTests(unittest.TestCase):
             for tail in ("", "about", "features", "download", "faq"):
                 path = DIST / locale.lower() / (tail or "") / "index.html"
                 source = path.read_text(encoding="utf-8")
-                self.assertIn('<div class="social-links" aria-label="Social media">', source)
+                self.assertEqual(source.count('<div class="social-links" aria-label="Social media">'), 1)
                 for label, url in expected.items():
                     self.assertIn(f'href="{url}" target="_blank" rel="noopener noreferrer" aria-label="{label}"', source)
 

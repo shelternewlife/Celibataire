@@ -393,7 +393,7 @@ def render_language_root():
 {render_analytics()}
 </head>
 <body data-page-section="language-root"><a class="skip-link" href="#language-content">Skip to main content</a><header class="language-header"><div class="locale-switch"><p><a lang="en" href="{page_url("en")}">English</a>
-<a lang="ar" dir="rtl" href="{page_url("ar")}">العربية</a></p></div></header><main id="language-content" class="language"><div><div class="tag">JOB CONNECT</div>
+<a lang="ar" dir="rtl" href="{page_url("ar")}">العربية</a></p>{render_social_links()}</div></header><main id="language-content" class="language"><div><div class="tag">JOB CONNECT</div>
 <h1>Choose your language / اختر لغتك</h1></div></main></body>
 </html>'''
 

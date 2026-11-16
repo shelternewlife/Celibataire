@@ -345,10 +345,10 @@ class SiteTests(unittest.TestCase):
             "Instagram": "https://www.instagram.com/",
         }
         for lang in ("en", "ar"):
-            for tail in ("", "about", "features", "download", "faq", "blog", "guide", "tips", "comparison"):
+            for tail in ("about", "features", "download", "faq", "blog", "guide", "tips", "comparison"):
                 path = DIST / lang / tail / "index.html" if tail else DIST / lang / "index.html"
                 source = path.read_text(encoding="utf-8")
-                self.assertIn('<div class="social-links" aria-label="Social media">', source)
+                self.assertEqual(source.count('<div class="social-links" aria-label="Social media">'), 1)
                 for label, url in expected.items():
                     self.assertIn(f'href="{url}" target="_blank" rel="noopener noreferrer" aria-label="{label}"', source)
 
