@@ -28,6 +28,29 @@ def replace_text(source, old, new):
         source = source.replace(html.escape(old, quote=False), html.escape(new, quote=True))
     return source
 
+FLAG_DATA = {
+    "en-US": ("🇺🇸", "United States · English"),
+    "en-CA": ("🇨🇦", "Canada · English"),
+    "fr-CA": ("🇨🇦", "Canada · Français"),
+    "es-ES": ("🇪🇸", "España · Español"),
+    "pt-PT": ("🇵🇹", "Portugal · Português"),
+    "fr-FR": ("🇫🇷", "France · Français"),
+    "de-DE": ("🇩🇪", "Deutschland · Deutsch"),
+    "it-IT": ("🇮🇹", "Italia · Italiano"),
+}
+
+def render_locale_flags(published, tail="", current=None):
+    links = []
+    for code in published:
+        flag, label = FLAG_DATA[code]
+        current_attr = ' aria-current="page"' if code == current else ""
+        links.append(
+            f'<a class="locale-flag" lang="{code}" href="{BASE}/{slug(code)}/{tail}" '
+            f'title="{html.escape(label, quote=True)}" aria-label="{html.escape(label, quote=True)}"{current_attr}>'
+            f'<span aria-hidden="true">{flag}</span></a>'
+        )
+    return "".join(links)
+
 def localize(source, locale, section, route_tail=None):
     import build
     language, region = locale_parts(locale)
@@ -73,29 +96,29 @@ def localize(source, locale, section, route_tail=None):
     # Convert every internal English route, including navigation and feature anchors.
     source = source.replace(f"{BASE}/en/", f"{BASE}/{slug(locale)}/")
     source = source.replace('<html lang="en"', f'<html lang="{locale}"')
-    # The legacy bilingual switch is replaced with an explicit three-market selector.
+    tail = route_tail if route_tail is not None else ("" if section == "home" else f"{section}/")
+    selector = render_locale_flags(STRATEGY["published_locales"], tail, locale)
     source = re.sub(
-        r'<a lang="ar" href="[^"]+">العربية</a>',
-        '<span class="locale-switch"><a lang="en-US" href="' + BASE + '/en-us/' + '">US English</a> · '
-        '<a lang="en-CA" href="' + BASE + '/en-ca/' + '">English (Canada)</a> · '
-        '<a lang="fr-CA" href="' + BASE + '/fr-ca/' + '">Français (Canada)</a></span>',
+        r'<a class="locale-flag" lang="(?:ar|en)"[^>]*>.*?</a>',
+        lambda _: selector,
         source,
+        flags=re.DOTALL,
     )
     source = re.sub(
         r'<link rel="alternate" hreflang="(?:en|ar|x-default)" href="[^"]+">\n?',
         "",
         source,
     )
-    tail = route_tail if route_tail is not None else ("" if section == "home" else f"{section}/")
     canonical = f"{BASE}/{slug(locale)}/{tail}"
-    alternates = (
-        f'<link rel="alternate" hreflang="en-US" href="{BASE}/en-us/{tail}">\\n'
-        f'<link rel="alternate" hreflang="en-CA" href="{BASE}/en-ca/{tail}">\\n'
-        f'<link rel="alternate" hreflang="fr-CA" href="{BASE}/fr-ca/{tail}">\\n'
-        f'<link rel="alternate" hreflang="x-default" href="{BASE}/en-us/{tail}">'
+    alternates = ''.join(
+        f'<link rel="alternate" hreflang="{code}" href="{BASE}/{slug(code)}/{tail}">\n'
+        for code in STRATEGY["published_locales"]
     )
-    source = source.replace(f'<link rel="canonical" href="{canonical}">', 
-                            f'<link rel="canonical" href="{canonical}">\\n{alternates}')
+    alternates += f'<link rel="alternate" hreflang="x-default" href="{BASE}/en-us/{tail}">'
+    source = source.replace(f'<link rel="canonical" href="{canonical}">',
+                            f'<link rel="canonical" href="{canonical}">\n{alternates}')
+    source = source.replace('content="en_US"', f'content="{locale.replace("-", "_")}"')
+    source = source.replace('"inLanguage": "en"', f'"inLanguage": "{locale}"')
     return source
 
 def build_localized_pages():
@@ -130,6 +153,7 @@ def build_localized_pages():
             target = DIST / slug(locale) / tail / "index.html"
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(localize(source, locale, "features", tail), encoding="utf-8")
+    update_legacy_pages(published)
     update_root_page(published)
     update_sitemaps(published)
     llms = DIST / "llms.txt"
@@ -138,6 +162,23 @@ def build_localized_pages():
     for locale in published:
         existing += f"- {locale}: {BASE}/{slug(locale)}/\n"
     llms.write_text(existing, encoding="utf-8")
+
+def update_legacy_pages(published):
+    for language in ("en", "ar"):
+        root = DIST / language
+        for path in root.rglob("index.html"):
+            relative = path.parent.relative_to(root)
+            tail = "" if str(relative) == "." else relative.as_posix() + "/"
+            source = path.read_text(encoding="utf-8")
+            selector = render_locale_flags(published, tail)
+            source = re.sub(
+                r'<a class="locale-flag" lang="(?:ar|en)"[^>]*>.*?</a>',
+                lambda _: selector,
+                source,
+                flags=re.DOTALL,
+            )
+            path.write_text(source, encoding="utf-8")
+
 
 def update_root_page(published):
     path = DIST / "index.html"
@@ -148,12 +189,14 @@ def update_root_page(published):
         for locale in published
     )
     links += f'<link rel="alternate" hreflang="x-default" href="{BASE}/">'
-    source = source.replace(f'<link rel="canonical" href="{BASE}/">', 
+    source = source.replace(f'<link rel="canonical" href="{BASE}/">',
                             f'<link rel="canonical" href="{BASE}/">\n{links}')
-    source = re.sub(r'<p><a lang="en" href="[^"]+">English</a>\s*<a lang="ar" dir="rtl" href="[^"]+">العربية</a></p>',
-        f'<p><a lang="en-US" href="{BASE}/en-us/">US English</a> · '
-        f'<a lang="en-CA" href="{BASE}/en-ca/">English (Canada)</a> · '
-        f'<a lang="fr-CA" href="{BASE}/fr-ca/">Français (Canada)</a></p>', source)
+    selector = render_locale_flags(published)
+    source = re.sub(
+        r'<p><a lang="en" href="[^"]+">English</a>\s*<a lang="ar" dir="rtl" href="[^"]+">العربية</a></p>',
+        lambda _: selector,
+        source,
+    )
     path.write_text(source, encoding="utf-8")
 
 def update_sitemaps(published):

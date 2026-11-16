@@ -18,7 +18,8 @@ class MarketStrategyTests(unittest.TestCase):
         markets = [item for item in STRATEGY["markets"] if item["priority"] == 2]
         self.assertGreaterEqual(len(markets), 45)
         self.assertEqual(len({item["country_code"] for item in markets}), len(markets))
-        self.assertTrue(all(item["status"] == "planned" for item in markets))
+        self.assertTrue(all(item["status"] in ("planned", "initial") for item in markets))
+        self.assertEqual({item["country_code"] for item in markets if item["status"] == "initial"}, {"ES", "PT", "FR", "DE", "IT"})
         self.assertTrue(all(item["locales"] for item in markets))
 
     def test_locale_tags_and_url_policy_are_explicit(self):

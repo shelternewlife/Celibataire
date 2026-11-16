@@ -13,6 +13,7 @@ BASE = APP["website_url"].rstrip("/")
 NS = "http://www.sitemaps.org/schemas/sitemap/0.9"
 XHTML = "http://www.w3.org/1999/xhtml"
 HUBS = ("tips", "blog", "guide", "comparison")
+EXTRA_CONTENT = json.loads((ROOT / "content/resource-locales.json").read_text(encoding="utf-8"))
 
 CONTENT = {
     "en-US": {
@@ -82,6 +83,7 @@ CONTENT = {
         }
     }
 }
+CONTENT.update(EXTRA_CONTENT)
 
 def esc(value):
     return html.escape(str(value), quote=True)
@@ -91,6 +93,16 @@ def route(locale, tail):
 
 def render_page(locale, tail, data):
     language = locale.split("-", 1)[0]
+    labels = CONTENT[locale].get("labels", {
+        "features": "Fonctionnalités" if language == "fr" else "Features",
+        "more": "En savoir plus" if language == "fr" else "Explore this resource",
+        "skip": "Passer au contenu principal" if language == "fr" else "Skip to main content",
+        "resource": "RESSOURCES CARRIÈRE" if language == "fr" else "CAREER RESOURCES",
+        "home": "Retour à l’accueil" if language == "fr" else "Back to the home page",
+        "privacy": "Politique de confidentialité" if language == "fr" else "Privacy policy",
+        "support": "Soutien" if language == "fr" else "Support",
+        "nav_aria": "Navigation principale" if language == "fr" else "Primary navigation"
+    })
     title, description, heading, intro, cards = data
     slug = locale.lower()
     alternates = "".join(
@@ -103,13 +115,13 @@ def render_page(locale, tail, data):
         for item in HUBS
     )
     nav += (
-        f'<a href="{BASE}/{slug}/features/">{"Fonctionnalités" if language == "fr" else "Features"}</a>'
+        f'<a href="{BASE}/{slug}/features/">{esc(labels["features"])}</a>'
         f'<a href="{BASE}/{slug}/faq/">FAQ</a>'
     )
     cards_html = "".join(
         f'<article class="item"><h2><a href="{route(locale, target)}">{esc(card_title)}</a></h2>'
         f'<p>{esc(card_text)}</p><a href="{route(locale, target)}">'
-        f'{"En savoir plus" if language == "fr" else "Explore this resource"}</a></article>'
+        f'{esc(labels["more"])}</a></article>'
         for card_title, card_text, target in cards
     )
     locale_links = " · ".join(
@@ -144,17 +156,17 @@ def render_page(locale, tail, data):
 <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
 </head>
 <body data-page-section="{tail}">
-<a class="skip-link" href="#main-content">{"Passer au contenu principal" if language == "fr" else "Skip to main content"}</a>
+<a class="skip-link" href="#main-content">{esc(labels["skip"])}</a>
 <header><a class="brand" href="{BASE}/{slug}/">JOB <b>CONNECT</b></a>
-<nav aria-label="Primary navigation">{nav}</nav></header>
+<nav aria-label="{esc(labels["nav_aria"])}">{nav}</nav></header>
 <main id="main-content"><section class="section resource-hub">
-<div class="tag">JOB CONNECT · {"RESSOURCES CARRIÈRE" if language == "fr" else "CAREER RESOURCES"}</div>
+<div class="tag">JOB CONNECT · {esc(labels["resource"])}</div>
 <h1>{esc(heading)}</h1><p class="lead">{esc(intro)}</p>
 <div class="grid">{cards_html}</div>
 <p class="locale-links">{locale_links}</p>
-<p><a href="{BASE}/{slug}/">{"Retour à l’accueil" if language == "fr" else "Back to the home page"}</a></p>
+<p><a href="{BASE}/{slug}/">{esc(labels["home"])}</a></p>
 </section></main>
-<footer><span>© DevImpact · JOB CONNECT</span><span><a href="{esc(APP["privacy_policy_url"])}">{"Politique de confidentialité" if language == "fr" else "Privacy policy"}</a> · <a href="mailto:{esc(APP["support_email"])}">{"Soutien" if language == "fr" else "Support"}</a></span></footer>
+<footer><span>© DevImpact · JOB CONNECT</span><span><a href="{esc(APP["privacy_policy_url"])}">{esc(labels["privacy"])}</a> · <a href="mailto:{esc(APP["support_email"])}">{esc(labels["support"])}</a></span></footer>
 </body>
 </html>'''
 

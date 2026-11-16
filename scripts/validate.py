@@ -349,22 +349,22 @@ try:
         }
         if loc.text.strip() == f"{BASE}/":
             expected_alternates = {
-                "en-US": f"{BASE}/en-us/", "en-CA": f"{BASE}/en-ca/",
-                "fr-CA": f"{BASE}/fr-ca/", "x-default": f"{BASE}/",
+                **{code: f"{BASE}/{code.lower()}/" for code in STRATEGY["published_locales"]},
+                "x-default": f"{BASE}/",
             }
         else:
             parsed_loc = urlparse(loc.text.strip())
             relative_path = parsed_loc.path[len(urlparse(BASE).path.rstrip("/")):].strip("/")
             relative_parts = relative_path.split("/")
-            if relative_parts[0] in ("en-us", "en-ca", "fr-ca"):
+            published_slugs = {code.lower() for code in STRATEGY["published_locales"]}
+            if relative_parts[0] in published_slugs:
                 tail = "/".join(relative_parts[1:])
                 suffix = f"{tail}/" if tail else ""
                 expected_alternates = {
-                    "en-US": f"{BASE}/en-us/{suffix}",
-                    "en-CA": f"{BASE}/en-ca/{suffix}",
-                    "fr-CA": f"{BASE}/fr-ca/{suffix}",
-                    "x-default": f"{BASE}/en-us/{suffix}",
+                    code: f"{BASE}/{code.lower()}/{suffix}"
+                    for code in STRATEGY["published_locales"]
                 }
+                expected_alternates["x-default"] = f"{BASE}/en-us/{suffix}"
             else:
                 tail = "/".join(relative_parts[1:])
                 expected_alternates = {

@@ -1,4 +1,5 @@
 import json
+import re
 import pathlib
 import subprocess
 import sys
@@ -50,7 +51,7 @@ class MarketLocaleTests(unittest.TestCase):
         subprocess.run([sys.executable, str(ROOT / "scripts/validate.py")], check=True)
 
     def test_locale_titles_and_descriptions_are_localized_and_within_snippet_bounds(self):
-        for locale in ("en-US", "en-CA", "fr-CA"):
+        for locale in STRATEGY["published_locales"]:
             bundle = json.loads((ROOT / "content/locales.json").read_text(encoding="utf-8"))[locale]
             observed_titles = set()
             for section in ("", "about", "features", "download", "faq"):
@@ -67,7 +68,7 @@ class MarketLocaleTests(unittest.TestCase):
 
     def test_market_keyword_clusters_are_relevant_and_avoid_unverified_promises(self):
         clusters = STRATEGY["initial_keyword_clusters"]
-        expected = {"en-US", "en-CA", "fr-CA"}
+        expected = set(STRATEGY["published_locales"])
         self.assertEqual(set(clusters), expected)
         for locale, config in clusters.items():
             self.assertTrue(config["primary"])
@@ -84,15 +85,16 @@ class MarketLocaleTests(unittest.TestCase):
         self.assertIn("application de recherche d’emploi", " ".join(clusters["fr-CA"]["primary"]))
 
     def test_only_explicitly_published_locales_are_generated(self):
-        expected = {"en-us", "en-ca", "fr-ca"}
-        self.assertEqual({x.lower() for x in STRATEGY["published_locales"]}, expected)
+        expected = {x.lower() for x in STRATEGY["published_locales"]}
+        bundle_locales = json.loads((ROOT / "content/locales.json").read_text(encoding="utf-8"))
+        self.assertEqual(expected, {x.lower() for x in bundle_locales})
         for locale in expected:
             self.assertTrue((DIST / locale / "index.html").is_file())
-        for locale in ("de-de", "fr-fr", "es-es", "nl-nl", "pl-pl"):
+        for locale in ("nl-nl", "pl-pl", "en-gb"):
             self.assertFalse((DIST / locale).exists(), f"Unpublished locale was generated: {locale}")
 
     def test_all_core_routes_exist_and_have_self_canonical(self):
-        for locale in ("en-US", "en-CA", "fr-CA"):
+        for locale in STRATEGY["published_locales"]:
             slug = locale.lower()
             for section in ("", "about", "features", "download", "faq"):
                 path = DIST / slug / (section or "") / "index.html"
@@ -103,7 +105,7 @@ class MarketLocaleTests(unittest.TestCase):
                 self.assertEqual(parser.canonical, expected)
 
     def test_hreflang_is_complete_and_reciprocal_for_every_equivalent_page(self):
-        expected_locales = {"en-US", "en-CA", "fr-CA"}
+        expected_locales = set(STRATEGY["published_locales"])
         for locale in expected_locales:
             slug = locale.lower()
             for section in ("", "about", "features", "download", "faq"):
@@ -116,27 +118,31 @@ class MarketLocaleTests(unittest.TestCase):
                 self.assertEqual(parser.alternates, expected, f"{locale}/{section}")
 
     def test_localized_navigation_stays_within_the_market_locale_family(self):
-        for locale in ("en-US", "en-CA", "fr-CA"):
+        for locale in STRATEGY["published_locales"]:
             source = (DIST / locale.lower() / "index.html").read_text(encoding="utf-8")
             parser = Links()
             parser.feed(source)
-            for target in ("en-us", "en-ca", "fr-ca"):
-                self.assertIn(f"{BASE}/{target}/", parser.links)
+            for target in {x.lower() for x in STRATEGY["published_locales"]}:
+                self.assertTrue(
+                    any(link.startswith(f"{BASE}/{target}/") for link in parser.links),
+                    f"{locale} has no flag link for {target}",
+                )
             self.assertNotIn(f"{BASE}/ar/", parser.links)
             self.assertNotIn(f"{BASE}/en/", parser.links)
 
-    def test_french_page_has_genuine_french_content_and_metadata(self):
-        source = (DIST / "fr-ca" / "index.html").read_text(encoding="utf-8")
-        self.assertIn('<html lang="fr-CA"', source)
-        self.assertIn("Découvrez votre prochaine possibilité", source)
-        self.assertIn("Application de recherche d’emploi", source)
-        self.assertIn("Foire aux questions", (DIST / "fr-ca" / "faq" / "index.html").read_text(encoding="utf-8"))
-        self.assertNotIn("Discover your next opportunity", source)
-        self.assertNotIn("Frequently asked questions", source)
+    def test_french_pages_have_genuine_french_content_and_metadata(self):
+        for locale in ("fr-CA", "fr-FR"):
+            source = (DIST / locale.lower() / "index.html").read_text(encoding="utf-8")
+            self.assertIn(f'<html lang="{locale}"', source)
+            self.assertIn("Découvrez", source)
+            self.assertIn("Application de recherche d’emploi", source)
+            self.assertIn("Foire aux questions", (DIST / locale.lower() / "faq" / "index.html").read_text(encoding="utf-8"))
+            self.assertNotIn("Discover your next opportunity", source)
+            self.assertNotIn("Frequently asked questions", source)
 
     def test_localized_feature_detail_routes_are_real_and_reciprocal(self):
         from scripts.build import FEATURES
-        for locale in ("en-US", "en-CA", "fr-CA"):
+        for locale in STRATEGY["published_locales"]:
             slug = locale.lower()
             for feature in FEATURES:
                 tail = f"features/{feature['id']}/"
@@ -146,9 +152,7 @@ class MarketLocaleTests(unittest.TestCase):
                 parser.feed(path.read_text(encoding="utf-8"))
                 self.assertEqual(parser.canonical, f"{BASE}/{slug}/{tail}")
                 self.assertEqual(parser.alternates, {
-                    "en-US": f"{BASE}/en-us/{tail}",
-                    "en-CA": f"{BASE}/en-ca/{tail}",
-                    "fr-CA": f"{BASE}/fr-ca/{tail}",
+                    **{code: f"{BASE}/{code.lower()}/{tail}" for code in STRATEGY["published_locales"]},
                     "x-default": f"{BASE}/en-us/{tail}",
                 })
 
@@ -156,12 +160,12 @@ class MarketLocaleTests(unittest.TestCase):
         from scripts.build import FEATURES
         expected = {
             f"{BASE}/{locale.lower()}/{tail}"
-            for locale in ("en-US", "en-CA", "fr-CA")
+            for locale in STRATEGY["published_locales"]
             for tail in ("", "about/", "features/", "download/", "faq/")
         }
         expected.update(
             f"{BASE}/{locale.lower()}/features/{feature['id']}/"
-            for locale in ("en-US", "en-CA", "fr-CA") for feature in FEATURES
+            for locale in STRATEGY["published_locales"] for feature in FEATURES
         )
         xml_root = ET.parse(DIST / "sitemap.xml").getroot()
         entries = xml_root.findall(f"{NS}url")
@@ -171,11 +175,12 @@ class MarketLocaleTests(unittest.TestCase):
         self.assertTrue(expected.issubset(text_urls))
         self.assertEqual(len(xml_urls), len(entries))
         self.assertEqual(len(text_urls), len((DIST / "sitemap.txt").read_text(encoding="utf-8").splitlines()))
-        self.assertFalse(any("/de-de/" in url or "/fr-fr/" in url for url in xml_urls | text_urls))
+        for locale in ("nl-NL", "pl-PL", "en-GB"):
+            self.assertFalse(any(f"/{locale.lower()}/" in url for url in xml_urls | text_urls))
 
     def test_sitemap_hreflang_reciprocity(self):
         root = ET.parse(DIST / "sitemap.xml").getroot()
-        expected_locales = {"en-US", "en-CA", "fr-CA"}
+        expected_locales = set(STRATEGY["published_locales"])
         for node in root.findall(f"{NS}url"):
             loc = node.findtext(f"{NS}loc") or ""
             if not any(f"/{code.lower()}/" in loc for code in expected_locales):
@@ -190,9 +195,39 @@ class MarketLocaleTests(unittest.TestCase):
             expected["x-default"] = f"{BASE}/en-us/{base_tail}"
             self.assertEqual(alternates, expected, loc)
 
-    def test_root_selector_points_to_the_three_launch_locales(self):
+    def test_flag_only_locale_switcher_is_top_left_and_above_navigation(self):
+        expected_flags = {
+            "en-US": "🇺🇸", "en-CA": "🇨🇦", "fr-CA": "🇨🇦",
+            "es-ES": "🇪🇸", "pt-PT": "🇵🇹", "fr-FR": "🇫🇷",
+            "de-DE": "🇩🇪", "it-IT": "🇮🇹",
+        }
+        for locale in STRATEGY["published_locales"]:
+            source = (DIST / locale.lower() / "index.html").read_text(encoding="utf-8")
+            switch = re.search(r'<div class="locale-switch"[^>]*>(.*?)</div>', source, re.DOTALL)
+            self.assertIsNotNone(switch, locale)
+            header = source.index("<header>")
+            switch_pos = source.index('<div class="locale-switch"')
+            nav_pos = source.index('<nav aria-label="Primary navigation">')
+            self.assertLess(header, switch_pos)
+            self.assertLess(switch_pos, nav_pos)
+            for code, flag in expected_flags.items():
+                self.assertIn(f'lang="{code}"', switch.group(1), f"{locale} missing {code}")
+                self.assertIn(f'<span aria-hidden="true">{flag}</span>', switch.group(1))
+            self.assertNotRegex(switch.group(1), r'>\s*(?:US English|English \(Canada\)|Français|Español|Português|Deutsch|Italiano)')
+        root = (DIST / "index.html").read_text(encoding="utf-8")
+        root_switch = re.search(r'<div class="locale-switch"[^>]*>(.*?)</div>', root, re.DOTALL)
+        self.assertIsNotNone(root_switch)
+        for code in expected_flags:
+            self.assertIn(f'lang="{code}"', root_switch.group(1))
+        for legacy in ("en", "ar"):
+            page = (DIST / legacy / "index.html").read_text(encoding="utf-8")
+            self.assertIn('class="locale-switch"', page)
+            for code in expected_flags:
+                self.assertIn(f'lang="{code}"', page)
+
+    def test_root_selector_points_to_every_published_locale(self):
         source = (DIST / "index.html").read_text(encoding="utf-8")
-        for locale in ("en-US", "en-CA", "fr-CA"):
+        for locale in STRATEGY["published_locales"]:
             self.assertIn(f'hreflang="{locale}"', source)
             self.assertIn(f'href="{BASE}/{locale.lower()}/"', source)
         self.assertIn(f'hreflang="x-default" href="{BASE}/"', source)
