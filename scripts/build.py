@@ -362,7 +362,7 @@ def main():
         for section in ("home", "about", "features", "download", "faq"):
             relative = pathlib.Path(lang) / ("" if section == "home" else section) / "index.html"
             write(relative, render_page(lang, section))
-    write(pathlib.Path("robots.txt"), f"User-agent: *\nAllow: /\nSitemap: {BASE_URL}/sitemap.xml\n")
+    write(pathlib.Path("robots.txt"), f"User-agent: *\nAllow: /\nSitemap: {BASE_URL}/sitemap.txt\n")
     sitemap_entries = [(f"{BASE_URL}/", None, "home")]
     sitemap_entries.extend(
         (page_url(lang, section), lang, section)
@@ -385,6 +385,8 @@ def main():
         sitemap += "</url>"
     sitemap += "</urlset>"
     write(pathlib.Path("sitemap.xml"), sitemap)
+    sitemap_txt = "\n".join(url for url, _, _ in sitemap_entries) + "\n"
+    write(pathlib.Path("sitemap.txt"), sitemap_txt)
     write(pathlib.Path("llms.txt"), (
         f"# Job Connect\n\n{APP['description']['en']}\n\n"
         f"- Google Play: {APP['google_play_url']}\n"

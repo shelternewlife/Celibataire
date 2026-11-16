@@ -63,7 +63,7 @@ def fail(message):
 
 required_files = [
     DIST / "index.html", DIST / "robots.txt", DIST / "sitemap.xml",
-    DIST / "llms.txt", DIST / "assets/style.css",
+    DIST / "sitemap.txt", DIST / "llms.txt", DIST / "assets/style.css",
     DIST / "assets/screens/screen-1.webp",
 ]
 if not (ROOT / "content/screenshots.json").is_file():
@@ -234,13 +234,31 @@ try:
 except Exception as exc:
     fail(f"Invalid sitemap XML: {exc}")
 
+try:
+    text_sitemap = (DIST / "sitemap.txt").read_text(encoding="utf-8")
+    text_urls = [line.strip() for line in text_sitemap.splitlines() if line.strip()]
+    if len(text_urls) != len(route_urls):
+        fail(f"Text sitemap should contain {len(route_urls)} routes, found {len(text_urls)}")
+    if len(set(text_urls)) != len(text_urls):
+        fail("Text sitemap contains duplicate URLs")
+    if set(text_urls) != route_urls:
+        fail("Text sitemap URLs do not match the generated site routes")
+    for sitemap_url in text_urls:
+        parsed_url = urlparse(sitemap_url)
+        if parsed_url.scheme != "https" or parsed_url.netloc != urlparse(BASE).netloc:
+            fail(f"Text sitemap contains a non-canonical host or non-HTTPS URL: {sitemap_url}")
+        if parsed_url.query or parsed_url.fragment:
+            fail(f"Text sitemap contains a URL with query or fragment: {sitemap_url}")
+except Exception as exc:
+    fail(f"Invalid text sitemap: {exc}")
+
 robots = (DIST / "robots.txt").read_text(encoding="utf-8") if (DIST / "robots.txt").is_file() else ""
 robots_lines = [line.strip() for line in robots.splitlines() if line.strip()]
 if "User-agent: *" not in robots_lines or "Allow: /" not in robots_lines:
     fail("robots.txt must allow crawling for all user agents")
 sitemap_directives = [line for line in robots_lines if line.lower().startswith("sitemap:")]
-if sitemap_directives != [f"Sitemap: {BASE}/sitemap.xml"]:
-    fail("robots.txt must contain exactly one canonical sitemap directive")
+if sitemap_directives != [f"Sitemap: {BASE}/sitemap.txt"]:
+    fail("robots.txt must reference only the canonical text sitemap")
 
 if APP["package_id"] not in APP["google_play_url"]:
     fail("Package ID mismatch in Google Play URL")

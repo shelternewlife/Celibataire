@@ -145,7 +145,17 @@ class SiteTests(unittest.TestCase):
         lines = [line.strip() for line in (DIST / "robots.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
         self.assertIn("User-agent: *", lines)
         self.assertIn("Allow: /", lines)
-        self.assertEqual([line for line in lines if line.lower().startswith("sitemap:")], [f"Sitemap: {BASE}/sitemap.xml"])
+        self.assertEqual([line for line in lines if line.lower().startswith("sitemap:")], [f"Sitemap: {BASE}/sitemap.txt"])
+
+    def test_text_sitemap_contains_root_and_all_language_routes(self):
+        urls = [line.strip() for line in (DIST / "sitemap.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
+        self.assertEqual(len(urls), 11)
+        self.assertEqual(len(urls), len(set(urls)))
+        self.assertIn(f"{BASE}/", urls)
+        for lang in ("en", "ar"):
+            for section in ("home", "about", "features", "download", "faq"):
+                expected = f"{BASE}/{lang}/" + ("" if section == "home" else f"{section}/")
+                self.assertIn(expected, urls)
 
     def test_screenshot_asset_exists(self):
         self.assertTrue((DIST / "assets/screens/screen-1.webp").is_file())
