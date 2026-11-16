@@ -208,7 +208,7 @@ class SiteTests(unittest.TestCase):
             "about": ["about_intro"],
             "features": ["features_end"],
             "download": ["download_hero", "download_end"],
-            "faq": [],
+            "faq": ["faq_end"],
         }
         for lang in ("en", "ar"):
             for section, locations in expected_locations.items():
@@ -224,6 +224,49 @@ class SiteTests(unittest.TestCase):
                     self.assertEqual(cta.get("data-analytics-event"), "google_play_click")
         root = (DIST / "index.html").read_text(encoding="utf-8")
         self.assertIn(f"gtag('config', '{measurement_id}')", root)
+
+    def test_pages_have_skip_links_and_single_main_heading(self):
+        for lang in ("en", "ar"):
+            for section in ("home", "about", "features", "download", "faq"):
+                source = output_path(lang, section).read_text(encoding="utf-8")
+                self.assertIn('<a class="skip-link" href="#main-content">', source)
+                self.assertIn('<main id="main-content">', source)
+                self.assertEqual(source.count("<h1"), 1)
+        root = (DIST / "index.html").read_text(encoding="utf-8")
+        self.assertIn('<a class="skip-link" href="#language-content">', root)
+        self.assertIn('<main id="language-content"', root)
+
+    def test_all_images_have_alt_text_and_intrinsic_dimensions(self):
+        for path in DIST.rglob("*.html"):
+            parser = PageParser()
+            parser.feed(path.read_text(encoding="utf-8"))
+            for image in parser.images:
+                self.assertTrue(image.get("alt", "").strip(), str(path))
+                self.assertTrue(image.get("width", "").isdigit(), str(path))
+                self.assertTrue(image.get("height", "").isdigit(), str(path))
+
+    def test_navigation_has_keyboard_focus_and_touch_targets(self):
+        css = (DIST / "assets/style.css").read_text(encoding="utf-8")
+        self.assertIn("a:focus-visible{outline:", css)
+        self.assertIn("min-height:44px;padding:8px 0", css)
+        self.assertIn(".btn{min-height:48px", css)
+
+    def test_gallery_images_keep_landscape_aspect_ratio(self):
+        css = (DIST / "assets/style.css").read_text(encoding="utf-8")
+        self.assertIn(".shot img{display:block;width:100%;height:auto;aspect-ratio:auto;", css)
+        for lang in ("en", "ar"):
+            parser = PageParser()
+            parser.feed(output_path(lang).read_text(encoding="utf-8"))
+            for image in parser.images[1:6]:
+                self.assertEqual(image.get("width"), "526")
+                self.assertEqual(image.get("height"), "296")
+
+    def test_faq_has_measurable_google_play_cta(self):
+        for lang in ("en", "ar"):
+            parser = PageParser()
+            parser.feed(output_path(lang, "faq").read_text(encoding="utf-8"))
+            self.assertIn(APP["google_play_url"], parser.links)
+            self.assertEqual([cta.get("data-cta-location") for cta in parser.tracked_ctas], ["faq_end"])
 
     def test_no_previous_brand(self):
         for path in DIST.rglob("*.html"):

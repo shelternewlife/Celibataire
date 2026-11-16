@@ -105,13 +105,22 @@ for lang in ("en", "ar"):
             fail(f"Missing title for {path.relative_to(DIST)}")
         if not parser.h1 or not "".join(parser.h1).strip():
             fail(f"Missing H1 for {path.relative_to(DIST)}")
+        if page_html.count("<h1") != 1:
+            fail(f"Page must contain exactly one H1: {path.relative_to(DIST)}")
+        if '<a class="skip-link" href="#main-content">' not in page_html or '<main id="main-content">' not in page_html:
+            fail(f"Missing accessible skip link or main landmark: {path.relative_to(DIST)}")
+        for image in parser.images:
+            if not image.get("alt", "").strip():
+                fail(f"Image without alternative text: {path.relative_to(DIST)}")
+            if not image.get("width") or not image.get("height"):
+                fail(f"Image without intrinsic dimensions: {path.relative_to(DIST)}")
         import re
         tracked_locations = {
             "home": ["home_hero"],
             "about": ["about_intro"],
             "features": ["features_end"],
             "download": ["download_hero", "download_end"],
-            "faq": [],
+            "faq": ["faq_end"],
         }
         found_locations = re.findall(r'data-analytics-event="google_play_click" data-cta-location="([^"]+)"', page_html)
         if found_locations != tracked_locations[section]:
@@ -124,6 +133,8 @@ for lang in ("en", "ar"):
                 fail(f"Download page is missing SEO description or index directive: {path.relative_to(DIST)}")
             if '"@type": "MobileApplication"' not in page_html or '"installUrl":' not in page_html:
                 fail(f"Download page is missing MobileApplication install structured data: {path.relative_to(DIST)}")
+        if section == "faq" and APP["google_play_url"] not in parser.links:
+            fail(f"FAQ page is missing its official Google Play CTA: {path.relative_to(DIST)}")
         if section == "features":
             page_html = path.read_text(encoding="utf-8")
             if APP["google_play_url"] not in parser.links:
@@ -175,6 +186,8 @@ if (DIST / "index.html").is_file():
         fail("Root canonical URL is incorrect")
     if 'name="google-site-verification"' not in root_html:
         fail("Google Search Console verification meta tag missing from root page")
+    if '<a class="skip-link" href="#language-content">' not in root_html or '<main id="language-content"' not in root_html:
+        fail("Root language page is missing its accessible skip link or main landmark")
     if f"https://www.googletagmanager.com/gtag/js?id={GA_MEASUREMENT_ID}" not in root_html:
         fail("GA4 library missing from language root")
     if f"gtag('config', '{GA_MEASUREMENT_ID}')" not in root_html:

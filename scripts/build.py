@@ -16,6 +16,7 @@ GA_MEASUREMENT_ID = APP["ga4_measurement_id"]
 TEXT = {
     "en": {
         "about": "About Job Connect",
+        "skip_to_content": "Skip to main content",
         "features": "Explore the features",
         "faq": "Frequently asked questions",
         "download_nav": "Download",
@@ -48,6 +49,7 @@ TEXT = {
     },
     "ar": {
         "about": "عن Job Connect",
+        "skip_to_content": "تجاوز إلى المحتوى الرئيسي",
         "features": "استكشف المزايا",
         "faq": "الأسئلة الشائعة",
         "download_nav": "تنزيل التطبيق",
@@ -114,7 +116,7 @@ PAGE_DESCRIPTIONS = {
     },
 }
 
-CSS = """*{box-sizing:border-box}body{margin:0;background:#080b12;color:#f4f7fb;font:16px/1.75 system-ui,sans-serif}a{color:inherit}header,main,footer{width:min(1120px,calc(100% - 36px));margin:auto}header{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:22px 0;border-bottom:1px solid #263246}.brand{font-weight:900;text-decoration:none;letter-spacing:.08em}.brand b,.tag{color:#00c4df}nav{display:flex;gap:22px;flex-wrap:wrap}nav a{color:#c4ccda;text-decoration:none}.hero{padding:70px 0;display:grid;grid-template-columns:1fr .8fr;gap:44px;align-items:center}.tag{font-size:.8rem;letter-spacing:.16em;font-weight:700}.hero h1{font-size:clamp(2.5rem,6vw,4.6rem);line-height:1.12;margin:18px 0}.lead,.muted{color:#aab6c8}.btn{display:inline-block;background:#00c4df;color:#061018;text-decoration:none;padding:13px 20px;border-radius:9px;font-weight:800;margin-top:20px}.preview{padding:16px;background:#121a28;border:1px solid #29364b;border-radius:22px;text-align:center}.preview img{height:480px;max-width:100%;object-fit:contain;border-radius:12px}.section{padding:48px 0;border-top:1px solid #ffffff18}.section h2{font-size:2rem}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.item,.faq{background:#111925;border:1px solid #283449;border-radius:14px;padding:22px}.item h3,.faq h3{margin-top:0}.item p,.faq p{color:#aab6c8}.feature-shot{display:block;width:100%;max-height:230px;object-fit:contain;object-position:left center;background:#080b12;border-radius:9px;margin:0 0 16px}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.step{background:#111925;border:1px solid #283449;border-radius:14px;padding:20px}.step b{display:block;color:#00c4df;font-size:1.3rem}.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.fact{padding:16px;background:#111925;border:1px solid #283449;border-radius:12px;overflow-wrap:anywhere}.fact small{display:block;color:#aab6c8}.download-hero{padding:58px 0;display:grid;grid-template-columns:1fr .65fr;gap:36px;align-items:center}.download-hero h1{font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.15}.num{color:#00c4df;font:700 .8rem monospace}.faqgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}.shot{margin:0;padding:12px;background:#111925;border:1px solid #283449;border-radius:14px}.shot img{display:block;width:100%;height:auto;aspect-ratio:9/16;object-fit:contain;background:#080b12;border-radius:9px}.shot figcaption{padding:10px 2px 2px;color:#d6deeb;font-size:.92rem;line-height:1.5}.end{text-align:center;background:#11242d;border:1px solid #236071;border-radius:18px;padding:34px}.language{min-height:70vh;display:grid;place-items:center;text-align:center}.language a{display:inline-block;margin:8px;padding:14px 22px;border:1px solid #236071;border-radius:10px;text-decoration:none}footer{padding:30px 0;color:#aab6c8;border-top:1px solid #ffffff18;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}html[dir=rtl] body{text-align:right}html[dir=rtl] header{direction:rtl}@media(max-width:760px){.hero,.download-hero{grid-template-columns:1fr;padding:42px 0}.preview img{height:360px}.grid,.faqgrid,.steps,.facts{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}nav{gap:14px}}"""
+CSS = """*{box-sizing:border-box}body{margin:0;background:#080b12;color:#f4f7fb;font:16px/1.75 system-ui,sans-serif}a{color:inherit}a:focus-visible{outline:3px solid #00c4df;outline-offset:4px}.btn{min-height:48px;display:inline-flex;align-items:center;justify-content:center}.skip-link{position:absolute;z-index:10;top:8px;left:8px;padding:10px 14px;background:#00c4df;color:#061018;border-radius:8px;font-weight:800;transform:translateY(-160%)}.skip-link:focus{transform:translateY(0)}header,main,footer{width:min(1120px,calc(100% - 36px));margin:auto}header{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:22px 0;border-bottom:1px solid #263246}.brand{font-weight:900;text-decoration:none;letter-spacing:.08em}.brand b,.tag{color:#00c4df}nav{display:flex;gap:22px;flex-wrap:wrap}nav a{color:#c4ccda;text-decoration:none;display:inline-flex;align-items:center;min-height:44px;padding:8px 0}.hero{padding:70px 0;display:grid;grid-template-columns:1fr .8fr;gap:44px;align-items:center}.tag{font-size:.8rem;letter-spacing:.16em;font-weight:700}.hero h1{font-size:clamp(2.5rem,6vw,4.6rem);line-height:1.12;margin:18px 0}.lead,.muted{color:#aab6c8}.btn{display:inline-block;background:#00c4df;color:#061018;text-decoration:none;padding:13px 20px;border-radius:9px;font-weight:800;margin-top:20px}.preview{padding:16px;background:#121a28;border:1px solid #29364b;border-radius:22px;text-align:center}.preview img{height:480px;max-width:100%;object-fit:contain;border-radius:12px}.section{padding:48px 0;border-top:1px solid #ffffff18}.section h2{font-size:2rem}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.item,.faq{background:#111925;border:1px solid #283449;border-radius:14px;padding:22px}.item h3,.faq h3{margin-top:0}.item p,.faq p{color:#aab6c8}.feature-shot{display:block;width:100%;max-height:230px;object-fit:contain;object-position:left center;background:#080b12;border-radius:9px;margin:0 0 16px}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.step{background:#111925;border:1px solid #283449;border-radius:14px;padding:20px}.step b{display:block;color:#00c4df;font-size:1.3rem}.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.fact{padding:16px;background:#111925;border:1px solid #283449;border-radius:12px;overflow-wrap:anywhere}.fact small{display:block;color:#aab6c8}.download-hero{padding:58px 0;display:grid;grid-template-columns:1fr .65fr;gap:36px;align-items:center}.download-hero h1{font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.15}.num{color:#00c4df;font:700 .8rem monospace}.faqgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}.shot{margin:0;padding:12px;background:#111925;border:1px solid #283449;border-radius:14px}.shot img{display:block;width:100%;height:auto;aspect-ratio:auto;object-fit:contain;background:#080b12;border-radius:9px}.shot figcaption{padding:10px 2px 2px;color:#d6deeb;font-size:.92rem;line-height:1.5}.end{text-align:center;background:#11242d;border:1px solid #236071;border-radius:18px;padding:34px}.language{min-height:70vh;display:grid;place-items:center;text-align:center}.language a{display:inline-block;margin:8px;padding:14px 22px;border:1px solid #236071;border-radius:10px;text-decoration:none}footer{padding:30px 0;color:#aab6c8;border-top:1px solid #ffffff18;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}html[dir=rtl] body{text-align:right}html[dir=rtl] header{direction:rtl}@media(max-width:760px){.hero,.download-hero{grid-template-columns:1fr;padding:42px 0}.preview img{height:360px}.grid,.faqgrid,.steps,.facts{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}nav{gap:14px}}"""
 
 def render_analytics():
     return """<script async src="https://www.googletagmanager.com/gtag/js?id=__GA_ID__"></script>
@@ -166,7 +168,7 @@ def render_features(lang):
         cards.append(
             f'<article class="item" id="feature-{esc(feature["id"])}">'
             f'<div class="num">{index:02d} / FEATURE</div>'
-            f'<img class="feature-shot" src="{esc(SCREENSHOTS[index - 1]["src"])}" '
+            f'<img class="feature-shot" src="{esc(SCREENSHOTS[index - 1]["src"])}" width="526" height="296" '
             f'alt="{esc(SCREENSHOTS[index - 1]["alt"][lang])}" loading="lazy" decoding="async">'
             f'<h2>{esc(feature["title"][lang])}</h2>'
             f'<p>{esc(feature["description"][lang])}</p></article>'
@@ -187,7 +189,7 @@ def render_gallery(lang):
     cards = []
     for screenshot in SCREENSHOTS:
         cards.append(
-            f'<figure class="shot"><img src="{esc(screenshot["src"])}" '
+            f'<figure class="shot"><img src="{esc(screenshot["src"])}" width="526" height="296" '
             f'alt="{esc(screenshot["alt"][lang])}" loading="lazy" decoding="async">'
             f'<figcaption>{esc(screenshot["caption"][lang])}</figcaption></figure>'
         )
@@ -206,8 +208,8 @@ def render_download(lang):
         f'target="_blank" rel="noopener noreferrer" aria-label="{esc(t["cta"])}" '
         f'data-analytics-event="google_play_click" data-cta-location="download_hero">{t["cta"]}</a>'
         f'<p class="muted">{esc(t["download_note"])}</p></div>'
-        f'<div class="preview"><img src="{esc(SCREENSHOTS[0]["src"])}" '
-        f'alt="{esc(SCREENSHOTS[0]["alt"][lang])}" loading="eager"></div></section>'
+        f'<div class="preview"><img src="{esc(SCREENSHOTS[0]["src"])}" width="526" height="296" '
+        f'alt="{esc(SCREENSHOTS[0]["alt"][lang])}" loading="eager" decoding="async"></div></section>'
         f'<section class="section"><h2>{t["download_steps_title"]}</h2><div class="steps">'
         f'<article class="step"><b>01</b>{esc(t["download_step_1"])}</article>'
         f'<article class="step"><b>02</b>{esc(t["download_step_2"])}</article>'
@@ -234,7 +236,7 @@ def render_content(lang, section):
             f'<h1>{esc(t["home"])}</h1><p class="lead">{esc(t["home_intro"])}</p>'
             f'<a class="btn" href="{esc(APP["google_play_url"])}" '
             f'data-analytics-event="google_play_click" data-cta-location="home_hero">{t["cta"]}</a></div>'
-            f'<div class="preview"><img src="{image}" alt="{esc(SCREENSHOTS[0]["alt"][lang])}" loading="eager"></div></section>'
+            f'<div class="preview"><img src="{image}" width="526" height="296" alt="{esc(SCREENSHOTS[0]["alt"][lang])}" loading="eager" fetchpriority="high" decoding="async"></div></section>'
             f'{render_gallery(lang)}'
             f'<section class="section"><h2>{t["features"]}</h2>{render_features(lang)}'
             f'<p><a href="{page_url(lang, "features")}">{t["features"]}</a></p></section>'
@@ -265,6 +267,10 @@ def render_content(lang, section):
             f'<section class="section"><div class="tag">JOB CONNECT</div>'
             f'<h1>{t["faq"]}</h1><p class="lead">{t["faq_intro"]}</p>'
             f'{render_faq(lang)}</section>'
+            f'<section class="section end"><h2>{t["download"]}</h2>'
+            f'<p>{esc(APP["tagline"][lang])}</p>'
+            f'<a class="btn" href="{esc(APP["google_play_url"])}" target="_blank" rel="noopener noreferrer" '
+            f'data-analytics-event="google_play_click" data-cta-location="faq_end">{t["cta"]}</a></section>'
         )
     raise ValueError(f"Unknown page section: {section}")
 
@@ -316,8 +322,9 @@ def render_page(lang, section):
 {render_analytics()}
 </head>
 <body data-page-section="{section}">
+<a class="skip-link" href="#main-content">{t["skip_to_content"]}</a>
 {render_header(lang, section)}
-<main>{content}</main>
+<main id="main-content">{content}</main>
 <footer><span>© DevImpact · JOB CONNECT</span>
 <span><a href="{esc(APP["privacy_policy_url"])}">{t["privacy"]}</a> ·
 <a href="mailto:{esc(APP["support_email"])}">{t["support"]}</a></span></footer>
@@ -341,7 +348,7 @@ def render_language_root():
 <link rel="stylesheet" href="{BASE_URL}/assets/style.css">
 {render_analytics()}
 </head>
-<body data-page-section="language-root"><main class="language"><div><div class="tag">JOB CONNECT</div>
+<body data-page-section="language-root"><a class="skip-link" href="#language-content">Skip to main content</a><main id="language-content" class="language"><div><div class="tag">JOB CONNECT</div>
 <h1>Choose your language / اختر لغتك</h1>
 <p><a lang="en" href="{page_url("en")}">English</a>
 <a lang="ar" dir="rtl" href="{page_url("ar")}">العربية</a></p></div></main></body>
