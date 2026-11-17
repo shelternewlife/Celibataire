@@ -6,7 +6,11 @@ class SiteTests(unittest.TestCase):
   subprocess.run([sys.executable,str(ROOT/"scripts/build.py")],check=True)
   subprocess.run([sys.executable,str(ROOT/"scripts/validate.py")],check=True)
  def test_identity(self):
-  a=json.loads((ROOT/"content/app.json").read_text()); self.assertEqual(a["package_id"],"com.celibataire.single.devimpact"); self.assertIn(a["package_id"],a["google_play_url"])
+  a=json.loads((ROOT/"content/app.json").read_text()); self.assertEqual(a["package_id"],"com.celibataire.single.devimpact"); self.assertIn(a["package_id"],a["google_play_url"]); self.assertEqual(a["name"],"Célibataire: Rencontres & Chat"); self.assertNotIn("brand_name",a)
+ def test_official_name_only(self):
+  for p in (ROOT/"dist").rglob("*.html"):
+   if p == ROOT/"dist/index.html": continue
+   x=p.read_text(); self.assertNotIn("Single: Meet & Chat",x); self.assertIn("Célibataire: Rencontres &amp; Chat",x)
  def test_all_locales(self):
   s=json.loads((ROOT/"content/market-strategy.json").read_text())
   for c in s["published_locales"]:
