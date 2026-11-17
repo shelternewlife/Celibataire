@@ -1,30 +1,100 @@
 {
-  "en": {
+  "en-US": {
     "primary": [
-      "job search app",
-      "job opportunities",
-      "job opportunity discovery"
+      "dating app to meet people nearby",
+      "meet new people app",
+      "dating and friendship app"
     ],
     "secondary": [
-      "Android job search app",
-      "job listings",
-      "organize job opportunities",
-      "job search app features"
+      "make friends nearby",
+      "women message first dating app",
+      "professional networking app",
+      "chat with photos and voice notes"
     ]
   },
-  "ar": {
+  "en-CA": {
     "primary": [
-      "البحث عن عمل",
-      "وظائف شاغرة",
-      "فرص عمل"
+      "dating app to meet people",
+      "meet people nearby app",
+      "friendship app"
     ],
     "secondary": [
-      "البحث عن وظائف",
-      "وظائف عن بعد",
-      "وظائف للمبتدئين",
-      "تنظيم فرص العمل",
-      "نصائح البحث عن عمل"
+      "dating and friendship",
+      "women message first",
+      "professional connections"
     ]
   },
-  "note": "Legacy English seeds are aligned to verified discovery and organization features. Market-specific clusters in market-strategy.json are authoritative for en-US, en-CA and fr-CA. Search volume is not verified; confirm by country and language in Google Keyword Planner and refine with Search Console."
+  "fr-CA": {
+    "primary": [
+      "application de rencontre",
+      "rencontrer des personnes près de moi",
+      "application pour se faire des amis"
+    ],
+    "secondary": [
+      "rencontres et amitié",
+      "femme écrit en premier",
+      "réseau professionnel"
+    ]
+  },
+  "fr-FR": {
+    "primary": [
+      "application de rencontre",
+      "site de rencontre célibataire",
+      "rencontre amicale"
+    ],
+    "secondary": [
+      "rencontrer des célibataires",
+      "faire des rencontres près de moi",
+      "réseau professionnel"
+    ]
+  },
+  "es-ES": {
+    "primary": [
+      "aplicación de citas",
+      "conocer gente cerca",
+      "app para hacer amigos"
+    ],
+    "secondary": [
+      "citas y amistad",
+      "mujeres dan el primer paso",
+      "contactos profesionales"
+    ]
+  },
+  "pt-PT": {
+    "primary": [
+      "aplicação de encontros",
+      "conhecer pessoas perto",
+      "aplicação para fazer amigos"
+    ],
+    "secondary": [
+      "encontros e amizade",
+      "mulheres enviam a primeira mensagem",
+      "contactos profissionais"
+    ]
+  },
+  "de-DE": {
+    "primary": [
+      "Dating App",
+      "Menschen in der Nähe kennenlernen",
+      "Freunde finden App"
+    ],
+    "secondary": [
+      "Dating und Freundschaft",
+      "Frauen schreiben zuerst",
+      "berufliche Kontakte"
+    ]
+  },
+  "it-IT": {
+    "primary": [
+      "app di incontri",
+      "conoscere persone vicino a me",
+      "app per fare amicizia"
+    ],
+    "secondary": [
+      "incontri e amicizia",
+      "la donna scrive per prima",
+      "contatti professionali"
+    ]
+  },
+  "note": "Keyword themes are editorial hypotheses, not measured search volumes. Validate in Search Console and Keyword Planner."
 }

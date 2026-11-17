@@ -1,7 +1,42 @@
 [
-{"id":"discovery","title":{"en":"Discover fresh opportunity signals","ar":"اكتشف إشارات الفرص الحديثة"},"description":{"en":"Explore a discovery feed with newly surfaced opportunities, freshness labels and alignment indicators.","ar":"استكشف موجز اكتشاف يبرز الفرص الحديثة ومؤشرات حداثة الإعلان والتوافق."}},
-{"id":"opportunity-cards","title":{"en":"Review opportunities at a glance","ar":"راجع الفرص بنظرة سريعة"},"description":{"en":"Compare roles, organizations, locations and compensation signals in focused opportunity cards.","ar":"قارن المسميات والجهات والمواقع ومؤشرات التعويضات ضمن بطاقات واضحة."}},
-{"id":"opportunity-intelligence","title":{"en":"Understand why an opportunity stands out","ar":"افهم لماذا تبرز فرصة معينة"},"description":{"en":"Inspect compensation, location, remote flexibility, freshness and the reasons surfaced by the app. Displayed values are indicators, not guarantees.","ar":"افحص مؤشرات الراتب والموقع والعمل عن بُعد والحداثة وأسباب إبراز التطبيق للفرصة. القيم مؤشرات وليست ضمانات."}},
-{"id":"derived-metrics","title":{"en":"Explore derived intelligence metrics","ar":"استكشف مؤشرات الذكاء المستنتجة"},"description":{"en":"Review data completeness, post freshness, uniqueness and competition indicators, alongside detected capabilities and requisites. These are estimates.","ar":"راجع مؤشرات اكتمال البيانات وحداثة الإعلان والتفرد والمنافسة والمهارات والمتطلبات المستنتجة. وهي تقديرات تحليلية."}},
-{"id":"collections","title":{"en":"Organize opportunities into collections","ar":"نظّم الفرص داخل مجموعات"},"description":{"en":"Create personal buckets such as Remote Hub, Elite Leap and My Watchlist to categorize and revisit opportunities.","ar":"أنشئ مجموعات مثل Remote Hub وElite Leap وMy Watchlist لتصنيف الفرص والعودة إليها."}}
+  {
+    "id": "discover",
+    "title": "Discover people nearby",
+    "description": "Explore profiles of people near you for dating, friendship and professional networking."
+  },
+  {
+    "id": "women-first",
+    "title": "Women send the first message",
+    "description": "After a match, women make the first move in the conversation."
+  },
+  {
+    "id": "matches",
+    "title": "Matches with a 24-hour window",
+    "description": "Matches expire after 24 hours; the app listing says you can extend a match or send another."
+  },
+  {
+    "id": "intentions",
+    "title": "Choose your intentions",
+    "description": "Filter discovery by age, distance and intentions."
+  },
+  {
+    "id": "profiles",
+    "title": "Build a personal profile",
+    "description": "Create a profile with photos, a bio, prompts and interests."
+  },
+  {
+    "id": "messaging",
+    "title": "Chat with text, photos and voice",
+    "description": "Continue conversations with text messages, photos and voice notes."
+  },
+  {
+    "id": "circles",
+    "title": "Dating, friendship and networking",
+    "description": "Meet people for romance, friendship or professional connections."
+  },
+  {
+    "id": "local-storage",
+    "title": "Keep exploring with unstable connectivity",
+    "description": "The Google Play description says local storage helps when your connection is unstable."
+  }
 ]

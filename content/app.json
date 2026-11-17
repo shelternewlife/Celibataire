@@ -1,9 +1,17 @@
 {
-"name":"Job Connect","developer":"DevImpact","package_id":"com.jobsearch.jobconnect.work.jobs.devimpact",
-"google_play_url":"https://play.google.com/store/apps/details?id=com.jobsearch.jobconnect.work.jobs.devimpact",
-"website_url":"https://shelternewlife.github.io/Celibataire/","ga4_measurement_id":"G-2JMZS90324","category":"Business","contains_ads":true,
-"distribution_status":"published_on_google_play","languages":["en","ar"],
-"privacy_policy_url":"https://sites.google.com/view/regles-2-confidentialite","support_email":"carta.net.play@gmail.com",
-"tagline":{"en":"Discover opportunities before they get crowded.","ar":"اكتشف الفرص المهنية مبكراً، قبل أن تزدحم المنافسة."},
-"description":{"en":"A focused job-opportunity discovery experience built around fresh signals, opportunity intelligence and personal collections. Explore roles, review compensation and location signals, understand why an opportunity surfaced, and organize opportunities worth following.","ar":"تجربة متخصصة لاكتشاف فرص العمل، ترتكز على الإشارات الحديثة وذكاء تحليل الفرص والمجموعات الشخصية. استكشف الأدوار الوظيفية، وراجع مؤشرات الرواتب والمواقع، وافهم أسباب ظهور الفرصة، ونظّم الفرص التي تستحق المتابعة."}
+  "name": "Célibataire: Rencontres & Chat",
+  "brand_name": "Single: Meet & Chat",
+  "developer": "DevImpact",
+  "package_id": "com.celibataire.single.devimpact",
+  "google_play_url": "https://play.google.com/store/apps/details?id=com.celibataire.single.devimpact",
+  "website_url": "https://shelternewlife.github.io/Celibataire/",
+  "ga4_measurement_id": "G-2JMZS90324",
+  "category": "Dating",
+  "contains_ads": true,
+  "content_rating": "Mature 17+",
+  "platform": "Android",
+  "privacy_policy_url": "https://sites.google.com/view/regles-2-confidentialite",
+  "support_email": "carta.net.play@gmail.com",
+  "description": "Discover people nearby for dating, friendship and professional networking. Create a profile with photos, a bio, prompts and interests; filter by age, distance and intentions; and chat with text, photos or voice notes. Women send the first message. Matches expire after 24 hours and can be extended.",
+  "google_play_source": "Official Google Play listing reviewed 2026-11-17"
 }

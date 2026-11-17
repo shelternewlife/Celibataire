@@ -1,122 +1,50 @@
 [
   {
-    "q": {
-      "en": "What is Job Connect?",
-      "ar": "ما هو Job Connect؟"
-    },
-    "a": {
-      "en": "A job-opportunity discovery app focused on fresh signals, opportunity context and personal collections.",
-      "ar": "تطبيق لاكتشاف فرص العمل يركز على الإشارات الحديثة وسياق الفرص والمجموعات الشخصية."
-    }
+    "q": "What is Célibataire: Rencontres & Chat?",
+    "a": "It is an Android social discovery app for meeting people nearby for dating, friendship and professional networking."
   },
   {
-    "q": {
-      "en": "What does an alignment score mean?",
-      "ar": "ماذا تعني درجة التوافق؟"
-    },
-    "a": {
-      "en": "It is an app-displayed indicator, not a promise that a role is a perfect match or that an application will succeed.",
-      "ar": "مؤشر يعرضه التطبيق، وليس ضماناً بأن الوظيفة مناسبة تماماً أو بأن طلب التوظيف سينجح."
-    }
+    "q": "Who is the app designed for?",
+    "a": "The Google Play listing presents it for French singles and people looking for dating, friendship or professional connections. Availability and matches depend on your location and app use."
   },
   {
-    "q": {
-      "en": "What are the intelligence metrics?",
-      "ar": "ما المقصود بمؤشرات الذكاء؟"
-    },
-    "a": {
-      "en": "Screens show derived indicators such as data completeness, post freshness, uniqueness and competition, plus detected capabilities and requisites. They are estimates.",
-      "ar": "تعرض الشاشات مؤشرات مستنتجة مثل اكتمال البيانات والحداثة والتفرد والمنافسة والمهارات والمتطلبات. وهي تقديرات."
-    }
+    "q": "How does matching work?",
+    "a": "You can browse profiles, like someone or use SuperSwipe. The app listing says each match expires after 24 hours and can be extended or followed by another match."
   },
   {
-    "q": {
-      "en": "Can I organize opportunities?",
-      "ar": "هل يمكنني تنظيم الفرص؟"
-    },
-    "a": {
-      "en": "Yes. Collections include examples such as Remote Hub, Elite Leap and My Watchlist.",
-      "ar": "نعم. تشمل أمثلة المجموعات Remote Hub وElite Leap وMy Watchlist."
-    }
+    "q": "Who sends the first message?",
+    "a": "The app listing says women send the first message after a match."
   },
   {
-    "q": {
-      "en": "Where can I install Job Connect?",
-      "ar": "من أين أثبّت Job Connect؟"
-    },
-    "a": {
-      "en": "Install the Android app from its official Google Play listing.",
-      "ar": "ثبّت تطبيق Android من صفحته الرسمية على Google Play."
-    }
+    "q": "Can I use the app to make friends?",
+    "a": "Yes. The listing describes meeting people to go out with, travel with or chat with, without romantic pressure."
   },
   {
-    "q": {
-      "en": "Does Job Connect contain ads?",
-      "ar": "هل يحتوي Job Connect على إعلانات؟"
-    },
-    "a": {
-      "en": "The Google Play listing identifies the app as containing ads.",
-      "ar": "توضح صفحة Google Play أن التطبيق يحتوي على إعلانات."
-    }
+    "q": "Does the app support professional networking?",
+    "a": "Yes. The listing describes connecting with professionals who share your ambitions."
   },
   {
-    "q": {
-      "en": "Does Job Connect apply to jobs for me?",
-      "ar": "هل يتقدم Job Connect إلى الوظائف نيابةً عني؟"
-    },
-    "a": {
-      "en": "No. Job Connect helps you discover and review opportunities. Follow the employer's official application instructions to apply.",
-      "ar": "لا. يساعدك Job Connect على اكتشاف الفرص ومراجعتها. اتبع تعليمات التقديم الرسمية لدى صاحب العمل لإرسال طلبك."
-    }
+    "q": "What can I add to my profile?",
+    "a": "The listing says profiles can include photos, a bio, prompts and interests."
   },
   {
-    "q": {
-      "en": "Does an opportunity indicator guarantee a successful application?",
-      "ar": "هل تضمن مؤشرات الفرصة نجاح طلب التوظيف؟"
-    },
-    "a": {
-      "en": "No. Alignment, freshness and intelligence indicators are estimates that support your review. They do not predict hiring decisions or guarantee an interview.",
-      "ar": "لا. مؤشرات التوافق والحداثة والذكاء تقديرات تساعدك على المراجعة، ولا تتنبأ بقرارات التوظيف أو تضمن مقابلة."
-    }
+    "q": "Which filters are available?",
+    "a": "The listing names age, distance and intentions filters."
   },
   {
-    "q": {
-      "en": "How can I check whether a job listing is genuine?",
-      "ar": "كيف أتحقق من أن إعلان الوظيفة حقيقي؟"
-    },
-    "a": {
-      "en": "Find the employer's official website independently, compare the job details and application domain, and be cautious of requests for money, passwords or verification codes.",
-      "ar": "ابحث بنفسك عن الموقع الرسمي لصاحب العمل، وقارن تفاصيل الوظيفة ونطاق التقديم، واحذر طلبات المال أو كلمات المرور أو رموز التحقق."
-    }
+    "q": "How can I communicate?",
+    "a": "The app listing describes text messages, photo sharing and voice notes."
   },
   {
-    "q": {
-      "en": "Are all jobs remote or available in every country?",
-      "ar": "هل جميع الوظائف عن بُعد أو متاحة في كل الدول؟"
-    },
-    "a": {
-      "en": "No. Work location and country eligibility depend on each employer and listing. Check the original vacancy for geographic restrictions and remote-work terms.",
-      "ar": "لا. يعتمد موقع العمل وأهلية الدول على كل صاحب عمل وإعلان. راجع الإعلان الأصلي لمعرفة القيود الجغرافية وشروط العمل عن بُعد."
-    }
+    "q": "Does the app contain ads?",
+    "a": "Yes. Google Play marks the app as containing ads."
   },
   {
-    "q": {
-      "en": "Why might a job listing have no salary information?",
-      "ar": "لماذا قد لا يتضمن إعلان الوظيفة معلومات عن الراتب؟"
-    },
-    "a": {
-      "en": "Some employers do not publish compensation details. Treat the missing information as a question to clarify with the employer before proceeding.",
-      "ar": "لا ينشر بعض أصحاب العمل تفاصيل التعويض. اعتبر غيابها نقطة تحتاج إلى استيضاح من صاحب العمل قبل المتابعة."
-    }
+    "q": "Where can I install the app?",
+    "a": "Use the official Google Play listing linked from this website to install the Android app."
   },
   {
-    "q": {
-      "en": "Can I install Job Connect outside Google Play?",
-      "ar": "هل يمكنني تثبيت Job Connect من خارج Google Play؟"
-    },
-    "a": {
-      "en": "For the safest official installation route, use the Job Connect listing on Google Play linked from this website.",
-      "ar": "للحصول على مسار التثبيت الرسمي الأكثر أماناً، استخدم صفحة Job Connect على Google Play المرتبطة من هذا الموقع."
-    }
+    "q": "What is the app's age rating?",
+    "a": "Google Play currently displays a Mature 17+ content rating. Review the store listing and local requirements before installing."
   }
 ]
