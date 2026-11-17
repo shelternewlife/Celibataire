@@ -1,100 +1,107 @@
 {
   "en-US": {
     "primary": [
+      "French dating app",
       "dating app to meet people nearby",
-      "meet new people app",
       "dating and friendship app"
     ],
     "secondary": [
-      "make friends nearby",
+      "meet French singles",
       "women message first dating app",
-      "professional networking app",
+      "24-hour dating matches",
       "chat with photos and voice notes"
     ]
   },
   "en-CA": {
     "primary": [
-      "dating app to meet people",
-      "meet people nearby app",
-      "friendship app"
+      "French dating app Canada",
+      "dating app to meet people nearby",
+      "dating and friendship app"
     ],
     "secondary": [
-      "dating and friendship",
-      "women message first",
-      "professional connections"
+      "meet French singles in Canada",
+      "women message first dating app",
+      "24-hour dating matches",
+      "chat with photos and voice notes"
     ]
   },
   "fr-CA": {
     "primary": [
       "application de rencontre",
-      "rencontrer des personnes près de moi",
-      "application pour se faire des amis"
+      "site de rencontre pour célibataires",
+      "application pour faire des rencontres"
     ],
     "secondary": [
-      "rencontres et amitié",
-      "femme écrit en premier",
-      "réseau professionnel"
+      "rencontrer des célibataires",
+      "rencontre amicale",
+      "femme envoie le premier message",
+      "match de 24 heures"
     ]
   },
   "fr-FR": {
     "primary": [
       "application de rencontre",
-      "site de rencontre célibataire",
+      "application rencontre célibataire",
       "rencontre amicale"
     ],
     "secondary": [
       "rencontrer des célibataires",
-      "faire des rencontres près de moi",
-      "réseau professionnel"
+      "faire des rencontres",
+      "femme envoie le premier message",
+      "match de 24 heures"
     ]
   },
   "es-ES": {
     "primary": [
-      "aplicación de citas",
-      "conocer gente cerca",
+      "app de citas",
+      "aplicación para conocer gente",
       "app para hacer amigos"
     ],
     "secondary": [
       "citas y amistad",
-      "mujeres dan el primer paso",
-      "contactos profesionales"
+      "conocer personas cerca",
+      "mujeres envían el primer mensaje",
+      "matches de 24 horas"
     ]
   },
   "pt-PT": {
     "primary": [
       "aplicação de encontros",
-      "conhecer pessoas perto",
+      "app para conhecer pessoas",
       "aplicação para fazer amigos"
     ],
     "secondary": [
       "encontros e amizade",
+      "conhecer pessoas perto",
       "mulheres enviam a primeira mensagem",
-      "contactos profissionais"
+      "matches de 24 horas"
     ]
   },
   "de-DE": {
     "primary": [
       "Dating App",
-      "Menschen in der Nähe kennenlernen",
-      "Freunde finden App"
+      "App zum Leute kennenlernen",
+      "App für Freundschaften"
     ],
     "secondary": [
       "Dating und Freundschaft",
+      "Menschen in der Nähe kennenlernen",
       "Frauen schreiben zuerst",
-      "berufliche Kontakte"
+      "24-Stunden-Matches"
     ]
   },
   "it-IT": {
     "primary": [
       "app di incontri",
-      "conoscere persone vicino a me",
+      "app per conoscere persone",
       "app per fare amicizia"
     ],
     "secondary": [
       "incontri e amicizia",
+      "conoscere persone vicino a me",
       "la donna scrive per prima",
-      "contatti professionali"
+      "match di 24 ore"
     ]
   },
-  "note": "Keyword themes are editorial hypotheses, not measured search volumes. Validate in Search Console and Keyword Planner."
+  "note": "Keyword clusters are editorial targets, not measured search volumes. Validate actual queries and conversions in Google Search Console and Keyword Planner."
 }

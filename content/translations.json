@@ -1,0 +1,472 @@
+{
+  "fr": {
+    "features": [
+      {
+        "id": "discover",
+        "title": "Découvrir des personnes à proximité",
+        "description": "Parcourez les profils de personnes près de vous pour des rencontres, de l’amitié ou des contacts professionnels."
+      },
+      {
+        "id": "women-first",
+        "title": "Les femmes envoient le premier message",
+        "description": "Après un match, les femmes prennent l’initiative de commencer la conversation."
+      },
+      {
+        "id": "matches",
+        "title": "Des matchs pendant 24 heures",
+        "description": "Les matchs expirent après 24 heures. La fiche de l’application indique qu’il est possible de prolonger un match ou d’en envoyer un autre."
+      },
+      {
+        "id": "intentions",
+        "title": "Choisir ses intentions",
+        "description": "Affinez la découverte selon l’âge, la distance et les intentions."
+      },
+      {
+        "id": "profiles",
+        "title": "Créer un profil personnel",
+        "description": "Présentez-vous avec des photos, une biographie, des réponses aux questions et vos centres d’intérêt."
+      },
+      {
+        "id": "messaging",
+        "title": "Discuter par texte, photo et note vocale",
+        "description": "Poursuivez les échanges avec des messages texte, des photos et des notes vocales."
+      },
+      {
+        "id": "circles",
+        "title": "Rencontres, amitié et réseau professionnel",
+        "description": "Découvrez des personnes pour une relation, une amitié ou des contacts professionnels."
+      },
+      {
+        "id": "local-storage",
+        "title": "Une aide en cas de connexion instable",
+        "description": "La description Google Play indique que le stockage local peut aider lorsque la connexion est instable."
+      }
+    ],
+    "faq": [
+      {
+        "q": "Qu’est-ce que Célibataire : Rencontres & Chat ?",
+        "a": "C’est une application Android de découverte sociale pour rencontrer des personnes à proximité, faire des rencontres, créer des amitiés et développer des contacts professionnels."
+      },
+      {
+        "q": "À qui s’adresse l’application ?",
+        "a": "La fiche Google Play la présente pour les célibataires francophones et les personnes qui recherchent des rencontres, de l’amitié ou des contacts professionnels. La disponibilité dépend de votre région."
+      },
+      {
+        "q": "Comment fonctionnent les matchs ?",
+        "a": "Vous pouvez parcourir les profils, aimer une personne ou utiliser SuperSwipe. Selon la fiche de l’application, chaque match expire après 24 heures et peut être prolongé."
+      },
+      {
+        "q": "Qui envoie le premier message ?",
+        "a": "La fiche de l’application indique que les femmes envoient le premier message après un match."
+      },
+      {
+        "q": "Puis-je utiliser l’application pour me faire des amis ?",
+        "a": "Oui. La fiche présente aussi des possibilités de rencontrer des personnes pour sortir, voyager ou discuter, sans nécessairement rechercher une relation amoureuse."
+      },
+      {
+        "q": "L’application permet-elle le réseautage professionnel ?",
+        "a": "Oui. La fiche Google Play décrit la possibilité d’entrer en contact avec des professionnels qui partagent vos ambitions."
+      },
+      {
+        "q": "Que puis-je ajouter à mon profil ?",
+        "a": "La fiche indique que le profil peut contenir des photos, une biographie, des réponses à des questions et des centres d’intérêt."
+      },
+      {
+        "q": "Quels filtres sont disponibles ?",
+        "a": "La fiche mentionne des filtres par âge, distance et intentions."
+      },
+      {
+        "q": "Comment communiquer avec les autres ?",
+        "a": "L’application propose des messages texte, le partage de photos et des notes vocales, selon sa fiche Google Play."
+      },
+      {
+        "q": "L’application contient-elle des publicités ?",
+        "a": "Oui. Google Play indique que l’application contient des publicités."
+      },
+      {
+        "q": "Où télécharger l’application ?",
+        "a": "Utilisez le lien vers la fiche officielle Google Play présent sur ce site pour consulter et installer l’application Android."
+      },
+      {
+        "q": "Quelle est la classification par âge ?",
+        "a": "Google Play affiche actuellement la classification Mature 17+. Consultez la fiche du magasin pour les informations à jour."
+      }
+    ]
+  },
+  "es": {
+    "features": [
+      {
+        "id": "discover",
+        "title": "Descubre personas cerca de ti",
+        "description": "Explora perfiles de personas cercanas para citas, amistad y contactos profesionales."
+      },
+      {
+        "id": "women-first",
+        "title": "Las mujeres envían el primer mensaje",
+        "description": "Después de un match, las mujeres toman la iniciativa y comienzan la conversación."
+      },
+      {
+        "id": "matches",
+        "title": "Matches con un plazo de 24 horas",
+        "description": "Los matches caducan después de 24 horas. La ficha de la aplicación indica que se pueden ampliar o iniciar otro match."
+      },
+      {
+        "id": "intentions",
+        "title": "Elige tus intenciones",
+        "description": "Filtra los perfiles por edad, distancia e intenciones."
+      },
+      {
+        "id": "profiles",
+        "title": "Crea un perfil personal",
+        "description": "Preséntate con fotos, una biografía, respuestas a preguntas e intereses."
+      },
+      {
+        "id": "messaging",
+        "title": "Chat con texto, fotos y notas de voz",
+        "description": "Continúa las conversaciones con mensajes de texto, fotos y notas de voz."
+      },
+      {
+        "id": "circles",
+        "title": "Citas, amistad y contactos profesionales",
+        "description": "Conoce personas para relaciones, amistad o conexiones profesionales."
+      },
+      {
+        "id": "local-storage",
+        "title": "Ayuda cuando la conexión es inestable",
+        "description": "La descripción de Google Play indica que el almacenamiento local ayuda cuando la conexión es inestable."
+      }
+    ],
+    "faq": [
+      {
+        "q": "¿Qué es Célibataire: Rencontres & Chat?",
+        "a": "Es una aplicación Android de descubrimiento social para conocer personas cercanas, tener citas, hacer amistades y crear contactos profesionales."
+      },
+      {
+        "q": "¿Para quién está diseñada la aplicación?",
+        "a": "Google Play la presenta para solteros francófonos y personas interesadas en citas, amistad o contactos profesionales. La disponibilidad depende de la ubicación."
+      },
+      {
+        "q": "¿Cómo funcionan los matches?",
+        "a": "Puedes explorar perfiles, dar Me gusta o usar SuperSwipe. Según la ficha, cada match caduca después de 24 horas y se puede ampliar."
+      },
+      {
+        "q": "¿Quién envía el primer mensaje?",
+        "a": "La ficha de la aplicación indica que las mujeres envían el primer mensaje después de un match."
+      },
+      {
+        "q": "¿Puedo usar la aplicación para hacer amigos?",
+        "a": "Sí. La ficha también describe la posibilidad de conocer personas para salir, viajar o conversar, sin buscar necesariamente una relación romántica."
+      },
+      {
+        "q": "¿La aplicación permite contactos profesionales?",
+        "a": "Sí. La ficha de Google Play describe la posibilidad de conectar con profesionales que comparten tus ambiciones."
+      },
+      {
+        "q": "¿Qué puedo añadir a mi perfil?",
+        "a": "La ficha indica que el perfil puede incluir fotos, biografía, respuestas a preguntas e intereses."
+      },
+      {
+        "q": "¿Qué filtros están disponibles?",
+        "a": "La ficha menciona filtros de edad, distancia e intenciones."
+      },
+      {
+        "q": "¿Cómo puedo comunicarme?",
+        "a": "La aplicación permite mensajes de texto, compartir fotos y enviar notas de voz, según su ficha de Google Play."
+      },
+      {
+        "q": "¿La aplicación contiene anuncios?",
+        "a": "Sí. Google Play indica que la aplicación contiene anuncios."
+      },
+      {
+        "q": "¿Dónde puedo descargar la aplicación?",
+        "a": "Utiliza el enlace a la ficha oficial de Google Play de este sitio para consultar e instalar la aplicación Android."
+      },
+      {
+        "q": "¿Cuál es la clasificación por edad?",
+        "a": "Google Play muestra actualmente la clasificación Mature 17+. Consulta la ficha de la tienda para ver la información actualizada."
+      }
+    ]
+  },
+  "pt": {
+    "features": [
+      {
+        "id": "discover",
+        "title": "Descobrir pessoas por perto",
+        "description": "Explore perfis de pessoas próximas para encontros, amizade e contactos profissionais."
+      },
+      {
+        "id": "women-first",
+        "title": "As mulheres enviam a primeira mensagem",
+        "description": "Depois de um match, as mulheres tomam a iniciativa de iniciar a conversa."
+      },
+      {
+        "id": "matches",
+        "title": "Matches com duração de 24 horas",
+        "description": "Os matches expiram após 24 horas. A página da aplicação indica que é possível prolongar um match ou iniciar outro."
+      },
+      {
+        "id": "intentions",
+        "title": "Escolher as suas intenções",
+        "description": "Filtre os perfis por idade, distância e intenções."
+      },
+      {
+        "id": "profiles",
+        "title": "Criar um perfil pessoal",
+        "description": "Apresente-se com fotografias, biografia, respostas a perguntas e interesses."
+      },
+      {
+        "id": "messaging",
+        "title": "Conversar por texto, fotografias e notas de voz",
+        "description": "Continue as conversas com mensagens de texto, fotografias e notas de voz."
+      },
+      {
+        "id": "circles",
+        "title": "Encontros, amizade e contactos profissionais",
+        "description": "Conheça pessoas para relacionamentos, amizade ou ligações profissionais."
+      },
+      {
+        "id": "local-storage",
+        "title": "Apoio quando a ligação é instável",
+        "description": "A descrição do Google Play indica que o armazenamento local pode ajudar quando a ligação é instável."
+      }
+    ],
+    "faq": [
+      {
+        "q": "O que é Célibataire: Rencontres & Chat?",
+        "a": "É uma aplicação Android de descoberta social para conhecer pessoas próximas, ter encontros, fazer amizades e criar contactos profissionais."
+      },
+      {
+        "q": "A quem se destina a aplicação?",
+        "a": "A página do Google Play apresenta-a para solteiros francófonos e pessoas interessadas em encontros, amizade ou contactos profissionais. A disponibilidade depende da localização."
+      },
+      {
+        "q": "Como funcionam os matches?",
+        "a": "Pode explorar perfis, gostar de alguém ou utilizar o SuperSwipe. Segundo a página da aplicação, cada match expira após 24 horas e pode ser prolongado."
+      },
+      {
+        "q": "Quem envia a primeira mensagem?",
+        "a": "A página da aplicação indica que as mulheres enviam a primeira mensagem depois de um match."
+      },
+      {
+        "q": "Posso utilizar a aplicação para fazer amizades?",
+        "a": "Sim. A página também descreve a possibilidade de conhecer pessoas para sair, viajar ou conversar, sem procurar necessariamente uma relação amorosa."
+      },
+      {
+        "q": "A aplicação permite contactos profissionais?",
+        "a": "Sim. A página do Google Play descreve a possibilidade de contactar profissionais que partilham as suas ambições."
+      },
+      {
+        "q": "O que posso adicionar ao meu perfil?",
+        "a": "A página indica que o perfil pode incluir fotografias, biografia, respostas a perguntas e interesses."
+      },
+      {
+        "q": "Que filtros estão disponíveis?",
+        "a": "A página menciona filtros por idade, distância e intenções."
+      },
+      {
+        "q": "Como posso comunicar?",
+        "a": "A aplicação permite mensagens de texto, partilha de fotografias e notas de voz, segundo a página do Google Play."
+      },
+      {
+        "q": "A aplicação contém anúncios?",
+        "a": "Sim. O Google Play indica que a aplicação contém anúncios."
+      },
+      {
+        "q": "Onde posso transferir a aplicação?",
+        "a": "Utilize a ligação para a página oficial do Google Play neste site para consultar e instalar a aplicação Android."
+      },
+      {
+        "q": "Qual é a classificação etária?",
+        "a": "O Google Play apresenta atualmente a classificação Mature 17+. Consulte a página da loja para obter informações atualizadas."
+      }
+    ]
+  },
+  "de": {
+    "features": [
+      {
+        "id": "discover",
+        "title": "Menschen in deiner Nähe entdecken",
+        "description": "Entdecke Profile von Menschen in deiner Nähe für Dating, Freundschaft und berufliche Kontakte."
+      },
+      {
+        "id": "women-first",
+        "title": "Frauen schreiben zuerst",
+        "description": "Nach einem Match beginnen Frauen das Gespräch mit der ersten Nachricht."
+      },
+      {
+        "id": "matches",
+        "title": "Matches mit 24-Stunden-Zeitfenster",
+        "description": "Matches laufen nach 24 Stunden ab. Laut App-Eintrag kann ein Match verlängert oder ein neues gesendet werden."
+      },
+      {
+        "id": "intentions",
+        "title": "Absichten auswählen",
+        "description": "Filtere die Entdeckung nach Alter, Entfernung und Absichten."
+      },
+      {
+        "id": "profiles",
+        "title": "Ein persönliches Profil erstellen",
+        "description": "Stelle dich mit Fotos, einer Biografie, Antworten auf Fragen und Interessen vor."
+      },
+      {
+        "id": "messaging",
+        "title": "Chat mit Text, Fotos und Sprachnachrichten",
+        "description": "Führe Gespräche mit Textnachrichten, Fotos und Sprachnachrichten weiter."
+      },
+      {
+        "id": "circles",
+        "title": "Dating, Freundschaft und Networking",
+        "description": "Lerne Menschen für Dating, Freundschaft oder berufliche Kontakte kennen."
+      },
+      {
+        "id": "local-storage",
+        "title": "Hilfe bei instabiler Verbindung",
+        "description": "Laut Google-Play-Beschreibung kann lokaler Speicher bei instabiler Verbindung helfen."
+      }
+    ],
+    "faq": [
+      {
+        "q": "Was ist Célibataire: Rencontres & Chat?",
+        "a": "Eine Android-App zum Entdecken von Menschen in der Nähe – für Dating, Freundschaften und berufliche Kontakte."
+      },
+      {
+        "q": "Für wen ist die App gedacht?",
+        "a": "Der Google-Play-Eintrag richtet sich an französischsprachige Singles und Menschen, die Dating, Freundschaft oder berufliche Kontakte suchen. Die Verfügbarkeit hängt vom Standort ab."
+      },
+      {
+        "q": "Wie funktionieren Matches?",
+        "a": "Du kannst Profile ansehen, Likes vergeben oder SuperSwipe nutzen. Laut App-Eintrag laufen Matches nach 24 Stunden ab und können verlängert werden."
+      },
+      {
+        "q": "Wer sendet die erste Nachricht?",
+        "a": "Laut App-Eintrag senden Frauen nach einem Match die erste Nachricht."
+      },
+      {
+        "q": "Kann ich die App nutzen, um Freunde zu finden?",
+        "a": "Ja. Der Eintrag beschreibt auch die Möglichkeit, Menschen zum Ausgehen, Reisen oder Chatten kennenzulernen – ohne zwingend eine romantische Beziehung zu suchen."
+      },
+      {
+        "q": "Unterstützt die App berufliches Networking?",
+        "a": "Ja. Der Google-Play-Eintrag beschreibt Kontakte zu Fachleuten mit ähnlichen Ambitionen."
+      },
+      {
+        "q": "Was kann ich meinem Profil hinzufügen?",
+        "a": "Laut Eintrag kann ein Profil Fotos, eine Biografie, Antworten auf Fragen und Interessen enthalten."
+      },
+      {
+        "q": "Welche Filter gibt es?",
+        "a": "Der Eintrag nennt Filter für Alter, Entfernung und Absichten."
+      },
+      {
+        "q": "Wie kann ich kommunizieren?",
+        "a": "Laut Google-Play-Eintrag unterstützt die App Textnachrichten, das Teilen von Fotos und Sprachnachrichten."
+      },
+      {
+        "q": "Enthält die App Werbung?",
+        "a": "Ja. Google Play kennzeichnet die App als werbefinanziert."
+      },
+      {
+        "q": "Wo kann ich die App herunterladen?",
+        "a": "Nutze den Link zum offiziellen Google-Play-Eintrag auf dieser Website, um die Android-App aufzurufen und zu installieren."
+      },
+      {
+        "q": "Welche Altersfreigabe hat die App?",
+        "a": "Google Play zeigt derzeit die Einstufung Mature 17+. Prüfe den Store-Eintrag auf aktuelle Angaben."
+      }
+    ]
+  },
+  "it": {
+    "features": [
+      {
+        "id": "discover",
+        "title": "Scopri persone vicino a te",
+        "description": "Esplora i profili delle persone vicine per incontri, amicizia e contatti professionali."
+      },
+      {
+        "id": "women-first",
+        "title": "Le donne inviano il primo messaggio",
+        "description": "Dopo un match, sono le donne a prendere l’iniziativa e iniziare la conversazione."
+      },
+      {
+        "id": "matches",
+        "title": "Match con una finestra di 24 ore",
+        "description": "I match scadono dopo 24 ore. La scheda dell’app indica che è possibile prolungare un match o inviarne un altro."
+      },
+      {
+        "id": "intentions",
+        "title": "Scegli le tue intenzioni",
+        "description": "Filtra i profili in base a età, distanza e intenzioni."
+      },
+      {
+        "id": "profiles",
+        "title": "Crea un profilo personale",
+        "description": "Presentati con foto, biografia, risposte alle domande e interessi."
+      },
+      {
+        "id": "messaging",
+        "title": "Chat con testo, foto e note vocali",
+        "description": "Continua le conversazioni con messaggi di testo, foto e note vocali."
+      },
+      {
+        "id": "circles",
+        "title": "Incontri, amicizia e networking",
+        "description": "Conosci persone per relazioni, amicizia o contatti professionali."
+      },
+      {
+        "id": "local-storage",
+        "title": "Supporto con connessione instabile",
+        "description": "La descrizione su Google Play indica che l’archiviazione locale può essere utile quando la connessione è instabile."
+      }
+    ],
+    "faq": [
+      {
+        "q": "Che cos’è Célibataire: Rencontres & Chat?",
+        "a": "È un’app Android di scoperta sociale per conoscere persone vicine, trovare incontri, fare amicizia e creare contatti professionali."
+      },
+      {
+        "q": "A chi è rivolta l’app?",
+        "a": "La scheda Google Play la presenta per single francofoni e persone interessate a incontri, amicizia o contatti professionali. La disponibilità dipende dalla posizione."
+      },
+      {
+        "q": "Come funzionano i match?",
+        "a": "Puoi esplorare i profili, mettere Mi piace o usare SuperSwipe. Secondo la scheda dell’app, ogni match scade dopo 24 ore e può essere prolungato."
+      },
+      {
+        "q": "Chi invia il primo messaggio?",
+        "a": "La scheda dell’app indica che, dopo un match, sono le donne a inviare il primo messaggio."
+      },
+      {
+        "q": "Posso usare l’app per fare amicizia?",
+        "a": "Sì. La scheda descrive anche la possibilità di conoscere persone con cui uscire, viaggiare o chattare, senza cercare necessariamente una relazione romantica."
+      },
+      {
+        "q": "L’app supporta il networking professionale?",
+        "a": "Sì. La scheda Google Play descrive la possibilità di entrare in contatto con professionisti che condividono le tue ambizioni."
+      },
+      {
+        "q": "Cosa posso aggiungere al mio profilo?",
+        "a": "La scheda indica che il profilo può includere foto, biografia, risposte alle domande e interessi."
+      },
+      {
+        "q": "Quali filtri sono disponibili?",
+        "a": "La scheda indica filtri per età, distanza e intenzioni."
+      },
+      {
+        "q": "Come posso comunicare?",
+        "a": "Secondo la scheda Google Play, l’app supporta messaggi di testo, condivisione di foto e note vocali."
+      },
+      {
+        "q": "L’app contiene annunci pubblicitari?",
+        "a": "Sì. Google Play indica che l’app contiene annunci."
+      },
+      {
+        "q": "Dove posso scaricare l’app?",
+        "a": "Usa il link alla scheda ufficiale Google Play presente su questo sito per consultare e installare l’app Android."
+      },
+      {
+        "q": "Qual è la classificazione per età?",
+        "a": "Google Play mostra attualmente la classificazione Mature 17+. Consulta la scheda dello store per informazioni aggiornate."
+      }
+    ]
+  }
+}

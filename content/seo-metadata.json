@@ -1,0 +1,230 @@
+{
+  "en": {
+    "home": {
+      "title": "French Dating App for Dating & Friendship | Célibataire",
+      "description": "Meet people for dating, friendship and professional connections. Build your profile, explore nearby people and chat with photos or voice notes on Android."
+    },
+    "about": {
+      "title": "About Célibataire: Dating, Friends & Chat",
+      "description": "Learn how Célibataire helps people discover dating, friendship and professional connections through profiles, likes, filters and chat."
+    },
+    "features": {
+      "title": "Dating App Features: Matches, Filters & Chat",
+      "description": "Explore Célibataire features including profile discovery, likes, SuperSwipe, age and distance filters, women-first messaging and 24-hour matches."
+    },
+    "download": {
+      "title": "Download Célibataire Dating & Chat on Android",
+      "description": "Get Célibataire: Rencontres & Chat from Google Play. Review the official Android app details, compatibility and current availability before installing."
+    },
+    "faq": {
+      "title": "Célibataire App FAQ: Matches, Messages & Profiles",
+      "description": "Find answers about Célibataire profiles, matching, women-first messaging, 24-hour match limits, filters, photos and voice notes."
+    },
+    "tips": {
+      "title": "Dating & Friendship Tips | Célibataire",
+      "description": "Practical ideas for making an authentic profile, choosing your intentions and starting respectful conversations."
+    },
+    "blog": {
+      "title": "Dating, Friendship & New Connections | Célibataire",
+      "description": "Explore useful perspectives on dating, making friends and building professional connections with clear intentions."
+    },
+    "guide": {
+      "title": "How to Use the Célibataire Dating App",
+      "description": "A practical guide to creating a profile, exploring people, using discovery filters and chatting through the Android app."
+    },
+    "comparison": {
+      "title": "Dating, Friendship or Networking? | Célibataire",
+      "description": "Understand the different ways to connect on Célibataire, from dating and friendship to professional networking."
+    }
+  },
+  "fr": {
+    "home": {
+      "title": "Application de rencontre et amitié | Célibataire",
+      "description": "Faites des rencontres, créez des amitiés et développez votre réseau. Découvrez des profils, utilisez les filtres et échangez par texte, photo ou note vocale."
+    },
+    "about": {
+      "title": "Célibataire : présentation de l’application de rencontre",
+      "description": "Découvrez comment Célibataire réunit rencontres, amitié et réseau professionnel avec des profils, des likes, des filtres et une messagerie."
+    },
+    "features": {
+      "title": "Fonctionnalités : profils, matchs et messagerie",
+      "description": "Explorez les profils, les likes, SuperSwipe, les filtres d’âge et de distance, le premier message envoyé par les femmes et les matchs de 24 heures."
+    },
+    "download": {
+      "title": "Télécharger Célibataire sur Google Play",
+      "description": "Consultez la fiche officielle de Célibataire : Rencontres & Chat sur Google Play pour vérifier les détails, la compatibilité et la disponibilité."
+    },
+    "faq": {
+      "title": "FAQ Célibataire : rencontres, matchs et messages",
+      "description": "Réponses sur les profils, les matchs de 24 heures, les filtres, les messages, les photos et les notes vocales dans Célibataire."
+    },
+    "tips": {
+      "title": "Conseils pour les rencontres et l’amitié | Célibataire",
+      "description": "Des conseils pratiques pour créer un profil authentique, préciser ses intentions et engager des conversations respectueuses."
+    },
+    "blog": {
+      "title": "Rencontres, amitié et nouvelles relations | Célibataire",
+      "description": "Des pistes pour aborder les rencontres, créer des amitiés et développer des relations professionnelles avec des intentions claires."
+    },
+    "guide": {
+      "title": "Guide d’utilisation de l’application Célibataire",
+      "description": "Apprenez à créer votre profil, découvrir des personnes, utiliser les filtres et discuter depuis l’application Android."
+    },
+    "comparison": {
+      "title": "Rencontres, amitié ou réseau professionnel ?",
+      "description": "Découvrez les différentes façons de créer des liens avec Célibataire : rencontres, amitié et réseautage professionnel."
+    }
+  },
+  "es": {
+    "home": {
+      "title": "App de citas y amistad para conocer gente | Célibataire",
+      "description": "Conoce personas para citas, amistad y contactos profesionales. Crea tu perfil, descubre gente cercana y chatea con fotos o notas de voz en Android."
+    },
+    "about": {
+      "title": "Célibataire: cómo funciona la app de citas y chat",
+      "description": "Descubre cómo Célibataire reúne citas, amistad y contactos profesionales mediante perfiles, likes, filtros y chat."
+    },
+    "features": {
+      "title": "Funciones de citas: perfiles, matches y chat",
+      "description": "Conoce los perfiles, likes, SuperSwipe, filtros de edad y distancia, mensajes iniciados por mujeres y matches de 24 horas."
+    },
+    "download": {
+      "title": "Descargar Célibataire para Android | Google Play",
+      "description": "Consulta la ficha oficial de Célibataire: Rencontres & Chat en Google Play y comprueba los detalles, la compatibilidad y la disponibilidad."
+    },
+    "faq": {
+      "title": "Preguntas frecuentes sobre Célibataire",
+      "description": "Resuelve tus dudas sobre perfiles, matches de 24 horas, filtros, mensajes, fotos y notas de voz en Célibataire."
+    },
+    "tips": {
+      "title": "Consejos para citas y amistad | Célibataire",
+      "description": "Ideas prácticas para crear un perfil auténtico, definir tus intenciones e iniciar conversaciones respetuosas."
+    },
+    "blog": {
+      "title": "Citas, amistad y nuevas conexiones | Célibataire",
+      "description": "Ideas sobre citas, cómo hacer amistades y cómo crear contactos profesionales con objetivos claros."
+    },
+    "guide": {
+      "title": "Guía para usar la app Célibataire",
+      "description": "Aprende a crear tu perfil, descubrir personas, utilizar filtros y conversar desde la aplicación Android."
+    },
+    "comparison": {
+      "title": "¿Citas, amistad o contactos profesionales?",
+      "description": "Conoce las distintas formas de conectar en Célibataire: citas, amistad y networking profesional."
+    }
+  },
+  "pt": {
+    "home": {
+      "title": "App de encontros e amizade para conhecer pessoas | Célibataire",
+      "description": "Conheça pessoas para encontros, amizade e contactos profissionais. Crie o seu perfil, descubra pessoas próximas e converse por texto, fotos ou notas de voz."
+    },
+    "about": {
+      "title": "Célibataire: conheça a aplicação de encontros e chat",
+      "description": "Saiba como a Célibataire reúne encontros, amizade e contactos profissionais através de perfis, gostos, filtros e mensagens."
+    },
+    "features": {
+      "title": "Funcionalidades: perfis, matches e mensagens",
+      "description": "Explore perfis, gostos, SuperSwipe, filtros de idade e distância, primeira mensagem enviada por mulheres e matches de 24 horas."
+    },
+    "download": {
+      "title": "Transferir Célibataire para Android | Google Play",
+      "description": "Consulte a página oficial de Célibataire: Rencontres & Chat no Google Play para verificar detalhes, compatibilidade e disponibilidade."
+    },
+    "faq": {
+      "title": "Perguntas frequentes sobre a Célibataire",
+      "description": "Encontre respostas sobre perfis, matches de 24 horas, filtros, mensagens, fotografias e notas de voz."
+    },
+    "tips": {
+      "title": "Dicas para encontros e amizade | Célibataire",
+      "description": "Sugestões práticas para criar um perfil autêntico, definir intenções e iniciar conversas respeitosas."
+    },
+    "blog": {
+      "title": "Encontros, amizade e novas ligações | Célibataire",
+      "description": "Ideias sobre encontros, como fazer amizades e criar contactos profissionais com objetivos claros."
+    },
+    "guide": {
+      "title": "Guia para utilizar a aplicação Célibataire",
+      "description": "Aprenda a criar o seu perfil, descobrir pessoas, utilizar filtros e conversar através da aplicação Android."
+    },
+    "comparison": {
+      "title": "Encontros, amizade ou contactos profissionais?",
+      "description": "Conheça as diferentes formas de ligação na Célibataire: encontros, amizade e networking profissional."
+    }
+  },
+  "de": {
+    "home": {
+      "title": "Dating-App für Begegnungen & Freundschaft | Célibataire",
+      "description": "Lerne Menschen für Dating, Freundschaft und berufliche Kontakte kennen. Erstelle dein Profil, entdecke Personen in deiner Nähe und chatte mit Fotos oder Sprachnachrichten."
+    },
+    "about": {
+      "title": "Célibataire: Die Dating- und Chat-App im Überblick",
+      "description": "Erfahre, wie Célibataire Dating, Freundschaft und berufliche Kontakte mit Profilen, Likes, Filtern und Chat verbindet."
+    },
+    "features": {
+      "title": "Funktionen: Profile, Matches, Filter und Chat",
+      "description": "Entdecke Profile, Likes, SuperSwipe, Alters- und Entfernungsfilter, Nachrichten zuerst von Frauen und 24-Stunden-Matches."
+    },
+    "download": {
+      "title": "Célibataire für Android herunterladen | Google Play",
+      "description": "Sieh dir den offiziellen Google-Play-Eintrag von Célibataire: Rencontres & Chat an und prüfe Details, Kompatibilität und Verfügbarkeit."
+    },
+    "faq": {
+      "title": "Célibataire FAQ: Profile, Matches und Nachrichten",
+      "description": "Antworten zu Profilen, 24-Stunden-Matches, Filtern, Nachrichten, Fotos und Sprachnachrichten in Célibataire."
+    },
+    "tips": {
+      "title": "Dating- und Freundschaftstipps | Célibataire",
+      "description": "Praktische Tipps für ein authentisches Profil, klare Absichten und respektvolle Gespräche."
+    },
+    "blog": {
+      "title": "Dating, Freundschaft und neue Kontakte | Célibataire",
+      "description": "Gedanken zu Dating, Freundschaften und beruflichen Kontakten mit klaren Erwartungen."
+    },
+    "guide": {
+      "title": "Anleitung zur Célibataire Dating-App",
+      "description": "So erstellst du dein Profil, entdeckst Menschen, verwendest Filter und chattest in der Android-App."
+    },
+    "comparison": {
+      "title": "Dating, Freundschaft oder berufliche Kontakte?",
+      "description": "Entdecke die Möglichkeiten von Célibataire: Dating, Freundschaft und berufliches Networking."
+    }
+  },
+  "it": {
+    "home": {
+      "title": "App di incontri e amicizia per conoscere persone | Célibataire",
+      "description": "Conosci persone per incontri, amicizia e contatti professionali. Crea il tuo profilo, scopri persone vicine e chatta con foto o messaggi vocali."
+    },
+    "about": {
+      "title": "Célibataire: scopri l’app di incontri e chat",
+      "description": "Scopri come Célibataire riunisce incontri, amicizia e contatti professionali con profili, like, filtri e chat."
+    },
+    "features": {
+      "title": "Funzioni: profili, match, filtri e chat",
+      "description": "Esplora profili, like, SuperSwipe, filtri per età e distanza, primo messaggio delle donne e match di 24 ore."
+    },
+    "download": {
+      "title": "Scarica Célibataire per Android | Google Play",
+      "description": "Consulta la scheda ufficiale di Célibataire: Rencontres & Chat su Google Play e verifica dettagli, compatibilità e disponibilità."
+    },
+    "faq": {
+      "title": "FAQ Célibataire: profili, match e messaggi",
+      "description": "Risposte su profili, match di 24 ore, filtri, messaggi, foto e note vocali nell’app Célibataire."
+    },
+    "tips": {
+      "title": "Consigli per incontri e amicizia | Célibataire",
+      "description": "Idee pratiche per creare un profilo autentico, chiarire le proprie intenzioni e iniziare conversazioni rispettose."
+    },
+    "blog": {
+      "title": "Incontri, amicizia e nuove connessioni | Célibataire",
+      "description": "Spunti su incontri, nuove amicizie e contatti professionali con obiettivi chiari."
+    },
+    "guide": {
+      "title": "Guida all’app di incontri Célibataire",
+      "description": "Scopri come creare il profilo, trovare persone, usare i filtri e chattare tramite l’app Android."
+    },
+    "comparison": {
+      "title": "Incontri, amicizia o contatti professionali?",
+      "description": "Scopri i diversi modi per entrare in contatto su Célibataire: incontri, amicizia e networking professionale."
+    }
+  }
+}
